@@ -1,0 +1,139 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Appointment;
+use Inertia\Inertia;
+use App\Mail\AppointmentConfirmed;
+use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
+
+class AppointmentController extends Controller
+{
+    public function index(Request $request)
+    {
+        $search    = $request->input('search');
+        $status    = $request->input('status');
+        $perPage   = (int) $request->input('per_page', 10);
+        $sortField = $request->input('sort_field', 'time_slot');
+        $sortOrder = $request->input('sort_order', 'asc');
+        $range     = $request->input('range', 'today');
+
+        // ── Range → Date Boundary Resolution ──────────────────────────
+        $dateFrom = null;
+        $dateTo   = null;
+        $isRange  = false;
+
+        switch ($range) {
+            case 'today':
+                $dateFrom = Carbon::today()->toDateString();
+                $dateTo   = $dateFrom;
+                break;
+            case 'yesterday':
+                $dateFrom = Carbon::yesterday()->toDateString();
+                $dateTo   = $dateFrom;
+                break;
+            case 'last_7_days':
+                $dateFrom = Carbon::today()->subDays(6)->toDateString();
+                $dateTo   = Carbon::today()->toDateString();
+                $isRange  = true;
+                break;
+            case 'last_month':
+                $dateFrom = Carbon::today()->subMonth()->startOfMonth()->toDateString();
+                $dateTo   = Carbon::today()->subMonth()->endOfMonth()->toDateString();
+                $isRange  = true;
+                break;
+            case 'last_year':
+                $dateFrom = Carbon::today()->subYear()->startOfYear()->toDateString();
+                $dateTo   = Carbon::today()->subYear()->endOfYear()->toDateString();
+                $isRange  = true;
+                break;
+            case 'all_time':
+                $dateFrom = null;
+                $dateTo   = null;
+                break;
+            default:
+                // Custom single date (e.g. "2025-06-01")
+                if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $range)) {
+                    $dateFrom = $range;
+                    $dateTo   = $range;
+                } else {
+                    $dateFrom = Carbon::today()->toDateString();
+                    $dateTo   = $dateFrom;
+                }
+                break;
+        }
+
+        // ── Stats — always scoped to TODAY for the header cards ────────
+        $statsDate = Carbon::today()->toDateString();
+        $stats = [
+            'total'     => Appointment::where('appointment_date', $statsDate)->count(),
+            'pending'   => Appointment::where('status', 'pending')->where('appointment_date', $statsDate)->count(),
+            'confirmed' => Appointment::where('status', 'confirmed')->where('appointment_date', $statsDate)->count(),
+            'completed' => Appointment::where('status', 'completed')->where('appointment_date', $statsDate)->count(),
+            'cancelled' => Appointment::where('status', 'cancelled')->where('appointment_date', $statsDate)->count(),
+        ];
+
+        // ── Main Query ─────────────────────────────────────────────────
+        $appointmentsQuery = Appointment::with('user')
+            ->when($dateFrom && $dateTo && $isRange, fn($q) =>
+                $q->whereBetween('appointment_date', [$dateFrom, $dateTo])
+            )
+            ->when($dateFrom && $dateTo && !$isRange && $range !== 'all_time', fn($q) =>
+                $q->where('appointment_date', $dateFrom)
+            )
+            ->when($status, fn($q) => $q->where('status', $status))
+            ->when($search, fn($q) =>
+                $q->where(function ($inner) use ($search) {
+                    $inner->where('queue_number', 'like', "%{$search}%")
+                          ->orWhere('time_slot', 'like', "%{$search}%")
+                          ->orWhereHas('user', fn($u) =>
+                              $u->where('name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%")
+                          );
+                })
+            );
+
+        $allowed = ['queue_number', 'appointment_date', 'time_slot', 'status', 'user_id', 'type'];
+        $appointmentsQuery->orderBy(
+            in_array($sortField, $allowed) ? $sortField : 'time_slot',
+            $sortOrder
+        );
+
+        $appointments = $appointmentsQuery->paginate($perPage)->withQueryString();
+
+        return Inertia::render('Admin/Appointments', [
+            'appointments' => $appointments,
+            'stats'        => $stats,
+            'filters'      => [
+                'search'     => $search,
+                'status'     => $status,
+                'per_page'   => $perPage,
+                'sort_field' => $sortField,
+                'sort_order' => $sortOrder,
+                'range'      => $range,
+            ],
+        ]);
+    }
+
+    public function updateStatus(Request $request, Appointment $appointment)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,confirmed,cancelled,completed',
+        ]);
+
+        $updateData = ['status' => $request->status];
+
+        if ($request->status === 'confirmed' && $appointment->status !== 'confirmed') {
+            $updateData['confirmed_by'] = auth()->id();
+            $updateData['confirmed_at'] = now();
+            Mail::to($appointment->user->email)->send(new AppointmentConfirmed($appointment));
+        }
+
+        $appointment->update($updateData);
+
+        return back()->with('success', "Appointment {$appointment->queue_number} status updated to {$request->status}.");
+    }
+}

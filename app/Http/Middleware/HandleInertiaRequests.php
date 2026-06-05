@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Illuminate\Http\Request;
+use Inertia\Middleware;
+
+class HandleInertiaRequests extends Middleware
+{
+    /**
+     * The root template that is loaded on the first page visit.
+     *
+     * @var string
+     */
+    protected $rootView = 'app';
+
+    /**
+     * Determine the current asset version.
+     */
+    public function version(Request $request): ?string
+    {
+        return parent::version($request);
+    }
+
+    /**
+     * Define the props that are shared by default.
+     *
+     * @return array<string, mixed>
+     */
+    public function share(Request $request): array
+    {
+        return [
+            ...parent::share($request),
+            'auth' => [
+                'user' => $request->user() ? [
+                    'id' => $request->user()->id,
+                    'name' => $request->user()->name,
+                    'email' => $request->user()->email,
+                    'role' => $request->user()->role,
+                ] : null,
+                'notifications' => $request->user()?->role === 'admin' ? \App\Models\Notification::whereNull('read_at')->latest()->take(10)->get() : [],
+                'unreadCount' => $request->user()?->role === 'admin' ? \App\Models\Notification::whereNull('read_at')->count() : 0,
+            ],
+            // Add this flash section so React can read our success messages
+            'flash' => [
+                'success' => $request->session()->get('success'),
+                'clearance' => $request->session()->get('clearance'),
+            ],
+        ];
+    }
+}
