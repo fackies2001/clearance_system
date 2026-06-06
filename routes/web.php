@@ -83,7 +83,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // ─── RATE-LIMITED PAYMENT CHANNELS ───
-Route::middleware('throttle:30,1')->prefix('payment')->group(function () {
+Route::middleware(['auth', 'verified', 'throttle:30,1'])->prefix('payment')->group(function () {
     Route::get('/{tracking_no}', [PaymentController::class, 'show'])->name('payment.show');
     Route::post('/{tracking_no}/process', [PaymentController::class, 'process'])->name('payment.process');
     Route::get('/{tracking_no}/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
@@ -126,7 +126,14 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
 
     // Hit Verification & Matching Resolution Core
     Route::get('/hit-verification', [HitVerificationController::class, 'index'])->name('admin.hit.index');
-    Route::patch('/hit-verification/{id}/resolve', [HitVerificationController::class, 'resolve'])->name('admin.hit.resolve');
+    Route::patch('/hit-verification/{id}/resolve', [HitVerificationController::class, 'resolve'])
+        ->middleware('password.confirm')
+        ->name('admin.hit.resolve');
+
+    // Role changes — need din ng re-auth
+    Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])
+        ->middleware('password.confirm')
+        ->name('admin.users.update-role');
 
     // Administrative Accounting Logs & Metrics Reporting
     Route::get('/reports', [ReportsController::class, 'index'])->name('admin.reports.index');

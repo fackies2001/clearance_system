@@ -7,23 +7,22 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 
-class AdminMiddleware
+class AppointmentConfirmerMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check() || !auth()->user()->isAdmin()) {
-            
-            // Log unauthorized access attempts
-            Log::warning('Unauthorized admin access attempt', [
+        $user = auth()->user();
+
+        if (!$user || (!$user->isAdmin() && !$user->isAppointmentConfirmer())) {
+
+            Log::warning('Unauthorized appointment confirmer access attempt', [
                 'user_id'    => auth()->id() ?? 'guest',
-                'email'      => auth()->user()->email ?? 'unauthenticated',
                 'ip'         => $request->ip(),
                 'url'        => $request->fullUrl(),
-                'user_agent' => $request->userAgent(),
                 'timestamp'  => now(),
             ]);
 
-            abort(403, 'Unauthorized. Admin access only.');
+            abort(403, 'Unauthorized.');
         }
 
         return $next($request);

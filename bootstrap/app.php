@@ -16,8 +16,14 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
+        // Global rate limit — 60 requests per minute per IP, no Redis needed
+        $middleware->web(prepend: [
+            \Illuminate\Http\Middleware\ThrottleRequests::class.':60,1',
+        ]);
+
         $middleware->alias([
-            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'admin'                 => \App\Http\Middleware\AdminMiddleware::class,
+            'appointment.confirmer' => \App\Http\Middleware\AppointmentConfirmerMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
