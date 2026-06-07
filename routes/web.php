@@ -30,8 +30,16 @@ Route::get('/', function () {
     ]);
 });
 
-// ─── USER & COMMON AUTHENTICATED ROUTES ───
+
+// ─── TWO FACTOR AUTHENTICATION ROUTES ───
 Route::middleware(['auth'])->group(function () {
+    Route::get('/two-factor', [App\Http\Controllers\TwoFactorController::class, 'index'])->name('two-factor.index');
+    Route::post('/two-factor/verify', [App\Http\Controllers\TwoFactorController::class, 'verify'])->name('two-factor.verify');
+    Route::post('/two-factor/resend', [App\Http\Controllers\TwoFactorController::class, 'resend'])->name('two-factor.resend');
+});
+
+// ─── USER & COMMON AUTHENTICATED ROUTES ───
+Route::middleware(['auth', 'two-factor'])->group(function () {
     
     Route::get('/dashboard', function () {
         return redirect()->route('application.status');
@@ -83,7 +91,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // ─── RATE-LIMITED PAYMENT CHANNELS ───
-Route::middleware(['auth', 'verified', 'throttle:30,1'])->prefix('payment')->group(function () {
+Route::middleware(['auth', 'verified', 'two-factor', 'throttle:30,1'])->prefix('payment')->group(function () {
     Route::get('/{tracking_no}', [PaymentController::class, 'show'])->name('payment.show');
     Route::post('/{tracking_no}/process', [PaymentController::class, 'process'])->name('payment.process');
     Route::get('/{tracking_no}/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
@@ -111,9 +119,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
     // Biometrics Storage Mapping
     Route::post('/applications/{id}/biometrics', [ApplicationController::class, 'storeBiometrics'])->name('admin.applications.biometrics');
 
-    // User Directory Administration
+   // User Directory Administration
     Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
-    Route::patch('/users/{user}/role', [UserController::class, 'updateRole'])->name('admin.users.update-role');
 
     // Appointments (Admin)
     Route::get('/appointments', [AdminAppointmentController::class, 'index'])->name('admin.appointments.index');

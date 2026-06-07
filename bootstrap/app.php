@@ -23,9 +23,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'admin'                 => \App\Http\Middleware\AdminMiddleware::class,
-            'appointment.confirmer' => \App\Http\Middleware\AppointmentConfirmerMiddleware::class,
-        ]);
+        'admin'                 => \App\Http\Middleware\AdminMiddleware::class,
+        'appointment.confirmer' => \App\Http\Middleware\AppointmentConfirmerMiddleware::class,
+        'two-factor'            => \App\Http\Middleware\TwoFactorMiddleware::class,
+    ]);
+    
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
