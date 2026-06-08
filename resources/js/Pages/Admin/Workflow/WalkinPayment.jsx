@@ -2,21 +2,34 @@ import React, { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function WalkinPayment({ auth, applicant, search }) {
+export default function WalkinPayment({ auth, applicant, search, pendingApplicants = [] }) {
     const [trackingNo, setTrackingNo] = useState(search || '');
     const [processing, setProcessing] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [selectedApplicant, setSelectedApplicant] = useState(applicant || null);
 
     const handleSearch = () => {
         router.get(route('admin.walkin.search'), { tracking_no: trackingNo });
     };
 
+    const handleSelectFromList = (item) => {
+        setSelectedApplicant(item);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     const handleConfirmPayment = () => {
         setShowConfirmModal(false);
-        router.post(route('admin.walkin.pay', applicant.id), {}, {
-            onSuccess: () => setShowSuccessModal(true),
-            onError: () => alert('Something went wrong. Please try again.'),
+        setProcessing(true);
+        router.post(route('admin.walkin.pay', selectedApplicant.id), {}, {
+            onSuccess: () => {
+                setProcessing(false);
+                setShowSuccessModal(true);
+            },
+            onError: () => {
+                setProcessing(false);
+                alert('Something went wrong. Please try again.');
+            },
         });
     };
 
@@ -69,7 +82,6 @@ export default function WalkinPayment({ auth, applicant, search }) {
                             <button
                                 type="button"
                                 onClick={handleSearch}
-                                disabled={processing}
                                 style={{
                                     padding: "10px 24px", borderRadius: 10,
                                     background: "#0f172a", color: "#fff", border: "none",
@@ -78,17 +90,17 @@ export default function WalkinPayment({ auth, applicant, search }) {
                                 onMouseEnter={e => e.currentTarget.style.background = "#334155"}
                                 onMouseLeave={e => e.currentTarget.style.background = "#0f172a"}
                             >
-                                {processing ? 'Searching...' : 'Search'}
+                                Search
                             </button>
                         </div>
                     </div>
 
-                    {/* Result Section */}
-                    {applicant && (
+                    {/* Search Result */}
+                    {selectedApplicant && (
                         <div style={{
                             background: "#fff", borderRadius: 16, padding: "28px",
                             border: "1px solid #f1f5f9", borderTop: "3px solid #3b82f6",
-                            boxShadow: "0 1px 4px rgba(0,0,0,0.04)"
+                            boxShadow: "0 1px 4px rgba(0,0,0,0.04)", marginBottom: 20,
                         }}>
                             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
                                 <div>
@@ -97,41 +109,41 @@ export default function WalkinPayment({ auth, applicant, search }) {
                                         textTransform: "uppercase", letterSpacing: "0.08em",
                                         background: "#eff6ff", padding: "3px 10px", borderRadius: 20,
                                     }}>Application Found</span>
-                                    <h2 style={{ margin: "10px 0 4px", fontSize: 26, fontWeight: 800, color: "#0f172a", letterSpacing: "-0.02em" }}>
-                                        {applicant.first_name} {applicant.last_name}
+                                    <h2 style={{ margin: "10px 0 4px", fontSize: 26, fontWeight: 800, color: "#0f172a" }}>
+                                        {selectedApplicant.first_name} {selectedApplicant.last_name}
                                     </h2>
-                                    <p style={{ margin: 0, fontFamily: "monospace", fontSize: 13, color: "#64748b" }}>{applicant.tracking_no}</p>
+                                    <p style={{ margin: 0, fontFamily: "monospace", fontSize: 13, color: "#64748b" }}>{selectedApplicant.tracking_no}</p>
                                 </div>
                                 <div style={{ textAlign: "right" }}>
                                     <p style={{ fontSize: 10, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", marginBottom: 6 }}>Payment Status</p>
                                     <span style={{
                                         display: "inline-block", padding: "4px 14px", borderRadius: 20,
                                         fontSize: 11, fontWeight: 800, textTransform: "uppercase",
-                                        background: applicant.payment_status === 'paid' ? "#dcfce7" : "#fef3c7",
-                                        color: applicant.payment_status === 'paid' ? "#15803d" : "#b45309",
-                                        border: `1px solid ${applicant.payment_status === 'paid' ? "#bbf7d0" : "#fde68a"}`,
+                                        background: selectedApplicant.payment_status === 'paid' ? "#dcfce7" : "#fef3c7",
+                                        color: selectedApplicant.payment_status === 'paid' ? "#15803d" : "#b45309",
+                                        border: `1px solid ${selectedApplicant.payment_status === 'paid' ? "#bbf7d0" : "#fde68a"}`,
                                     }}>
-                                        ● {applicant.payment_status}
+                                        ● {selectedApplicant.payment_status}
                                     </span>
                                 </div>
                             </div>
 
                             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 28 }}>
-                                <DetailBox label="Birth Date" value={applicant.date_of_birth} />
-                                <DetailBox label="Address" value={`${applicant.present_street}, ${applicant.present_barangay}, ${applicant.present_city}`} />
-                                <DetailBox label="Purpose" value={applicant.purpose} />
+                                <DetailBox label="Birth Date" value={selectedApplicant.date_of_birth} />
+                                <DetailBox label="Address" value={`${selectedApplicant.present_street}, ${selectedApplicant.present_barangay}, ${selectedApplicant.present_city}`} />
+                                <DetailBox label="Purpose" value={selectedApplicant.purpose} />
                                 <DetailBox label="Amount Due" value="₱150.00" highlight />
                             </div>
 
-                            {applicant.payment_status !== 'paid' ? (
+                            {selectedApplicant.payment_status !== 'paid' ? (
                                 <button
                                     onClick={() => setShowConfirmModal(true)}
+                                    disabled={processing}
                                     style={{
                                         width: "100%", padding: "14px", borderRadius: 12,
                                         background: "#059669", color: "#fff", border: "none",
                                         fontSize: 15, fontWeight: 800, cursor: "pointer",
                                         display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-                                        transition: "background 0.2s",
                                     }}
                                     onMouseEnter={e => e.currentTarget.style.background = "#047857"}
                                     onMouseLeave={e => e.currentTarget.style.background = "#059669"}
@@ -151,6 +163,77 @@ export default function WalkinPayment({ auth, applicant, search }) {
                             )}
                         </div>
                     )}
+
+                    {/* Pending Walk-in List */}
+                    <div style={{
+                        background: "#fff", borderRadius: 16, padding: "24px 28px",
+                        border: "1px solid #f1f5f9",
+                        boxShadow: "0 1px 4px rgba(0,0,0,0.04)"
+                    }}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.07em" }}>
+                                Pending Walk-in Payments
+                            </div>
+                            <span style={{
+                                background: "#fef3c7", color: "#b45309", border: "1px solid #fde68a",
+                                borderRadius: 20, padding: "2px 10px", fontSize: 11, fontWeight: 800,
+                            }}>
+                                {pendingApplicants.length} pending
+                            </span>
+                        </div>
+
+                        {pendingApplicants.length === 0 ? (
+                            <div style={{ textAlign: "center", padding: "32px 0", color: "#94a3b8" }}>
+                                <div style={{ fontSize: 32, marginBottom: 8 }}>✅</div>
+                                <p style={{ margin: 0, fontWeight: 600, fontSize: 14 }}>No pending walk-in payments</p>
+                            </div>
+                        ) : (
+                            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                                {pendingApplicants.map((item) => (
+                                    <div
+                                        key={item.id}
+                                        style={{
+                                            display: "flex", alignItems: "center", justifyContent: "space-between",
+                                            padding: "14px 18px", borderRadius: 12,
+                                            border: "1.5px solid #f1f5f9", background: "#f8fafc",
+                                            cursor: "pointer", transition: "all 0.15s",
+                                        }}
+                                        onMouseEnter={e => {
+                                            e.currentTarget.style.borderColor = "#fbbf24";
+                                            e.currentTarget.style.background = "#fffbeb";
+                                        }}
+                                        onMouseLeave={e => {
+                                            e.currentTarget.style.borderColor = "#f1f5f9";
+                                            e.currentTarget.style.background = "#f8fafc";
+                                        }}
+                                        onClick={() => handleSelectFromList(item)}
+                                    >
+                                        <div>
+                                            <p style={{ margin: "0 0 2px", fontWeight: 700, fontSize: 14, color: "#0f172a" }}>
+                                                {item.first_name} {item.last_name}
+                                            </p>
+                                            <p style={{ margin: 0, fontFamily: "monospace", fontSize: 12, color: "#64748b" }}>
+                                                {item.tracking_no}
+                                            </p>
+                                        </div>
+                                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                                            <span style={{ fontSize: 13, fontWeight: 700, color: "#2563eb" }}>₱150.00</span>
+                                            <span style={{
+                                                background: "#fef3c7", color: "#b45309",
+                                                border: "1px solid #fde68a", borderRadius: 20,
+                                                padding: "2px 10px", fontSize: 10, fontWeight: 800, textTransform: "uppercase",
+                                            }}>
+                                                Pending
+                                            </span>
+                                            <svg style={{ width: 16, height: 16, color: "#94a3b8" }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
 
                 </div>
             </div>
@@ -174,8 +257,10 @@ export default function WalkinPayment({ auth, applicant, search }) {
                                 margin: "0 auto 16px", fontSize: 28,
                             }}>⚠️</div>
                             <h3 style={{ margin: "0 0 8px", fontSize: 18, fontWeight: 800, color: "#0f172a" }}>Confirm Payment</h3>
-                            <p style={{ margin: "0 0 4px", color: "#64748b", fontSize: 14 }}>Are you sure you want to confirm walk-in payment for</p>
-                            <p style={{ margin: "0 0 8px", fontWeight: 800, color: "#0f172a", fontSize: 16 }}>{applicant?.first_name} {applicant?.last_name}?</p>
+                            <p style={{ margin: "0 0 4px", color: "#64748b", fontSize: 14 }}>Confirm walk-in payment for</p>
+                            <p style={{ margin: "0 0 8px", fontWeight: 800, color: "#0f172a", fontSize: 16 }}>
+                                {selectedApplicant?.first_name} {selectedApplicant?.last_name}?
+                            </p>
                             <p style={{ margin: 0, fontWeight: 800, color: "#2563eb", fontSize: 24 }}>₱150.00</p>
                         </div>
                         <div style={{ display: "flex", gap: 12 }}>
@@ -227,7 +312,9 @@ export default function WalkinPayment({ auth, applicant, search }) {
                         }}>✅</div>
                         <h3 style={{ margin: "0 0 8px", fontSize: 22, fontWeight: 800, color: "#0f172a" }}>Payment Confirmed!</h3>
                         <p style={{ margin: "0 0 4px", color: "#64748b", fontSize: 14 }}>Walk-in payment for</p>
-                        <p style={{ margin: "0 0 4px", fontWeight: 800, color: "#0f172a", fontSize: 16 }}>{applicant?.first_name} {applicant?.last_name}</p>
+                        <p style={{ margin: "0 0 4px", fontWeight: 800, color: "#0f172a", fontSize: 16 }}>
+                            {selectedApplicant?.first_name} {selectedApplicant?.last_name}
+                        </p>
                         <p style={{ margin: "0 0 24px", color: "#64748b", fontSize: 14 }}>has been successfully recorded.</p>
                         <button
                             onClick={() => router.visit(route('admin.clearance.index'))}

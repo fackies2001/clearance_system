@@ -56,17 +56,34 @@ class PaymentController extends Controller
         ]);
 
         $clearance = Clearance::where('tracking_no', $tracking_no)
-            ->where('user_id', auth()->id()) // Security check
+            ->where('user_id', auth()->id())
             ->firstOrFail();
 
-        // Idempotency — prevent double-processing if already paid
         if ($clearance->payment_status === 'paid') {
             return redirect()->route('payment.receipt', $tracking_no);
         }
 
-        // Generate unique reference number
         $reference = 'NBI-' . strtoupper(Str::random(8));
 
+        // ── WALK-IN FLOW ──────────────────────────────────────────
+        if ($request->payment_method === 'walkin') {
+            $clearance->update([
+                'payment_method'    => 'walkin',
+                'payment_reference' => $reference,
+                'payment_status'    => 'pending_walkin',
+            ]);
+
+            Log::info("Walk-in payment registered", [
+                'tracking_no' => $tracking_no,
+                'reference'   => $reference,
+                'ip'          => $request->ip(),
+            ]);
+
+            return redirect()->route('payment.walkin.pending', $tracking_no);
+        }
+        // ──────────────────────────────────────────────────────────
+
+        // Online payment methods (gcash, maya, bank_transfer)
         $clearance->update([
             'payment_method'    => $request->payment_method,
             'payment_reference' => $reference,
@@ -193,6 +210,29 @@ class PaymentController extends Controller
                 'payment_reference' => $clearance->payment_reference,
                 'payment_amount'    => $clearance->payment_amount,
                 'paid_at'           => $clearance->paid_at,
+            ],
+        ]);
+    }
+
+    // Walk-in pending page
+    public function walkinPending($tracking_no)
+    {
+        $clearance = Clearance::where('tracking_no', $tracking_no)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        if (!in_array($clearance->payment_status, ['pending_walkin', 'paid'])) {
+            return redirect()->route('payment.show', $tracking_no);
+        }
+
+        return Inertia::render('Payment/WalkinPending', [
+            'clearance' => [
+                'tracking_no'       => $clearance->tracking_no,
+                'full_name'         => $clearance->full_name,
+                'purpose'           => $clearance->purpose,
+                'payment_reference' => $clearance->payment_reference,
+                'payment_amount'    => $clearance->payment_amount,
+                'payment_status'    => $clearance->payment_status,
             ],
         ]);
     }

@@ -11,8 +11,13 @@ class WalkinPaymentController extends Controller
 {
     public function index()
     {
+        $pendingApplicants = Clearance::where('payment_status', 'pending_walkin')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return Inertia::render('Admin/Workflow/WalkinPayment', [
-            'initialSearch' => request('search'),
+            'pendingApplicants' => $pendingApplicants,
+            'initialSearch'     => request('search'),
         ]);
     }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import Modal from '@/Components/Modal';
@@ -57,7 +57,13 @@ export default function Apply({ auth, existingClearance }) {
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [sameAddress, setSameAddress] = useState(false);
 
-    const flash = usePage().props.flash || {};
+    const { flash } = usePage().props;
+
+    useEffect(() => {
+        if (flash?.clearance) {
+            setShowSuccessModal(true);
+        }
+    }, [flash?.clearance]);
 
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: '', middle_name: '', last_name: '', suffix: '',
@@ -94,11 +100,10 @@ export default function Apply({ auth, existingClearance }) {
         }
     };
 
-    const submit = (e) => {
+        const submit = (e) => {
         e.preventDefault();
         post(route('apply.submit'), {
             onSuccess: () => {
-                setShowSuccessModal(true);
                 reset();
                 setSameAddress(false);
             }
@@ -174,13 +179,15 @@ export default function Apply({ auth, existingClearance }) {
                                         }}>
                                             Check My Status
                                         </a>
-                                        <a href={`/payment/${existingClearance.tracking_no}`} style={{
-                                            display: "block", padding: "12px", borderRadius: 10,
-                                            background: "#f1f5f9", color: "#475569", fontWeight: 700,
-                                            fontSize: 14, textDecoration: "none", textAlign: "center",
-                                        }}>
-                                            Go to Payment
-                                        </a>
+                                        {existingClearance.payment_status !== 'paid' && (
+                                            <a href={`/payment/${existingClearance.tracking_no}`} style={{
+                                                display: "block", padding: "12px", borderRadius: 10,
+                                                background: "#f1f5f9", color: "#475569", fontWeight: 700,
+                                                fontSize: 14, textDecoration: "none", textAlign: "center",
+                                            }}>
+                                                Go to Payment
+                                            </a>
+                                        )}
                                     </div>
                                 </div>
                             </div>

@@ -88,7 +88,7 @@ export default function TwoFactor({ status }) {
                 </p>
             </div>
 
-            {/* Warning */}
+            {/* Warning */} 
             <div className="mt-4 rounded-lg bg-yellow-50 p-3 text-center text-xs text-yellow-700">
                 ⚠️ OTP is valid for <strong>10 minutes</strong> only. Do not share this code with anyone.
             </div>

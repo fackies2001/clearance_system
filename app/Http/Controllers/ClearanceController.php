@@ -14,22 +14,25 @@ class ClearanceController extends Controller
 {
     public function store(Request $request)
     {
-        // One per user rule
+      
+        // One per user rule — admin is exempt
+    if (Auth::user()->role !== 'admin') {
         $existing = Clearance::where('user_id', Auth::id())
-    ->whereNotIn('workflow_status', ['released', 'rejected'])
-    ->where(function($query) {
-        $query->where('payment_status', 'paid')
-              ->orWhere(function($q) {
-                  $q->where('payment_status', 'unpaid')
-                    ->whereNotNull('payment_method')
-                    ->where('payment_method', '!=', 'walkin');
-              });
-        })
-        ->exists();
+            ->whereNotIn('workflow_status', ['released', 'rejected'])
+            ->where(function($query) {
+                $query->where('payment_status', 'paid')
+                    ->orWhere(function($q) {
+                        $q->where('payment_status', 'unpaid')
+                            ->whereNotNull('payment_method')
+                            ->where('payment_method', '!=', 'walkin');
+                    });
+            })
+            ->exists();
 
         if ($existing) {
             return back()->withErrors(['error' => 'You already have an active application. Please wait for it to be processed or released.']);
         }
+    }
 
         $request->validate([
             'first_name' => 'required|string|max:255',
@@ -100,7 +103,11 @@ class ClearanceController extends Controller
             route('admin.clearance.index')
         );
 
-        return back()->with('clearance', $clearance);
+        return redirect()->route('apply.form')->with('clearance', [
+        'tracking_no' => $clearance->tracking_no,
+        'first_name'  => $clearance->first_name,
+        'last_name'   => $clearance->last_name,
+        ]);
     }
 
     public function viewClearance($tracking_no)

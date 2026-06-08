@@ -60,12 +60,18 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     Route::get('/clearance/{tracking_no}/download', [ClearanceController::class, 'downloadClearance'])->name('clearance.download');
 
     // Application Form
-    Route::get('/apply', function () {
-        $existing = null;
-        return Inertia::render('Clearance/Apply', [
-            'existingClearance' => $existing
-        ]);
-    })->name('apply.form');
+        Route::get('/apply', function () {
+    // Admin can always submit — no overlay
+    $existing = auth()->user()->role === 'admin' ? null : 
+        \App\Models\Clearance::where('user_id', auth()->id())
+            ->whereNotIn('workflow_status', ['released', 'rejected'])
+            ->where('payment_status', 'paid')
+            ->first();
+
+    return Inertia::render('Clearance/Apply', [
+        'existingClearance' => $existing,
+    ]);
+})->name('apply.form');
     
     Route::post('/apply', [ClearanceController::class, 'store'])->name('apply.submit');
 
@@ -98,6 +104,7 @@ Route::middleware(['auth', 'verified', 'two-factor', 'throttle:30,1'])->prefix('
     Route::post('/{tracking_no}/success', [PaymentController::class, 'success'])->name('payment.success');
     Route::post('/{tracking_no}/failed', [PaymentController::class, 'failed'])->name('payment.failed');
     Route::get('/{tracking_no}/receipt', [PaymentController::class, 'receipt'])->name('payment.receipt');
+    Route::get('/{tracking_no}/walkin-pending', [PaymentController::class, 'walkinPending'])->name('payment.walkin.pending'); // ← DAGDAG
 });
 
 // ─── ADMIN ONLY PRIVILEGED CONTROL MODULE ROUTES ───
