@@ -62,11 +62,11 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     // Application Form
         Route::get('/apply', function () {
     // Admin can always submit — no overlay
-    $existing = auth()->user()->role === 'admin' ? null : 
-        \App\Models\Clearance::where('user_id', auth()->id())
-            ->whereNotIn('workflow_status', ['released', 'rejected'])
-            ->where('payment_status', 'paid')
-            ->first();
+   $existing = auth()->user()->role === 'admin' ? null : 
+    \App\Models\Clearance::where('user_id', auth()->id())
+        ->whereNotIn('workflow_status', ['released', 'rejected'])
+        ->whereNotIn('payment_status', ['paid'])
+        ->first();
 
     return Inertia::render('Clearance/Apply', [
         'existingClearance' => $existing,

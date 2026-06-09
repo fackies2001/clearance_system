@@ -77,7 +77,7 @@ class AppointmentController extends Controller
         ];
 
         // ── Main Query ─────────────────────────────────────────────────
-        $appointmentsQuery = Appointment::with('user')
+        $appointmentsQuery = Appointment::with(['user', 'clearance'])
             ->when($dateFrom && $dateTo && $isRange, fn($q) =>
                 $q->whereBetween('appointment_date', [$dateFrom, $dateTo])
             )
