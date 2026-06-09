@@ -19,7 +19,7 @@ class AppointmentController extends Controller
         $perPage   = (int) $request->input('per_page', 10);
         $sortField = $request->input('sort_field', 'time_slot');
         $sortOrder = $request->input('sort_order', 'asc');
-        $range     = $request->input('range', 'today');
+        $range = $request->input('range', 'all_time');
 
         // ── Range → Date Boundary Resolution ──────────────────────────
         $dateFrom = null;

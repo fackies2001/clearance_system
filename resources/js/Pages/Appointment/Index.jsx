@@ -161,10 +161,15 @@ export default function AppointmentIndex({ myAppointment, paidClearance }) {
         });
     };
 
-    const fmtDate = (str) =>
-        new Date(str + 'T00:00:00').toLocaleDateString('en-PH', {
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-        });
+        const fmtDate = (str) => {
+        if (!str) return 'N/A';
+        try {
+            const [y, m, d] = str.split('-');
+            return new Date(Number(y), Number(m) - 1, Number(d)).toLocaleDateString('en-PH', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+            });
+        } catch { return str; }
+    };;
 
     const statusStyle = {
         pending:   'bg-amber-100 text-amber-700 border-amber-200',

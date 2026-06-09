@@ -52,7 +52,7 @@ export default function AdminAppointments({ appointments = {}, stats = {}, filte
         router.get(route('admin.appointments.index'), {
             search:     searchTerm,
             status:     filters.status     || '',
-            range:      filters.range      || 'today',
+            range: filters.range || 'all_time',
             per_page:   filters.per_page   || 10,
             sort_field: filters.sort_field || 'time_slot',
             sort_order: filters.sort_order || 'asc',
