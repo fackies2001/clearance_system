@@ -1,8 +1,0 @@
-https://127.0.0.1:8000 {
-    reverse_proxy 127.0.0.1:8001
-    tls ./127.0.0.1.pem ./127.0.0.1-key.pem
-    header {
-        Permissions-Policy "camera=*, microphone=*"
-        -X-Frame-Options
-    }
-}

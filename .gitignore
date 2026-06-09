@@ -17,7 +17,7 @@
 /public/build
 /public/fonts-manifest.dev.json
 /public/hot
-/public/storage
+/public/storage 
 /storage/*.key
 /storage/pail
 /vendor
@@ -26,3 +26,9 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 /.claude
+caddy.exe
+mkcert.exe
+127.0.0.1.pem
+127.0.0.1-key.pem
+Caddyfile
+start.bat
