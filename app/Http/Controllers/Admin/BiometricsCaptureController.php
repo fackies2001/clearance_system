@@ -25,11 +25,12 @@ class BiometricsCaptureController extends Controller
         }
     }
 
-   return Inertia::render('Admin/Workflow/BiometricsCapture', [
-    'applicant'   => $applicant,
-    'search'      => $search,
-    'showCapture' => false,
-    ]); 
+    // PALITAN NG:
+    return Inertia::render('Admin/Workflow/BiometricsCapture', [
+        'applicant'   => $applicant,
+        'search'      => $search,
+        'showCapture' => request()->boolean('showCapture'),  
+    ]);
 }
 
    public function search(Request $request)
@@ -133,10 +134,6 @@ class BiometricsCaptureController extends Controller
         'mobile_number', 'email_address', 'purpose',
     ]));
 
-        return redirect()->route('admin.biometrics.index', [
-        'tracking_no' => $clearance->tracking_no,
-        'showCapture' => true,
-    ]);
-
+       return back()->with('showCapture', true);
     }
 }

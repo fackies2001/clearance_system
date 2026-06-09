@@ -41,7 +41,7 @@ export default function BiometricsCapture({ auth, applicant, search, showCapture
     const [imgSrc, setImgSrc] = useState(null);
     const imgSrcRef = useRef(null);
     const [sameAddress, setSameAddress] = useState(false);
-    const [showCaptureSection, setShowCaptureSection] = useState(showCapture || false);
+    const [showCaptureSection, setShowCaptureSection] = useState(showCapture === true || showCapture === 'true' || showCapture === 1 || showCapture === '1');
     const [showSuccessModal, setShowSuccessModal] = useState(false);
 
     const pageErrors = usePage().props.errors || {};
@@ -103,18 +103,20 @@ export default function BiometricsCapture({ auth, applicant, search, showCapture
         }
     };
 
-    const handleFormSubmit = (e) => {
+     const handleFormSubmit = (e) => {
         e.preventDefault();
         router.post(route('admin.biometrics.update', applicant.id), data, {
             onSuccess: () => setShowCaptureSection(true),
+            preserveScroll: true,
         });
     };
 
-    const capture = useCallback(() => {
-        const imageSrc = webcamRef.current.getScreenshot();
-        setImgSrc(imageSrc);
-        imgSrcRef.current = imageSrc;
-    }, [webcamRef]);
+        const capture = useCallback(() => {
+            if (!webcamRef.current) return;
+            const imageSrc = webcamRef.current.getScreenshot();
+            setImgSrc(imageSrc);
+            imgSrcRef.current = imageSrc;
+        }, [webcamRef]);
 
     const retake = () => {
         setImgSrc(null);
@@ -497,6 +499,8 @@ export default function BiometricsCapture({ auth, applicant, search, showCapture
                                                         ref={webcamRef}
                                                         screenshotFormat="image/png"
                                                         style={{ width: "100%", display: "block" }}
+                                                        videoConstraints={{ facingMode: "user" }}
+                                                        onUserMediaError={(err) => console.error("Camera error:", err)}
                                                     />
                                                 </div>
                                                 <button

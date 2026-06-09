@@ -316,17 +316,17 @@ export default function WalkinPayment({ auth, applicant, search, pendingApplican
                             {selectedApplicant?.first_name} {selectedApplicant?.last_name}
                         </p>
                         <p style={{ margin: "0 0 24px", color: "#64748b", fontSize: 14 }}>has been successfully recorded.</p>
-                        <button
-                            onClick={() => router.visit(route('admin.clearance.index'))}
-                            style={{
-                                width: "100%", padding: "12px", borderRadius: 10,
-                                background: "#0f172a", color: "#fff", border: "none",
-                                fontWeight: 700, fontSize: 14, cursor: "pointer",
-                            }}
-                            onMouseEnter={e => e.currentTarget.style.background = "#334155"}
-                            onMouseLeave={e => e.currentTarget.style.background = "#0f172a"}
-                        >
-                            Go to Clearance Processing
+                            <button
+                                onClick={() => setShowSuccessModal(false)}
+                                style={{
+                                    width: "100%", padding: "12px", borderRadius: 10,
+                                    background: "#059669", color: "#fff", border: "none",
+                                    fontWeight: 700, fontSize: 14, cursor: "pointer",
+                                }}
+                                onMouseEnter={e => e.currentTarget.style.background = "#047857"}
+                                onMouseLeave={e => e.currentTarget.style.background = "#059669"}
+                            >
+                                Confirmed
                         </button>
                     </div>
                 </div>
