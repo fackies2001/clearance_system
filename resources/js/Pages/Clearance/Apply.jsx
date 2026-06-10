@@ -53,7 +53,8 @@ const SectionHeader = ({ emoji, title, right }) => (
     </div>
 );
 
-export default function Apply({ auth, existingClearance }) {
+// resources/js/Pages/Clearance/Apply.jsx
+export default function Apply({ auth, existingClearance, latestClearance }) {
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [sameAddress, setSameAddress] = useState(false);
 
@@ -66,14 +67,28 @@ export default function Apply({ auth, existingClearance }) {
     }, [flash?.clearance]);
 
     const { data, setData, post, processing, errors, reset } = useForm({
-        first_name: '', middle_name: '', last_name: '', suffix: '',
-        date_of_birth: '', place_of_birth: '', sex: '',
-        civil_status: '', nationality: 'Filipino',
-        present_street: '', present_barangay: '', present_city: '',
-        present_province: '', present_zip: '',
-        permanent_street: '', permanent_barangay: '', permanent_city: '',
-        permanent_province: '', permanent_zip: '',
-        mobile_number: '', email_address: '', purpose: '',
+        first_name:         latestClearance?.first_name         || '',
+        middle_name:        latestClearance?.middle_name        || '',
+        last_name:          latestClearance?.last_name          || '',
+        suffix:             latestClearance?.suffix             || '',
+        date_of_birth:      latestClearance?.date_of_birth      || '',
+        place_of_birth:     latestClearance?.place_of_birth     || '',
+        sex:                latestClearance?.sex                || '',
+        civil_status:       latestClearance?.civil_status       || '',
+        nationality:        latestClearance?.nationality        || 'Filipino',
+        present_street:     latestClearance?.present_street     || '',
+        present_barangay:   latestClearance?.present_barangay   || '',
+        present_city:       latestClearance?.present_city       || '',
+        present_province:   latestClearance?.present_province   || '',
+        present_zip:        latestClearance?.present_zip        || '',
+        permanent_street:   latestClearance?.permanent_street   || '',
+        permanent_barangay: latestClearance?.permanent_barangay || '',
+        permanent_city:     latestClearance?.permanent_city     || '',
+        permanent_province: latestClearance?.permanent_province || '',
+        permanent_zip:      latestClearance?.permanent_zip      || '',
+        mobile_number:      latestClearance?.mobile_number      || '',
+        email_address:      latestClearance?.email_address      || '',
+        purpose:            latestClearance?.purpose            || '',
     });
 
     const handleSameAddress = (e) => {

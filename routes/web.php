@@ -61,18 +61,23 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     Route::get('/clearance/{tracking_no}/download', [ClearanceController::class, 'downloadClearance'])->name('clearance.download');
 
     // Application Form
-        Route::get('/apply', function () {
-    // Admin can always submit — no overlay
-   $existing = auth()->user()->role === 'admin' ? null : 
-    \App\Models\Clearance::where('user_id', auth()->id())
-        ->whereNotIn('workflow_status', ['released', 'rejected'])
-        ->whereNotIn('payment_status', ['paid'])
-        ->first();
+    Route::get('/apply', function () {
+        $existing = auth()->user()->role === 'admin' ? null : 
+            \App\Models\Clearance::where('user_id', auth()->id())
+                ->whereNotIn('workflow_status', ['released', 'rejected'])
+                ->whereNotIn('payment_status', ['paid'])
+                ->first();
 
-    return Inertia::render('Clearance/Apply', [
-        'existingClearance' => $existing,
-    ]);
-})->name('apply.form');
+        // Latest clearance para sa pre-fill (kahit released/rejected)
+        $latestClearance = \App\Models\Clearance::where('user_id', auth()->id())
+            ->latest()
+            ->first();
+
+        return Inertia::render('Clearance/Apply', [
+            'existingClearance' => $existing,
+            'latestClearance'   => $latestClearance,
+        ]);
+    })->name('apply.form');
     
     Route::post('/apply', [ClearanceController::class, 'store'])->name('apply.submit');
 
