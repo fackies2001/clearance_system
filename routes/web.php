@@ -48,6 +48,7 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     // Application Status
     Route::get('/application-status', function () {
         $clearances = Clearance::where('user_id', auth()->id())
+            ->with('appointment') // eager load
             ->orderBy('created_at', 'desc')
             ->get();
         return Inertia::render('Application/Status', [

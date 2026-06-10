@@ -100,24 +100,33 @@ export default function Status({ auth, clearances }) {
           
                             {/* Details section */}
                             <div className="space-y-6">
-                            {clearance.appointment_date && (
-                            <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
-                                <h3 className="text-sm font-black text-blue-600 uppercase tracking-widest mb-4">Appointment Details</h3>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between items-center text-sm">
-                                        <span className="text-gray-500 font-medium">Schedule</span>
-                                        <span className="font-bold text-gray-900">
-                                            {new Date(clearance.appointment_date).toLocaleDateString('en-PH', { 
-                                                weekday: 'long',
-                                                month: 'short', 
-                                                day: 'numeric', 
-                                                year: 'numeric' 
-                                            })}
-                                        </span>
+                            {clearance.appointment && (
+                                <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                    <h3 className="text-sm font-black text-blue-600 uppercase tracking-widest mb-4">Appointment Details</h3>
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between items-center text-sm">
+                                            <span className="text-gray-500 font-medium">Schedule</span>
+                                            <span className="font-bold text-gray-900">
+                                                {new Date(clearance.appointment.appointment_date).toLocaleDateString('en-PH', { 
+                                                    weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' 
+                                                })}
+                                            </span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-sm">
+                                            <span className="text-gray-500 font-medium">Time Slot</span>
+                                            <span className="font-bold text-gray-900">{clearance.appointment.time_slot}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-sm">
+                                            <span className="text-gray-500 font-medium">Queue No.</span>
+                                            <span className="font-mono font-bold text-gray-900">{clearance.appointment.queue_number}</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-sm">
+                                            <span className="text-gray-500 font-medium">Status</span>
+                                            <span className="font-bold text-gray-900 capitalize">{clearance.appointment.status}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
                                 <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
                                     <h3 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-4">Payment Information</h3>
                                     <div className="space-y-3">

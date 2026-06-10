@@ -129,4 +129,9 @@ class Clearance extends Model
     {
         return $this->belongsTo(\App\Models\User::class);
     }
+
+        public function appointment(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(\App\Models\Appointment::class, 'tracking_no', 'tracking_no');
+    }
 }
