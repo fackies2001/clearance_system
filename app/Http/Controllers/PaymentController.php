@@ -153,6 +153,15 @@ class PaymentController extends Controller
             'amount'      => $clearance->payment_amount,
         ]);
 
+        // Notify User
+        \App\Models\Notification::create([
+            'user_id' => $clearance->user_id,
+            'type'    => 'payment_confirmed',
+            'title'   => 'Payment Confirmed!',
+            'message' => "Your payment for NBI Clearance ({$tracking_no}) has been successfully processed. You may now schedule your appointment.",
+            'link'    => route('appointment.index'),
+        ]);
+
         // Notify Admins
         \App\Models\Notification::notifyAdmins(
             'payment_received',

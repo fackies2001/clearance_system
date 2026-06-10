@@ -95,6 +95,15 @@ class ClearanceController extends Controller
             'workflow_status' => $workflowStatus,
         ]);
 
+        // Notify User
+        \App\Models\Notification::create([
+            'user_id' => Auth::id(),
+            'type'    => 'application_submitted',
+            'title'   => 'Application Submitted!',
+            'message' => "Your NBI Clearance application ({$clearance->tracking_no}) has been successfully submitted. Please proceed to payment.",
+            'link'    => route('payment.show', $clearance->tracking_no),
+        ]);
+
         // Notify Admins
         \App\Models\Notification::notifyAdmins(
             'new_application',

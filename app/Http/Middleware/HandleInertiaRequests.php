@@ -38,8 +38,8 @@ class HandleInertiaRequests extends Middleware
                     'email' => $request->user()->email,
                     'role' => $request->user()->role,
                 ] : null,
-                'notifications' => $request->user()?->role === 'admin' ? \App\Models\Notification::whereNull('read_at')->latest()->take(10)->get() : [],
-                'unreadCount' => $request->user()?->role === 'admin' ? \App\Models\Notification::whereNull('read_at')->count() : 0,
+                'notifications' => $request->user() ? \App\Models\Notification::where('user_id', $request->user()->id)->latest()->take(10)->get() : [],
+                'unreadCount'   => $request->user() ? \App\Models\Notification::where('user_id', $request->user()->id)->whereNull('read_at')->count() : 0,
             ],
             // Add this flash section so React can read our success messages
             'flash' => [

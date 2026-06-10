@@ -101,14 +101,9 @@ export default function Apply({ auth, existingClearance }) {
     };
 
         const submit = (e) => {
-        e.preventDefault();
-        post(route('apply.submit'), {
-            onSuccess: () => {
-                reset();
-                setSameAddress(false);
-            }
-        });
-    };
+            e.preventDefault();
+            post(route('apply.submit'));
+        };
 
     return (
         <AuthenticatedLayout user={auth.user}>
