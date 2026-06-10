@@ -149,6 +149,10 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->group(functio
         ->middleware('password.confirm')
         ->name('admin.users.update-role');
 
+        // Admin can delete users
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])
+    ->name('admin.users.destroy');
+
     // Administrative Accounting Logs & Metrics Reporting
     Route::get('/reports', [ReportsController::class, 'index'])->name('admin.reports.index');
     Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('admin.audit.index');

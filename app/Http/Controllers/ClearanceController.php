@@ -112,10 +112,10 @@ class ClearanceController extends Controller
             route('admin.clearance.index')
         );
 
-        return redirect()->route('apply.form')->with('clearance', [
-        'tracking_no' => $clearance->tracking_no,
-        'first_name'  => $clearance->first_name,
-        'last_name'   => $clearance->last_name,
+        return back()->with('clearance', [
+            'tracking_no' => $clearance->tracking_no,
+            'first_name'  => $clearance->first_name,
+            'last_name'   => $clearance->last_name,
         ]);
     }
 

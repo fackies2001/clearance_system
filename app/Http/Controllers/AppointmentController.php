@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Appointment;
+use App\Models\Clearance;
 use Inertia\Inertia;
 
 class AppointmentController extends Controller
@@ -26,22 +27,31 @@ class AppointmentController extends Controller
      */
     public function index()
     {
+        // Fetch the active appointment for the logged-in user
         $myAppointment = Appointment::with('clearance')->where('user_id', auth()->id())
             ->whereIn('status', ['pending', 'confirmed'])
             ->latest()
             ->first();
 
-        $paidClearance = \App\Models\Clearance::where('user_id', auth()->id())
+        // FIX: Added missing database lookup query for paid clearance records
+        $paidClearance = Clearance::where('user_id', auth()->id())
             ->where('payment_status', 'paid')
             ->whereNotIn('workflow_status', ['released', 'rejected'])
             ->first();
 
+        // Fetch the latest successfully released clearance certificate if any
+        $releasedClearance = Clearance::where('user_id', auth()->id())
+            ->where('workflow_status', 'released')
+            ->latest()
+            ->first();
+
         return Inertia::render('Appointment/Index', [
-            'myAppointment' => $myAppointment,
-            'paidClearance' => $paidClearance,
-            'timeSlots'     => self::TIME_SLOTS,
+            'myAppointment'     => $myAppointment,
+            'paidClearance'     => $paidClearance,
+            'releasedClearance' => $releasedClearance,
+            'timeSlots'         => self::TIME_SLOTS,
         ]);
-    }
+    }   
 
     /**
      * JSON endpoint — returns available slot counts for a given date.
@@ -71,7 +81,7 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        $paidClearance = \App\Models\Clearance::where('user_id', auth()->id())
+        $paidClearance = Clearance::where('user_id', auth()->id())
             ->where('payment_status', 'paid')
             ->whereNotIn('workflow_status', ['released', 'rejected'])
             ->first();
@@ -80,7 +90,7 @@ class AppointmentController extends Controller
             return back()->withErrors(['appointment' => 'You must have a paid clearance application to book an appointment.']);
         }
 
-        // One active appointment at a time
+        // Enforcement constraint: One active appointment at a time
         $hasExisting = Appointment::where('user_id', auth()->id())
             ->whereIn('status', ['pending', 'confirmed'])
             ->exists();
@@ -96,7 +106,7 @@ class AppointmentController extends Controller
             'notes'            => 'nullable|string|max:500',
         ]);
 
-        // Check slot capacity
+        // Validate concurrent slot booking capacity thresholds
         $booked = Appointment::where('appointment_date', $request->appointment_date)
             ->where('time_slot', $request->time_slot)
             ->whereNotIn('status', ['cancelled'])
@@ -106,7 +116,7 @@ class AppointmentController extends Controller
             return back()->withErrors(['time_slot' => 'This time slot is already full. Please choose another.']);
         }
 
-        // Generate queue number: Q-{YYYYMMDD}-{001}
+        // Generate systematic sequential queue identifier format: Q-{YYYYMMDD}-{001}
         $dateStr       = date('Ymd', strtotime($request->appointment_date));
         $queueSequence = Appointment::whereDate('appointment_date', $request->appointment_date)
             ->whereNotIn('status', ['cancelled'])
@@ -132,7 +142,7 @@ class AppointmentController extends Controller
      */
     public function cancel(Appointment $appointment)
     {
-        // Only the owner can cancel
+        // Structural authorization defense layer
         if ($appointment->user_id !== auth()->id()) {
             abort(403);
         }

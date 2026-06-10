@@ -11,6 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+
+        $middleware->append(\App\Http\Middleware\TrustProxies::class);
+
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
@@ -19,14 +22,14 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Global rate limit — 60 requests per minute per IP, no Redis needed
         $middleware->web(prepend: [
-        \Illuminate\Routing\Middleware\ThrottleRequests::class.':60,1',
+            \Illuminate\Routing\Middleware\ThrottleRequests::class.':60,1',
         ]);
 
         $middleware->alias([
-        'admin'                 => \App\Http\Middleware\AdminMiddleware::class,
-        'appointment.confirmer' => \App\Http\Middleware\AppointmentConfirmerMiddleware::class,
-        'two-factor'            => \App\Http\Middleware\TwoFactorMiddleware::class,
-    ]);
+            'admin'                 => \App\Http\Middleware\AdminMiddleware::class,
+            'appointment.confirmer' => \App\Http\Middleware\AppointmentConfirmerMiddleware::class,
+            'two-factor'            => \App\Http\Middleware\TwoFactorMiddleware::class,
+        ]);
     
     })
     ->withExceptions(function (Exceptions $exceptions): void {

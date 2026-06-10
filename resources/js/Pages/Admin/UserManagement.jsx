@@ -7,6 +7,7 @@ export default function UserManagement({ auth, users = [] }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [roleFilter, setRoleFilter] = useState('all');
     const [confirmModal, setConfirmModal] = useState(null); // { user, newRole }
+    const [deleteModal, setDeleteModal] = useState(null); // { user }
 
     const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
@@ -95,6 +96,14 @@ export default function UserManagement({ auth, users = [] }) {
             route('admin.users.update-role', confirmModal.user.id),
             { role: confirmModal.newRole },
             { onFinish: () => setConfirmModal(null) }
+        );
+    };
+
+    // Confirm at execute delete request via Inertia router
+    const confirmDeleteUser = () => {
+        router.delete(
+            route('admin.users.destroy', deleteModal.user.id),
+            { onFinish: () => setDeleteModal(null) }
         );
     };
 
@@ -307,17 +316,32 @@ export default function UserManagement({ auth, users = [] }) {
                                                 })}
                                             </td>
                                             <td className="px-6 py-4">
-                                                {user.id === auth.user.id ? (
+                                                {user.id === 1 ? (
+                                                    // UI Flag para sa Pioneer Admin account
+                                                    <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                                                        🔒 Pioneer Account
+                                                    </span>
+                                                ) : user.id === auth.user.id ? (
                                                     <span className="text-xs text-slate-400 italic">Current Account</span>
                                                 ) : (
-                                                    <select
-                                                        value={user.role}
-                                                        onChange={e => handleRoleChange(user, e.target.value)}
-                                                        className="border border-slate-200 bg-slate-50 rounded-lg py-1.5 px-3 text-sm focus:outline-none focus:border-slate-400 cursor-pointer"
-                                                    >
-                                                        <option value="user">👤 User</option>
-                                                        <option value="admin">👑 Admin</option>
-                                                    </select>
+                                                    <div className="flex items-center gap-2">
+                                                        <select
+                                                            value={user.role}
+                                                            onChange={e => handleRoleChange(user, e.target.value)}
+                                                            className="border border-slate-200 bg-slate-50 rounded-lg py-1.5 px-3 text-sm focus:outline-none focus:border-slate-400 cursor-pointer"
+                                                        >
+                                                            <option value="user">👤 User</option>
+                                                            <option value="admin">👮 Admin</option>
+                                                        </select>
+
+                                                       <button
+                                                            onClick={() => setDeleteModal({ user })}
+                                                            className="px-3 py-1.5 text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 hover:bg-rose-600 hover:text-white rounded-lg transition-colors duration-150 flex items-center gap-1 shadow-sm"
+                                                            title="Delete User Account"
+                                                        >
+                                                            🗑️ Delete
+                                                        </button>
+                                                    </div>
                                                 )}
                                             </td>
                                         </tr>
@@ -378,58 +402,61 @@ export default function UserManagement({ auth, users = [] }) {
                 </div>
             </div>
 
-            {/* Confirm Role Change Modal */}
-            {confirmModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
-                    onClick={() => setConfirmModal(null)}>
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
-                        onClick={e => e.stopPropagation()}>
+                {/* Confirm Delete User Modal */}
+                    {deleteModal && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+                            onClick={() => setDeleteModal(null)}>
+                            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+                                onClick={e => e.stopPropagation()}>
 
-                        {/* Modal Header */}
-                        <div className="bg-slate-900 px-6 py-5">
-                            <h2 className="text-white font-bold text-lg">Confirm Role Change</h2>
-                            <p className="text-slate-400 text-xs mt-1">This action will update the user's access level.</p>
-                        </div>
+                                {/* Modal Header */}
+                                <div className="bg-rose-600 px-6 py-5">
+                                    <h2 className="text-white font-bold text-lg flex items-center gap-2">
+                                        ⚠️ Warning: Delete User Account
+                                    </h2>
+                                    <p className="text-rose-100 text-xs mt-1">Are you sure you want to proceed? This action cannot be undone.</p>
+                                </div>
 
-                        {/* Modal Body */}
-                        <div className="p-6 space-y-4">
-                            <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 space-y-2">
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-slate-500 font-medium">User:</span>
-                                    <span className="text-slate-900 font-bold">{confirmModal.user.name}</span>
+                                {/* Modal Body */}
+                                <div className="p-6 space-y-4">
+                                    <div className="bg-rose-50/60 rounded-xl p-4 border border-rose-100 space-y-2">
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-slate-500 font-medium">Name:</span>
+                                            <span className="text-slate-900 font-bold">{deleteModal.user.name}</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-slate-500 font-medium">Email:</span>
+                                            <span className="text-slate-900 font-semibold font-mono text-xs">{deleteModal.user.email}</span>
+                                        </div>
+                                        <div className="flex justify-between text-sm">
+                                            <span className="text-slate-500 font-medium">Current Role:</span>
+                                            <span className="font-bold text-slate-700 uppercase text-xs tracking-wider">{deleteModal.user.role}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-slate-500 font-medium">Current Role:</span>
-                                    <span className="font-bold text-slate-700 uppercase">{confirmModal.user.role}</span>
-                                </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-slate-500 font-medium">New Role:</span>
-                                    <span className={`font-bold uppercase ${confirmModal.newRole === 'admin' ? 'text-blue-600' : 'text-emerald-600'}`}>
-                                        {confirmModal.newRole}
-                                    </span>
+
+                                {/* Modal Footer */}
+                                <div className="border-t border-slate-100 px-6 py-4 flex justify-end gap-3 bg-slate-50">
+                                    <button
+                                        onClick={() => setDeleteModal(null)}
+                                        className="px-5 py-2 rounded-xl border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-white transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            router.delete(route('admin.users.destroy', deleteModal.user.id), {
+                                                onFinish: () => setDeleteModal(null)
+                                            });
+                                        }}
+                                        className="px-5 py-2 rounded-xl bg-rose-600 text-white text-sm font-semibold hover:bg-rose-700 transition-colors shadow-lg shadow-rose-200"
+                                    >
+                                        Yes, Delete Account
+                                    </button>
                                 </div>
                             </div>
                         </div>
-
-                        {/* Modal Footer */}
-                        <div className="border-t border-slate-100 px-6 py-4 flex justify-end gap-3">
-                            <button
-                                onClick={() => setConfirmModal(null)}
-                                className="px-5 py-2 rounded-xl border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={confirmRoleChange}
-                                className="px-5 py-2 rounded-xl bg-slate-900 text-white text-sm font-semibold hover:bg-slate-700 transition-colors"
-                            >
-                                Confirm Change
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
+                    )}
         </AuthenticatedLayout>
     );
 }
