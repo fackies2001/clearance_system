@@ -23,29 +23,40 @@ class RegisteredUserController extends Controller
         return Inertia::render('Auth/Register');
     }
 
-        public function store(Request $request): RedirectResponse
+            public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|lowercase|email|max:255|unique:' . User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'first_name'    => 'required|string|max:255',
+            'last_name'     => 'required|string|max:255',
+            'middle_name'   => 'nullable|string|max:255',
+            'gender'        => 'required|in:Male,Female',
+            'civil_status'  => 'required|in:Single,Married,Widowed,Separated',
+            'birth_year'    => 'required|digits:4|integer|min:1900|max:' . date('Y'),
+            'birth_month'   => 'required|string',
+            'birth_day'     => 'required|string',
+            'mobile_number' => 'required|string|size:11|regex:/^09[0-9]{9}$/',
+            'email'         => 'required|string|lowercase|email|max:255|unique:' . User::class,
+            'password'      => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Build full name from parts
+        $fullName = trim(implode(' ', array_filter([
+            $request->first_name,
+            $request->middle_name,
+            $request->last_name,
+        ])));
+
         $user = User::create([
-            'name'     => $request->name,
+            'name'     => $fullName,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
         event(new Registered($user));
-
         Auth::login($user);
 
-        // Reset 2FA session
         session()->forget('two_factor_verified');
 
-        // Redirect sa email verification notice muna
-        // OTP will be sent after email is verified and user logs in
         return redirect()->route('verification.notice');
     }
 }
