@@ -134,6 +134,7 @@ class ClearanceController extends Controller
         ]);
     }
 
+        // app/Http/Controllers/ClearanceController.php
     public function downloadClearance($tracking_no)
     {
         $clearance = Clearance::where('tracking_no', $tracking_no)
@@ -146,8 +147,9 @@ class ClearanceController extends Controller
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.clearance', [
             'clearance' => $clearance
-        ]);
+        ])->setPaper([0, 0, 609.449, 396.850], 'landscape'); // A5 landscape
 
         return $pdf->download("NBI_Clearance_{$clearance->clearance_number}.pdf");
     }
+
 }

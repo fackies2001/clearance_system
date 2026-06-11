@@ -1,165 +1,295 @@
+// resources/js/Pages/Clearance/ClearanceViewer.jsx
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function ClearanceViewer({ auth, clearance }) {
-    const handlePrint = () => {
-        window.print();
-    };
+const Label = ({ children }) => (
+    <div style={{ fontSize: 7, fontWeight: 700, textTransform: 'uppercase', color: '#555', letterSpacing: '0.5px', marginBottom: 1 }}>
+        {children}
+    </div>
+);
+
+const Val = ({ children, size = 11 }) => (
+    <div style={{ fontSize: size, fontWeight: 700, textTransform: 'uppercase', color: '#000', borderBottom: '0.5px solid #999', paddingBottom: 2, marginBottom: 5 }}>
+        {children || ' '}
+    </div>
+);
+
+function ClearanceCopy({ clearance, isPersonalCopy = false }) {
+    const validUntil = clearance.released_at
+        ? new Date(new Date(clearance.released_at).setFullYear(new Date(clearance.released_at).getFullYear() + 1))
+            .toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase()
+        : '—';
+
+    const dateIssued = clearance.released_at
+        ? new Date(clearance.released_at).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' })
+        : '—';
+
+    const dob = clearance.date_of_birth
+        ? new Date(clearance.date_of_birth).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase()
+        : '—';
+
+    const address = [
+        clearance.present_street,
+        'BRGY ' + clearance.present_barangay,
+        clearance.present_city,
+        clearance.present_province,
+    ].filter(Boolean).join(', ').toUpperCase();
 
     return (
-        <AuthenticatedLayout user={auth.user}>
-            <Head title={`NBI Clearance - ${clearance.clearance_number}`} />
+        <div style={{
+            width: '100%',
+            background: '#fff',
+            padding: '14px 18px',
+            position: 'relative',
+            overflow: 'hidden',
+            fontFamily: 'Arial, sans-serif',
+            borderBottom: isPersonalCopy ? 'none' : '2px dashed #999',
+        }}>
+            {/* Watermark */}
+            <div style={{ position: 'absolute', inset: 0, zIndex: 0, display: 'flex', flexWrap: 'wrap', overflow: 'hidden', opacity: 0.04, pointerEvents: 'none', alignContent: 'flex-start' }}>
+                {Array.from({ length: 150 }).map((_, i) => (
+                    <span key={i} style={{ fontSize: 10, fontWeight: 900, textTransform: 'uppercase', color: '#1a3a6b', whiteSpace: 'nowrap', padding: '2px 4px' }}>
+                        National Bureau of Investigation
+                    </span>
+                ))}
+            </div>
 
-            <div className="py-12 px-4 print:p-0 print:py-0">
-                <div className="max-w-3xl mx-auto">
-                    {/* Actions - Hidden on print */}
-                    <div className="flex justify-between items-center mb-6 print:hidden">
-                        <Link 
-                            href={route('application.status')}
-                            className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition"
-                        >
-                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                            Back to Status
-                        </Link>
-                        <div className="flex gap-3">
-                            <Link
-                                href={route('clearance.download', clearance.tracking_no)}
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-bold hover:bg-slate-200 transition"
-                            >
-                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                                Download PDF
-                            </Link>
-                            <button
-                                onClick={handlePrint}
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition"
-                            >
-                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
-                                Print Clearance
-                            </button>
+            {/* Personal Copy Stamp */}
+            {isPersonalCopy && (
+                <div style={{
+                    position: 'absolute', top: '35%', left: '30%', transform: 'rotate(-25deg)',
+                    fontSize: 36, fontWeight: 900, color: 'rgba(220,50,50,0.18)',
+                    border: '4px solid rgba(220,50,50,0.18)', padding: '4px 12px',
+                    textTransform: 'uppercase', letterSpacing: 2, zIndex: 2, pointerEvents: 'none',
+                    fontFamily: 'Arial Black, Arial',
+                }}>
+                    PERSONAL COPY
+                </div>
+            )}
+
+            <div style={{ position: 'relative', zIndex: 1 }}>
+                {/* Header */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, paddingBottom: 6, borderBottom: '2px solid #1a3a6b', marginBottom: 5 }}>
+                    <div style={{ width: 44, height: 44, border: '1px solid #ccc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 5.5, color: '#888', textAlign: 'center', flexShrink: 0 }}>
+                        BAGONG<br/>PILIPINAS
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: 6, fontWeight: 700, color: '#1a3a6b', letterSpacing: 2, textTransform: 'uppercase' }}>Bagong Pilipinas</div>
+                        <div style={{ fontSize: 12, fontWeight: 900, textTransform: 'uppercase' }}>Republic of the Philippines</div>
+                        <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Department of Justice</div>
+                        <div style={{ fontSize: 15, fontWeight: 900, textTransform: 'uppercase', color: '#1a3a6b', letterSpacing: 1 }}>National Bureau of Investigation</div>
+                    </div>
+                    <div style={{ width: 44, height: 44, border: '1px solid #1a3a6b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#1a3a6b', fontWeight: 900, flexShrink: 0 }}>
+                        NBI
+                    </div>
+                </div>
+
+                <p style={{ fontSize: 7, textAlign: 'center', color: '#444', marginBottom: 8, fontStyle: 'italic' }}>
+                    This is to certify that the person whose name, picture, signature and thumbprint appearing herein applied for NBI Clearance and the results is as follows:
+                </p>
+
+                {/* Main 2-column layout */}
+                <div style={{ display: 'flex', gap: 10 }}>
+
+                    {/* Left: Info */}
+                    <div style={{ flex: 1 }}>
+
+                        {/* Row 1: NBI ID + Valid Until */}
+                        <div style={{ display: 'flex', gap: 12 }}>
+                            <div style={{ flex: 1 }}>
+                                <Label>NBI ID No.</Label>
+                                <Val size={10}>{clearance.clearance_number}</Val>
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <Label>Valid Until</Label>
+                                <Val size={10}>{validUntil}</Val>
+                            </div>
                         </div>
+
+                        {/* Row 2: Family Name + First Name + Middle Name */}
+                        <div style={{ display: 'flex', gap: 12 }}>
+                            <div style={{ flex: 1 }}>
+                                <Label>Family Name</Label>
+                                <Val size={14}>{clearance.last_name}</Val>
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <Label>First Name</Label>
+                                <Val size={14}>{clearance.first_name}</Val>
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <Label>Middle Name</Label>
+                                <Val size={14}>{clearance.middle_name || 'N/A'}</Val>
+                            </div>
+                        </div>
+
+                        {/* Row 3: Address */}
+                        <div>
+                            <Label>Address</Label>
+                            <Val size={10}>{address}</Val>
+                        </div>
+
+                        {/* Row 4: Date of Birth + Place of Birth */}
+                        <div style={{ display: 'flex', gap: 12 }}>
+                            <div style={{ flex: 1 }}>
+                                <Label>Date of Birth</Label>
+                                <Val>{dob}</Val>
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <Label>Place of Birth</Label>
+                                <Val>{clearance.place_of_birth}</Val>
+                            </div>
+                        </div>
+
+                        {/* Row 5: Citizenship + Civil Status + Gender */}
+                        <div style={{ display: 'flex', gap: 12 }}>
+                            <div style={{ flex: 1 }}>
+                                <Label>Citizenship</Label>
+                                <Val>{clearance.nationality}</Val>
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <Label>Civil Status</Label>
+                                <Val>{clearance.civil_status}</Val>
+                            </div>
+                            <div style={{ flex: 1 }}>
+                                <Label>Gender</Label>
+                                <Val>{clearance.sex}</Val>
+                            </div>
+                        </div>
+
+                        {/* Row 6: Purpose */}
+                        <div>
+                            <Label>Purpose</Label>
+                            <Val>{clearance.purpose}</Val>
+                        </div>
+
+                        {/* Remarks */}
+                        <div style={{ border: '1.5px solid #000', padding: '4px 8px', marginTop: 2, marginBottom: 8 }}>
+                            <Label>Remarks</Label>
+                            <div style={{ fontSize: 12, fontWeight: 900, textTransform: 'uppercase' }}>
+                                {clearance.status === 'CLEARED' ? 'NO DEROGATORY RECORD' : 'WITH DEROGATORY RECORD'}
+                            </div>
+                        </div>
+
+                        {/* Bottom: Barcode + Signature */}
+                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16 }}>
+                            <div style={{ flex: 1 }}>
+                                <div style={{ background: '#000', height: 32, width: '100%', position: 'relative', overflow: 'hidden' }}>
+                                    {Array.from({ length: 80 }).map((_, i) => (
+                                        <div key={i} style={{
+                                            position: 'absolute', top: 0, bottom: 0,
+                                            left: `${i * 1.25}%`,
+                                            width: `${Math.random() > 0.5 ? 0.5 : 0.25}%`,
+                                            background: '#fff',
+                                        }}/>
+                                    ))}
+                                </div>
+                                <div style={{ fontSize: 7, fontFamily: 'monospace', textAlign: 'center', marginTop: 1 }}>
+                                    {clearance.clearance_number}
+                                </div>
+                            </div>
+                            <div style={{ textAlign: 'center' }}>
+                                <div style={{ borderTop: '1px solid #000', width: 110, marginBottom: 2 }}/>
+                                <div style={{ fontSize: 7.5, fontWeight: 900, textTransform: 'uppercase' }}>ATTY. NBI DIRECTOR</div>
+                                <div style={{ fontSize: 6.5, color: '#555', textTransform: 'uppercase' }}>Director</div>
+                            </div>
+                        </div>
+
                     </div>
 
-                    {/* The NBI Clearance Certificate */}
-                    <div className="bg-white border-[1px] border-slate-300 shadow-2xl p-0 min-h-[800px] relative overflow-hidden print:shadow-none print:border-none rounded-lg print:rounded-none">
-                        
-                        {/* Security Background Pattern (CSS based) */}
-                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none select-none overflow-hidden" 
-                             style={{ backgroundImage: 'radial-gradient(#1e3a8a 1px, transparent 0)', backgroundSize: '24px 24px' }}>
+                    {/* Right: Photo + QR + Transaction */}
+                    <div style={{ width: 95, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, flexShrink: 0 }}>
+
+                        <div style={{ background: '#1a3a6b', color: '#fff', fontSize: 8, fontWeight: 900, padding: '2px 6px', letterSpacing: 1, textAlign: 'center', width: '100%' }}>
+                            A-{clearance.clearance_number?.slice(-7)}
                         </div>
 
-                        {/* Certificate Body */}
-                        <div className="relative z-10 p-12 flex flex-col h-full">
-                            
-                            {/* Header */}
-                            <div className="text-center mb-8 border-b-2 border-slate-900 pb-6">
-                                <h1 className="text-3xl font-black tracking-tighter text-slate-900 mb-1 uppercase">Republic of the Philippines</h1>
-                                <h2 className="text-xl font-bold tracking-tight text-slate-800 mb-0.5 uppercase">Department of Justice</h2>
-                                <h3 className="text-2xl font-black tracking-widest text-blue-900 uppercase">National Bureau of Investigation</h3>
-                                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-2">Manila Division</p>
-                            </div>
-
-                            {/* Info Section */}
-                            <div className="grid grid-cols-12 gap-8 mb-12">
-                                <div className="col-span-8 space-y-6">
-                                    <div className="flex justify-between items-start border-b border-slate-100 pb-2">
-                                        <div>
-                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Clearance Number</p>
-                                            <p className="font-mono font-bold text-lg text-blue-600">{clearance.clearance_number}</p>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Date Issued</p>
-                                            <p className="font-bold text-sm text-gray-900">{new Date(clearance.released_at).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Name</p>
-                                        <p className="text-3xl font-black text-slate-900 uppercase leading-none">
-                                            {clearance.last_name}, {clearance.first_name} {clearance.middle_name} {clearance.suffix}
-                                        </p>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Birthdate</p>
-                                            <p className="font-bold text-sm uppercase text-gray-900">{new Date(clearance.date_of_birth).toLocaleDateString()}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Purpose</p>
-                                            <p className="font-bold text-sm uppercase text-gray-900">{clearance.purpose}</p>
-                                        </div>
-                                    </div>
-
-                                    <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-lg">
-                                        <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Verification Status</p>
-                                        <p className="text-2xl font-black text-emerald-700 tracking-widest uppercase">Cleared / No Record</p>
-                                    </div>
-                                </div>
-
-                                <div className="col-span-4 flex flex-col items-center gap-4">
-                                    {/* Photo Placeholder */}
-                                    <div className="w-full aspect-[3/4] bg-slate-100 border-2 border-slate-200 rounded-lg overflow-hidden flex items-center justify-center">
-                                       {clearance.photo_path ? (
-                                            <img src={`/storage/${clearance.photo_path}`} alt="Applicant" className="w-full h-full object-cover" />
-                                       ) : (
-                                            <div className="text-gray-300 text-xs text-center p-4 uppercase font-bold">Photo Placeholder</div>
-                                       )}
-                                    </div>
-                                    
-                                    {/* QR Code Placeholder */}
-                                    <div className="w-24 h-24 bg-white border border-slate-200 p-1">
-                                        {/* Simplified QR Placeholder */}
-                                        <div className="w-full h-full bg-slate-900 flex items-center justify-center">
-                                            <div className="grid grid-cols-4 grid-rows-4 w-full h-full gap-1 p-1">
-                                                {[...Array(16)].map((_, i) => (
-                                                    <div key={i} className={`w-full h-full ${Math.random() > 0.4 ? 'bg-white' : 'bg-transparent'}`}></div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p className="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Verify authenticity via QR</p>
-                                </div>
-                            </div>
-
-                            {/* Fingerprints section */}
-                            <div className="grid grid-cols-2 gap-8 mb-12 flex-1">
-                                <div className="border border-slate-200 p-4 rounded-xl">
-                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest text-center mb-2">Left Thumb</p>
-                                    <div className="w-full h-32 flex items-center justify-center grayscale opacity-20">
-                                        {/* Fingerprint Glyph */}
-                                        <svg className="w-20 h-20 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM5.121 14.879A7.48 7.48 0 0110 13c1.774 0 3.393.616 4.665 1.644l.214.18c.08.067.16.136.242.204a8 8 0 11-10.021-11.879l.068.04c.792.484 1.488 1.13 2.057 1.9l.481.654A7.481 7.481 0 0110 7c1.774 0 3.393.616 4.665 1.644.154.129.303.264.446.404L15.343 9.49a7.51 7.51 0 01-.176.152l-.125.101A7.476 7.476 0 0110 11c-1.774 0-3.393-.616-4.665-1.644a7.502 7.502 0 01-1.156-1.127l-.122-.162z" clipRule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div className="border border-slate-200 p-4 rounded-xl">
-                                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest text-center mb-2">Right Thumb</p>
-                                    <div className="w-full h-32 flex items-center justify-center grayscale opacity-20">
-                                         <svg className="w-20 h-20 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fillRule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM5.121 14.879A7.48 7.48 0 0110 13c1.774 0 3.393.616 4.665 1.644l.214.18c.08.067.16.136.242.204a8 8 0 11-10.021-11.879l.068.04c.792.484 1.488 1.13 2.057 1.9l.481.654A7.481 7.481 0 0110 7c1.774 0 3.393.616 4.665 1.644.154.129.303.264.446.404L15.343 9.49a7.51 7.51 0 01-.176.152l-.125.101A7.476 7.476 0 0110 11c-1.774 0-3.393-.616-4.665-1.644a7.502 7.502 0 01-1.156-1.127l-.122-.162z" clipRule="evenodd" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Footer */}
-                            <div className="flex justify-between items-end">
-                                <div className="text-center">
-                                    <div className="w-32 h-px bg-slate-900 mb-2 mx-auto"></div>
-                                    <p className="text-[10px] font-black uppercase text-slate-900">NBI Authorized Officer</p>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-[8px] text-gray-400 font-bold uppercase italic max-w-xs">
-                                        This certificate is issued for official use only. Any alteration or unauthorized reproduction will invalidate this document.
-                                    </p>
-                                </div>
-                            </div>
-
+                        {/* Photo */}
+                        <div style={{ width: 85, height: 105, border: '1.5px solid #555', overflow: 'hidden', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            {clearance.photo_path
+                                ? <img src={`/storage/${clearance.photo_path}`} alt="Photo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                : <span style={{ fontSize: 7, color: '#aaa', textAlign: 'center' }}>NO PHOTO</span>
+                            }
                         </div>
+
+                        {/* Signature */}
+                        <div style={{ width: 85, height: 28, border: '0.5px solid #999', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <span style={{ fontSize: 6.5, color: '#888', textTransform: 'uppercase' }}>Signature</span>
+                        </div>
+
+                        {/* QR */}
+                        <div style={{ width: 75, height: 75, background: '#000', display: 'flex', flexWrap: 'wrap', padding: 3, gap: 1 }}>
+                            {Array.from({ length: 49 }).map((_, i) => (
+                                <div key={i} style={{ width: 8, height: 8, background: Math.random() > 0.45 ? '#fff' : 'transparent' }}/>
+                            ))}
+                        </div>
+                        <div style={{ fontSize: 6.5, color: '#888', textTransform: 'uppercase', textAlign: 'center' }}>Scan QR to verify</div>
+
+                        {/* Transaction */}
+                        <table style={{ fontSize: 6, borderCollapse: 'collapse', width: '100%' }}>
+                            <tbody>
+                                {[
+                                    ['Date', dateIssued],
+                                    ['Agency', 'NBI'],
+                                    ['O.R. No.', clearance.payment_reference || 'N/A'],
+                                    ['DST PAID', clearance.payment_amount ? '₱' + clearance.payment_amount : 'N/A'],
+                                ].map(([k, v]) => (
+                                    <tr key={k}>
+                                        <td style={{ padding: '1px 3px', border: '0.5px solid #ccc', color: '#555', fontWeight: 700 }}>{k}</td>
+                                        <td style={{ padding: '1px 3px', border: '0.5px solid #ccc' }}>{v}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
                     </div>
                 </div>
             </div>
+        </div>
+    );
+}
+
+export default function ClearanceViewer({ auth, clearance }) {
+    return (
+        <AuthenticatedLayout user={auth.user}>
+            <Head title={`NBI Clearance - ${clearance.clearance_number}`}>
+                <style>{`
+                    @media print {
+                        body * { visibility: hidden; }
+                        #clearance-print, #clearance-print * { visibility: visible; }
+                        #clearance-print { position: fixed; top: 0; left: 0; width: 100%; }
+                    }
+                `}</style>
+            </Head>
+
+            {/* Action Buttons */}
+            <div className="flex justify-between items-center px-6 py-4 print:hidden">
+                <Link href={route('application.status')} className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 transition">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Back to Status
+                </Link>
+                <div className="flex gap-3">
+                    <Link href={route('clearance.download', clearance.tracking_no)}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-bold hover:bg-slate-200 transition">
+                        Download PDF
+                    </Link>
+                    <button onClick={() => window.print()}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition">
+                        Print Clearance
+                    </button>
+                </div>
+            </div>
+
+            {/* Two Copies */}
+            <div className="flex justify-center px-4 pb-12 print:p-0">
+                <div id="clearance-print" style={{ width: 820, border: '1px solid #ccc', boxShadow: '0 4px 24px rgba(0,0,0,0.10)' }}>
+                    <ClearanceCopy clearance={clearance} isPersonalCopy={false} />
+                    <ClearanceCopy clearance={clearance} isPersonalCopy={true} />
+                </div>
+            </div>
+
         </AuthenticatedLayout>
     );
 }
