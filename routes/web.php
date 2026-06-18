@@ -80,6 +80,7 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     })->name('apply.form');
     
     Route::post('/apply', [ClearanceController::class, 'store'])->name('apply.submit');
+    Route::patch('/apply/{clearance}', [ClearanceController::class, 'update'])->name('apply.update');
 
     // Appointments (User)
     Route::get('/appointment', [AppointmentController::class, 'index'])->name('appointment.index');
