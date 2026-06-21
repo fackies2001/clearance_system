@@ -14,24 +14,22 @@ export default function Edit({ mustVerifyEmail, status }) {
         >
             <Head title="Profile" />
 
-            <div className="py-10">
-                <div className="mx-auto max-w-2xl space-y-6 px-4 sm:px-6">
+           <div className="py-10">
+                        <div className="mx-auto max-w-2xl space-y-6 px-4 sm:px-6">
 
-                    {/* Profile Info */}
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-                        <UpdateProfileInformationForm
-                            mustVerifyEmail={mustVerifyEmail}
-                            status={status}
-                        />
-                    </div>
+                            {/* Profile Info */}
+                            <UpdateProfileInformationForm
+                                mustVerifyEmail={mustVerifyEmail}
+                                status={status}
+                            />
 
-                    {/* Update Password */}
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-                        <UpdatePasswordForm />
-                    </div>
+                            {/* Update Password */}
+                            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                                <UpdatePasswordForm />
+                            </div>
 
-                </div>
-            </div>
+                        </div>
+                    </div>  
         </AuthenticatedLayout>
     );
 }
