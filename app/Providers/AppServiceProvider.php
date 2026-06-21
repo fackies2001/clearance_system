@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,10 +19,17 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+        public function boot(): void
     {
         Vite::prefetch(concurrency: 3);
-        
+
+        Password::defaults(function () {
+            return Password::min(8)
+                ->mixedCase()
+                ->numbers()
+                ->symbols();
+        });
+
         if (app()->environment('local')) {
             \Illuminate\Support\Facades\URL::forceScheme('https');
             \Illuminate\Support\Facades\URL::forceRootUrl('https://127.0.0.1:8000');

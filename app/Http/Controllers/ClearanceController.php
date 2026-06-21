@@ -154,12 +154,11 @@ class ClearanceController extends Controller
 
         public function update(Request $request, \App\Models\Clearance $clearance): \Illuminate\Http\RedirectResponse
     {
-        // Siguraduhing sarili ng naka-login ang clearance na ito
+    
         if ($clearance->user_id !== auth()->id()) {
             abort(403);
         }
 
-        // Pwede lang i-edit kung pending pa at hindi pa paid
         if (!in_array($clearance->workflow_status, ['pending', 'payment_pending']) || $clearance->payment_status === 'paid') {
             abort(403, 'This application can no longer be edited.');
         }

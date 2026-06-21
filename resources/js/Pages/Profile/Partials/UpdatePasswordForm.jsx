@@ -2,6 +2,7 @@ import InputError from '@/Components/InputError';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import { useRef } from 'react';
+import PasswordStrengthChecklist from '@/Components/PasswordStrengthChecklist';
 
 const inputClass = "w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all";
 const labelClass = "block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5";
@@ -69,6 +70,7 @@ export default function UpdatePasswordForm() {
                             autoComplete="new-password"
                         />
                         <InputError message={errors.password} className="mt-1.5" />
+                        <PasswordStrengthChecklist password={data.password} />
                     </div>
                     <div>
                         <label className={labelClass}>Confirm Password</label>

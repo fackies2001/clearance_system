@@ -1,6 +1,7 @@
 import InputError from '@/Components/InputError';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import PasswordStrengthChecklist from '@/Components/PasswordStrengthChecklist';
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -209,6 +210,7 @@ export default function Register() {
                             required
                         />
                         <InputError message={errors.password} className="mt-1.5" />
+                        <PasswordStrengthChecklist password={data.password} />
                     </div>
                     <div>
                         <label className={labelClass}>Confirm Password</label>
