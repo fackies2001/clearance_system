@@ -366,7 +366,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger className="outline-none focus:ring-4 focus:ring-blue-100 rounded-full">
                                         <Avatar className="cursor-pointer border-2 border-gray-200 hover:border-blue-400 transition-all shadow-sm">
-                                            <AvatarImage src={user?.avatar || ""} />
+                                            <AvatarImage src={user?.avatar_url || ""} />
                                             <AvatarFallback className="bg-blue-600 text-white font-bold uppercase">
                                                 {user?.name?.charAt(0) || 'U'}
                                             </AvatarFallback>

@@ -32,12 +32,15 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user() ? [
-                    'id' => $request->user()->id,
-                    'name' => $request->user()->name,
-                    'email' => $request->user()->email,
-                    'role' => $request->user()->role,
-                ] : null,
+               'user' => $request->user() ? [
+                'id' => $request->user()->id,
+                'name' => $request->user()->name,
+                'email' => $request->user()->email,
+                'role' => $request->user()->role,
+                'avatar' => $request->user()->avatar,
+                'avatar_url' => $request->user()->avatar_url,
+            ] : null,
+            
                 'notifications' => $request->user() ? \App\Models\Notification::where('user_id', $request->user()->id)->latest()->take(10)->get() : [],
                 'unreadCount'   => $request->user() ? \App\Models\Notification::where('user_id', $request->user()->id)->whereNull('read_at')->count() : 0,
             ],

@@ -13,15 +13,18 @@ class User extends Authenticatable implements \Illuminate\Contracts\Auth\MustVer
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = [
+        protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'avatar',
         'two_factor_code',
         'two_factor_expires_at',
         'two_factor_enabled',
     ];
+
+    protected $appends = ['avatar_url'];
 
     protected $hidden = [
         'password',
@@ -84,4 +87,12 @@ class User extends Authenticatable implements \Illuminate\Contracts\Auth\MustVer
     {
         return $this->hasMany(Appointment::class);
     }
+
+        public function getAvatarUrlAttribute(): ?string
+    {
+        return $this->avatar
+            ? \Illuminate\Support\Facades\Storage::url($this->avatar)
+            : null;
+    }
+
 }
