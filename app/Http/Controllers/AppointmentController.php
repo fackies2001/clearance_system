@@ -20,7 +20,7 @@ class AppointmentController extends Controller
         '04:00 PM - 05:00 PM',
     ];
 
-    const MAX_PER_SLOT = 10;
+    const MAX_PER_SLOT = 100;
 
     /**
      * Show user's appointment page (booking form or existing appointment).
@@ -100,7 +100,7 @@ class AppointmentController extends Controller
         }
 
         $request->validate([
-            'appointment_date' => 'required|date|after:today',
+            'appointment_date' => 'required|date|after:today', // keep as is
             'time_slot'        => 'required|string|in:' . implode(',', self::TIME_SLOTS),
             'type'             => 'required|in:scheduled,walk_in',
             'notes'            => 'nullable|string|max:500',

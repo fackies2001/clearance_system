@@ -16,7 +16,7 @@ class AppointmentController extends Controller
     {
         $search    = $request->input('search');
         $status    = $request->input('status');
-        $perPage   = (int) $request->input('per_page', 10);
+        $perPage   = (int) $request->input('per_page', 100);
         $sortField = $request->input('sort_field', 'time_slot');
         $sortOrder = $request->input('sort_order', 'asc');
         $range = $request->input('range', 'all_time');

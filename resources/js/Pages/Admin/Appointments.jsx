@@ -81,14 +81,16 @@ export default function AdminAppointments({ appointments = {}, stats = {}, filte
     };
 
     const fmtDate = (str) => {
-        if (!str || typeof str !== 'string') return 'N/A';
-        try {
-            const [y, m, d] = str.split('-');
-            return new Date(y, m - 1, d).toLocaleDateString('en-PH', {
-                month: 'short', day: 'numeric', year: 'numeric',
-            });
-        } catch { return str; }
-    };
+    if (!str) return 'N/A';
+    try {
+        // Handle both "YYYY-MM-DD" and "YYYY-MM-DDTHH:mm:ss.000000Z"
+        const dateStr = typeof str === 'string' ? str.substring(0, 10) : str;
+        const [y, m, d] = dateStr.split('-');
+        return new Date(Number(y), Number(m) - 1, Number(d)).toLocaleDateString('en-PH', {
+            month: 'short', day: 'numeric', year: 'numeric',
+        });
+    } catch { return 'Invalid Date'; }
+};
 
     const SortIcon = ({ field }) => {
         const active = filters.sort_field === field;

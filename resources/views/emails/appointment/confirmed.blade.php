@@ -1,7 +1,7 @@
 <x-mail::message>
 # Appointment Confirmed!
 
-Hello {{ $appointment->user->first_name }},
+Hello {{ $appointment->user->name }},
 
 Your NBI Clearance appointment has been confirmed. Please see the details below:
 

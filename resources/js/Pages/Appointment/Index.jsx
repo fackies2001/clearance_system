@@ -32,7 +32,7 @@ function CalendarPicker({ selectedDate, onSelect }) {
 
     const handleClick = (day) => {
         const d = new Date(view.year, view.month, day);
-        if (d < today || d.getDay() === 0) return; // Fixed: Allows booking for 'today'
+        if (d <= today || d.getDay() === 0) return;
         const iso = `${view.year}-${String(view.month + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
         onSelect(iso);
     };
@@ -76,7 +76,7 @@ function CalendarPicker({ selectedDate, onSelect }) {
                     if (!day) return <div key={`e-${idx}`} />;
 
                     const thisDate  = new Date(view.year, view.month, day);
-                    const isPast    = thisDate < today; // Fixed: strictly less than today
+                    const isPast    = thisDate <= today;  // Fixed: strictly less than today
                     const isSunday  = thisDate.getDay() === 0;
                     const disabled  = isPast || isSunday;
                     const iso       = `${view.year}-${String(view.month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
@@ -172,10 +172,11 @@ export default function AppointmentIndex({ myAppointment, paidClearance, release
         });
     };
 
-    const fmtDate = (str) => {
+        const fmtDate = (str) => {
         if (!str) return 'N/A';
         try {
-            const [y, m, d] = str.split('-');
+            const dateStr = typeof str === 'string' ? str.substring(0, 10) : str;
+            const [y, m, d] = dateStr.split('-');
             return new Date(Number(y), Number(m) - 1, Number(d)).toLocaleDateString('en-PH', {
                 weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
             });
