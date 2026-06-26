@@ -22,8 +22,11 @@ const getRangeLabel = (range) => {
     const found = RANGE_OPTIONS.find(o => o.key === range);
     if (found) return found.label;
     if (range && /^\d{4}-\d{2}-\d{2}$/.test(range)) {
-        const [y, m, d] = range.split('-');
-        return `${m}/${d}/${y}`;
+        const dateStr = range.substring(0, 10);
+        const [y, m, d] = dateStr.split('-');
+        return new Date(Number(y), Number(m) - 1, Number(d)).toLocaleDateString('en-PH', {
+            month: 'short', day: 'numeric', year: 'numeric',
+        });
     }
     return 'Today';
 };
@@ -123,9 +126,10 @@ export default function AdminAppointments({ appointments = {}, stats = {}, filte
         </div>
     );
 
-        const STAT_CARDS = [
+        const currentRangeLabel = getRangeLabel(filters.range || 'all_time');
+    const STAT_CARDS = [
         {
-            label: 'Total Today',   value: stats.total     || 0,
+            label: `Total ${currentRangeLabel}`,   value: stats.total     || 0,
             sub: `${stats.pending || 0} pending processing`,
             color: '#3b82f6', 
         },
@@ -264,7 +268,7 @@ export default function AdminAppointments({ appointments = {}, stats = {}, filte
                                     >
                                         <span className="flex items-center gap-2">
                                             <span>📅</span>
-                                            <span>{getRangeLabel(filters.range || 'today')}</span>
+                                            <span>{getRangeLabel(filters.range || 'all_time')}</span>
                                         </span>
                                         <svg className={`w-3 h-3 text-slate-400 flex-shrink-0 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} viewBox="0 0 12 12" fill="none" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4.5l3 3 3-3" />
@@ -274,7 +278,7 @@ export default function AdminAppointments({ appointments = {}, stats = {}, filte
                                     {isDropdownOpen && (
                                         <div className="absolute right-0 mt-2 bg-white border border-slate-200 shadow-xl rounded-xl p-1.5 z-50 w-56">
                                             {RANGE_OPTIONS.map(opt => {
-                                                const active = (filters.range || 'today') === opt.key;
+                                                const active = (filters.range || 'all_time') === opt.key;
                                                 return (
                                                     <button key={opt.key}
                                                         onClick={() => { updateFilters({ range: opt.key }); setIsDropdownOpen(false); }}

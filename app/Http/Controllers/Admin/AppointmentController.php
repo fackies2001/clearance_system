@@ -66,25 +66,38 @@ class AppointmentController extends Controller
                 break;
         }
 
-        // ── Stats — always scoped to TODAY for the header cards ────────
-        $statsDate = Carbon::today()->toDateString();
-        $stats = [
-            'total'     => Appointment::where('appointment_date', $statsDate)->count(),
-            'pending'   => Appointment::where('status', 'pending')->where('appointment_date', $statsDate)->count(),
-            'confirmed' => Appointment::where('status', 'confirmed')->where('appointment_date', $statsDate)->count(),
-            'completed' => Appointment::where('status', 'completed')->where('appointment_date', $statsDate)->count(),
-            'cancelled' => Appointment::where('status', 'cancelled')->where('appointment_date', $statsDate)->count(),
-        ];
-
-        // ── Main Query ─────────────────────────────────────────────────
-        $appointmentsQuery = Appointment::with(['user', 'clearance'])
+        // ── Stats — scoped to the selected date range (by submission date) ──
+        $statsQuery = fn() => Appointment::query()
             ->when($dateFrom && $dateTo && $isRange, fn($q) =>
-                $q->whereBetween('appointment_date', [$dateFrom, $dateTo])
+                $q->whereBetween('created_at', [
+                    Carbon::parse($dateFrom)->startOfDay(),
+                    Carbon::parse($dateTo)->endOfDay(),
+                ])
             )
             ->when($dateFrom && $dateTo && !$isRange && $range !== 'all_time', fn($q) =>
-                $q->where('appointment_date', $dateFrom)
+                $q->whereDate('created_at', $dateFrom)
+            );
+
+        $stats = [
+            'total'     => $statsQuery()->count(),
+            'pending'   => $statsQuery()->where('status', 'pending')->count(),
+            'confirmed' => $statsQuery()->where('status', 'confirmed')->count(),
+            'completed' => $statsQuery()->where('status', 'completed')->count(),
+            'cancelled' => $statsQuery()->where('status', 'cancelled')->count(),
+        ];
+
+        // ── Main Query (filter by submission date, not appointment date) ──
+        $appointmentsQuery = Appointment::with(['user', 'clearance'])
+            ->when($dateFrom && $dateTo && $isRange, fn($q) =>
+                $q->whereBetween('created_at', [
+                    Carbon::parse($dateFrom)->startOfDay(),
+                    Carbon::parse($dateTo)->endOfDay(),
+                ])
             )
-            ->when($status, fn($q) => $q->where('status', $status))
+            ->when($dateFrom && $dateTo && !$isRange && $range !== 'all_time', fn($q) =>
+                $q->whereDate('created_at', $dateFrom)
+            )
+                ->when($status, fn($q) => $q->where('status', $status))
             ->when($search, fn($q) =>
                 $q->where(function ($inner) use ($search) {
                     $inner->where('queue_number', 'like', "%{$search}%")
