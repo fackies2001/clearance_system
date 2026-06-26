@@ -85,32 +85,33 @@ class DashboardController extends Controller
         'active_range'          => $range, 
     ];
 
-       // ── Monthly Applications (last 6 months) ────────────────────────
-        // Fetch monthly counts grouped by continuous formatted year-month keys and readable short month names (e.g., 'Jan', 'Feb')
-       $rawMonthlyData = Clearance::select(
+        // ── Monthly Applications (Trend Visualization) ────────────────────────
+        // Guarantee at least 6 to 12 data points so the area chart can always draw a line,
+        // even if the database only has data for a single month.
+        $monthsToGenerate = in_array($range, ['last_year', 'all_time']) ? 12 : 6;
+        
+        $chartStart = \Carbon\Carbon::now()->subMonths($monthsToGenerate - 1)->startOfMonth();
+        $chartEnd   = \Carbon\Carbon::now()->endOfMonth();
+
+        $rawMonthlyData = Clearance::select(
             DB::raw('COUNT(*) as total'),
-            DB::raw("DATE_FORMAT(created_at, '%b') as month_name"),
             DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month_key")
         )
-        ->whereBetween('created_at', [$startOfPeriod, $endOfPeriod]) // Dynamically respects whatever option is selected
-        ->groupBy('month_key', 'month_name')
-        ->orderBy('month_key')
-        ->get();
+        ->whereBetween('created_at', [$chartStart, $chartEnd])
+        ->groupBy('month_key')
+        ->pluck('total', 'month_key');
 
-        $monthlyApplications = $rawMonthlyData->map(function ($item) {
-            return [
-                'month' => $item->month_name,
-                'total' => (int) $item->total
-            ];
-        });
-
-        // Map the collection dataset into clean key-value structures expected by ApexCharts options configuration
-        $monthlyApplications = $rawMonthlyData->map(function ($item) {
-            return [
-                'month' => $item->month_name,
-                'total' => (int) $item->total
-            ];
-        });
+        $monthlyApplications = collect();
+        for ($i = $monthsToGenerate - 1; $i >= 0; $i--) {
+            $date = \Carbon\Carbon::now()->subMonths($i);
+            $key = $date->format('Y-m');
+            $label = $date->format('M Y'); // e.g. "Jun 2026"
+            
+            $monthlyApplications->push([
+                'month' => $label,
+                'total' => $rawMonthlyData->get($key, 0)
+            ]);
+        }
 
         // ── Workflow Status Breakdown ────────────────────────────────────
      $statusBreakdown = Clearance::select(
