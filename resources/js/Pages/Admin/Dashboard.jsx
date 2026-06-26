@@ -461,7 +461,7 @@ export default function Dashboard({
 
                     {/* ── Row 2: Monthly Applications + Workflow Donut ── */}
                 <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 18, marginBottom: 18 }}>
-                        <ChartCard title="Monthly Applications" subtitle={stats.active_range === 'all_time' ? "All-time history overview" : "Active range visualization matrix"}>
+                        <ChartCard title="Monthly Applications" subtitle={['today', 'yesterday', 'last_7_days', 'last_month'].includes(stats.active_range) ? "6-Month historical trend" : (stats.active_range === 'all_time' ? "All-time history overview" : "Active range visualization matrix")}>
                             {(monthlyApplications || []).length > 0 ? (
                                 <ReactApexChart
                                     options={monthlyChart.options}

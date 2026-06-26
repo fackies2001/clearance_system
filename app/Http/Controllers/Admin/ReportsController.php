@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Clearance;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -17,34 +18,47 @@ class ReportsController extends Controller
         // Helper function to dynamically append the date scope constraints based on filter type
         $applyDateFilter = function ($query, $column = 'created_at') use ($filter) {
             if ($filter === 'today') {
-                return $query->whereDate($column, \Carbon\Carbon::today());
+                return $query->whereDate($column, Carbon::today());
             } elseif ($filter === 'yesterday') {
-                return $query->whereDate($column, \Carbon\Carbon::yesterday());
+                return $query->whereDate($column, Carbon::yesterday());
             } elseif ($filter === '7_days_ago') {
-                return $query->where($column, '>=', \Carbon\Carbon::now()->subDays(7));
+                return $query->where($column, '>=', Carbon::now()->subDays(7));
             } elseif ($filter === 'last_month') {
-                return $query->whereMonth($column, \Carbon\Carbon::now()->subMonth()->month)
-                             ->whereYear($column, \Carbon\Carbon::now()->subMonth()->year);
+                return $query->whereMonth($column, Carbon::now()->subMonth()->month)
+                             ->whereYear($column, Carbon::now()->subMonth()->year);
             } elseif ($filter === 'last_year') {
-                return $query->whereYear($column, \Carbon\Carbon::now()->subYear()->year);
+                return $query->whereYear($column, Carbon::now()->subYear()->year);
             }
             // 'all_time' returns all historical metrics without conditional constraint closures
             return $query;
         };
 
-        // ── 1. Monthly Applications (last 12 months) ─────────────────────
-        $monthlyApplicationsQuery = Clearance::selectRaw(
-            "DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as total"
-        );
-        $monthlyApplications = $applyDateFilter($monthlyApplicationsQuery, 'created_at')
-            ->where('created_at', '>=', now()->subMonths(12)->startOfMonth())
-            ->groupBy('month')
-            ->orderBy('month', 'asc')
-            ->get()
-            ->map(fn($row) => [
-                'month' => $row->month,
-                'total' => $row->total,
+        // ── 1. Monthly Applications (Padded Trend) ──────────────────────
+        // Guarantee at least 6 to 12 data points so the area chart can always draw a line,
+        // even if the database only has data for a single month.
+        $monthsToGenerate = in_array($filter, ['last_year', 'all_time']) ? 12 : 6;
+
+        $chartStart = Carbon::now()->subMonths($monthsToGenerate - 1)->startOfMonth();
+        $chartEnd   = Carbon::now()->endOfMonth();
+
+        $rawMonthlyApps = Clearance::select(
+            DB::raw('COUNT(*) as total'),
+            DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month_key")
+        )
+        ->whereBetween('created_at', [$chartStart, $chartEnd])
+        ->groupBy('month_key')
+        ->pluck('total', 'month_key');
+
+        $monthlyApplications = collect();
+        for ($i = $monthsToGenerate - 1; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $key = $date->format('Y-m');
+            $label = $date->format('M Y');
+            $monthlyApplications->push([
+                'month' => $label,
+                'total' => $rawMonthlyApps->get($key, 0),
             ]);
+        }
 
         // ── 2. Applications per Workflow Status ───────────────────────────
         $statusBreakdownQuery = Clearance::selectRaw('workflow_status, COUNT(*) as total');
@@ -80,20 +94,28 @@ class ReportsController extends Controller
                 'total' => $row->total,
             ]);
 
-        // ── 5. Monthly Released Clearances (last 12 months) ──────────────
-        $monthlyReleasedQuery = Clearance::selectRaw(
-            "DATE_FORMAT(reviewed_at, '%Y-%m') as month, COUNT(*) as total"
-        )->where('workflow_status', 'released');
-        
-        $monthlyReleased = $applyDateFilter($monthlyReleasedQuery, 'reviewed_at')
-            ->where('reviewed_at', '>=', now()->subMonths(12)->startOfMonth())
-            ->groupBy('month')
-            ->orderBy('month', 'asc')
-            ->get()
-            ->map(fn($row) => [
-                'month' => $row->month,
-                'total' => $row->total,
+        // ── 5. Monthly Released Clearances (Padded Trend) ────────────────
+        // Same padding approach: guaranteed continuous months so bar chart always renders.
+        $rawMonthlyReleased = Clearance::select(
+            DB::raw('COUNT(*) as total'),
+            DB::raw("DATE_FORMAT(reviewed_at, '%Y-%m') as month_key")
+        )
+        ->where('workflow_status', 'released')
+        ->whereNotNull('reviewed_at')
+        ->whereBetween('reviewed_at', [$chartStart, $chartEnd])
+        ->groupBy('month_key')
+        ->pluck('total', 'month_key');
+
+        $monthlyReleased = collect();
+        for ($i = $monthsToGenerate - 1; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $key = $date->format('Y-m');
+            $label = $date->format('M Y');
+            $monthlyReleased->push([
+                'month' => $label,
+                'total' => $rawMonthlyReleased->get($key, 0),
             ]);
+        }
 
         // ── 6. Summary Stat Cards ─────────────────────────────────────────
         $totalApplications  = $applyDateFilter(Clearance::query(), 'created_at')->count();

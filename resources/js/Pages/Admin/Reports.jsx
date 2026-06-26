@@ -111,7 +111,7 @@ export default function Reports({
             fill: { type: "gradient", gradient: { shadeIntensity: 1, opacityFrom: 0.35, opacityTo: 0.02 } },
             colors: ["#1d4ed8"],
             xaxis: {
-                categories: monthlyApplications.map(d => fmtMonth(d.month)),
+                categories: monthlyApplications.map(d => d.month),
                 labels: { style: { fontSize: "11px", colors: "#94a3b8" } },
             },
             yaxis: { labels: { style: { fontSize: "11px", colors: "#94a3b8" } } },
@@ -135,7 +135,7 @@ export default function Reports({
                 } 
             },
             xaxis: {
-                categories: monthlyReleased.map(d => fmtMonth(d.month)),
+                categories: monthlyReleased.map(d => d.month),
                 labels: { style: { fontSize: "11px", colors: "#94a3b8" } },
             },
             yaxis: { labels: { style: { fontSize: "11px", colors: "#94a3b8" } } },
@@ -311,7 +311,7 @@ export default function Reports({
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
                     <ChartCard
                         title="Monthly Applications Filed"
-                        subtitle="Last 12 months"
+                        subtitle="6-Month historical trend"
                     >
                         {monthlyApplications.length > 0 ? (
                             <ReactApexChart
@@ -327,7 +327,7 @@ export default function Reports({
 
                     <ChartCard
                         title="Monthly Clearances Released"
-                        subtitle="Last 12 months"
+                        subtitle="6-Month historical trend"
                     >
                         {monthlyReleased.length > 0 ? (
                             <ReactApexChart
