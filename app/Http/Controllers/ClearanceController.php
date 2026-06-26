@@ -19,14 +19,6 @@ class ClearanceController extends Controller
     if (Auth::user()->role !== 'admin') {
         $existing = Clearance::where('user_id', Auth::id())
             ->whereNotIn('workflow_status', ['released', 'rejected'])
-            ->where(function($query) {
-                $query->where('payment_status', 'paid')
-                    ->orWhere(function($q) {
-                        $q->where('payment_status', 'unpaid')
-                            ->whereNotNull('payment_method')
-                            ->where('payment_method', '!=', 'walkin');
-                    });
-            })
             ->exists();
 
         if ($existing) {

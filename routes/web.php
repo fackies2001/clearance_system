@@ -65,7 +65,6 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
         $existing = auth()->user()->role === 'admin' ? null : 
             \App\Models\Clearance::where('user_id', auth()->id())
                 ->whereNotIn('workflow_status', ['released', 'rejected'])
-                ->whereNotIn('payment_status', ['paid'])
                 ->first();
 
         // Latest clearance para sa pre-fill (kahit released/rejected)
