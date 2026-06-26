@@ -61,7 +61,7 @@ class AppointmentController extends Controller
         $date = $request->validate(['date' => 'required|date'])['date'];
 
         $slots = collect(self::TIME_SLOTS)->map(function ($slot) use ($date) {
-            $booked = Appointment::where('appointment_date', $date)
+            $booked = Appointment::whereDate('appointment_date', $date)
                 ->where('time_slot', $slot)
                 ->whereNotIn('status', ['cancelled'])
                 ->count();
@@ -100,14 +100,14 @@ class AppointmentController extends Controller
         }
 
         $request->validate([
-            'appointment_date' => 'required|date|after:today', // keep as is
+            'appointment_date' => 'required|date|after_or_equal:' . \Carbon\Carbon::tomorrow()->toDateString(),
             'time_slot'        => 'required|string|in:' . implode(',', self::TIME_SLOTS),
             'type'             => 'required|in:scheduled,walk_in',
             'notes'            => 'nullable|string|max:500',
         ]);
 
         // Validate concurrent slot booking capacity thresholds
-        $booked = Appointment::where('appointment_date', $request->appointment_date)
+        $booked = Appointment::whereDate('appointment_date', $request->appointment_date)
             ->where('time_slot', $request->time_slot)
             ->whereNotIn('status', ['cancelled'])
             ->count();
@@ -117,16 +117,21 @@ class AppointmentController extends Controller
         }
 
         // Generate systematic sequential queue identifier format: Q-{YYYYMMDD}-{001}
-        $dateStr       = date('Ymd', strtotime($request->appointment_date));
+        $dateStr = \Carbon\Carbon::parse($request->appointment_date)->format('Ymd');
         $queueSequence = Appointment::whereDate('appointment_date', $request->appointment_date)
-            ->whereNotIn('status', ['cancelled'])
             ->count() + 1;
-        $queueNumber   = 'Q-' . $dateStr . '-' . str_pad($queueSequence, 3, '0', STR_PAD_LEFT);
 
+        // Ensure unique queue number
+        $queueNumber = 'Q-' . $dateStr . '-' . str_pad($queueSequence, 3, '0', STR_PAD_LEFT);
+        while (Appointment::where('queue_number', $queueNumber)->exists()) {
+            $queueSequence++;
+            $queueNumber = 'Q-' . $dateStr . '-' . str_pad($queueSequence, 3, '0', STR_PAD_LEFT);
+        }
+        
         Appointment::create([
             'user_id'          => auth()->id(),
             'tracking_no'      => $paidClearance->tracking_no,
-            'appointment_date' => $request->appointment_date,
+            'appointment_date' => \Carbon\Carbon::parse($request->appointment_date, 'Asia/Manila')->toDateString(),
             'time_slot'        => $request->time_slot,
             'type'             => $request->type,
             'queue_number'     => $queueNumber,

@@ -69,30 +69,24 @@ class BiometricsCaptureController extends Controller
     $clearance->update([
         'photo_path'         => 'clearances/' . $imageName,
         'fingerprint_status' => $request->fingerprint_status,
-        'workflow_status'    => 'released',
-        'status'             => 'CLEARED',
-        'released_at'        => now(),
-        'clearance_number'   => 'NBI-CLR-' . date('Y') . '-' . str_pad(
-            \App\Models\Clearance::whereYear('released_at', date('Y'))->count() + 1,
-            6, '0', STR_PAD_LEFT
-        ),
+        'workflow_status'    => 'biometrics_captured',
     ]);
 
-    // ── Audit log the auto-release ──────────────────────────────────────
+    // ── Audit log the biometrics capture ────────────────────────────────
     AuditLogger::log(
         action: 'status_changed',
-        description: "Biometrics captured for {$clearance->tracking_no} — automatically released.",
+        description: "Biometrics captured for {$clearance->tracking_no} — moved to processing.",
         subject: $clearance,
         oldValues: ['workflow_status' => $previousStatus],
-        newValues: ['workflow_status' => 'released'],
+        newValues: ['workflow_status' => 'biometrics_captured'],
     );
 
     \App\Models\Notification::create([
         'user_id' => $clearance->user_id,
-        'type'    => 'clearance_released',
-        'title'   => 'NBI Clearance Ready!',
-        'message' => 'Your NBI Clearance is now ready. You may download or print it.',
-        'link'    => route('clearance.view', $clearance->tracking_no),
+        'type'    => 'biometrics_captured',
+        'title'   => 'Biometrics Captured',
+        'message' => 'Your biometrics have been successfully captured. Your application is now being processed.',
+        'link'    => route('application.status'),
     ]);
 
     return back()->with('success', "Biometrics for {$clearance->first_name} confirmed! Application is now in processing.");

@@ -90,25 +90,24 @@ class ClearanceProcessingController extends Controller
         }
 
         // Base model query initialization adhering to baseline restrictions
-        $baseQuery = Clearance::whereNotIn('workflow_status', ['pending'])
+        $baseQuery = Clearance::whereIn('payment_status', ['paid'])
             ->whereIn('payment_status', ['paid'])
             ->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()]);
 
         // Build stats metrics strictly within active timeframe boundaries
         $stats = [
-            'pending'             => Clearance::whereNotIn('workflow_status', ['pending'])->whereIn('payment_status', ['paid'])->where('workflow_status', 'pending')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
-            'under_review'        => Clearance::whereNotIn('workflow_status', ['pending'])->whereIn('payment_status', ['paid'])->where('workflow_status', 'under_review')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
-            'biometrics_captured' => Clearance::whereNotIn('workflow_status', ['pending'])->whereIn('payment_status', ['paid'])->where('workflow_status', 'biometrics_captured')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
-            'approved'            => Clearance::whereNotIn('workflow_status', ['pending'])->whereIn('payment_status', ['paid'])->where('workflow_status', 'approved')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
-            'released'            => Clearance::whereNotIn('workflow_status', ['pending'])->whereIn('payment_status', ['paid'])->where('workflow_status', 'released')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
-            'rejected'            => Clearance::whereNotIn('workflow_status', ['pending'])->whereIn('payment_status', ['paid'])->where('workflow_status', 'rejected')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
-            'hit'                 => Clearance::whereNotIn('workflow_status', ['pending'])->whereIn('payment_status', ['paid'])->where('workflow_status', 'hit')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
+            'pending'             => Clearance::whereIn('payment_status', ['paid'])->where('workflow_status', 'pending')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
+            'under_review'        => Clearance::whereIn('payment_status', ['paid'])->where('workflow_status', 'under_review')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
+            'biometrics_captured' => Clearance::whereIn('payment_status', ['paid'])->where('workflow_status', 'biometrics_captured')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
+            'approved'            => Clearance::whereIn('payment_status', ['paid'])->where('workflow_status', 'approved')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
+            'released'            => Clearance::whereIn('payment_status', ['paid'])->where('workflow_status', 'released')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
+            'rejected'            => Clearance::whereIn('payment_status', ['paid'])->where('workflow_status', 'rejected')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
+            'hit'                 => Clearance::whereIn('payment_status', ['paid'])->where('workflow_status', 'hit')->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])->count(),
             'total'               => $baseQuery->count(),
         ];
 
         // Process conditional filtration pipelines
         $clearancesQuery = Clearance::with(['biometric', 'reviewer'])
-            ->whereNotIn('workflow_status', ['pending'])
             ->whereIn('payment_status', ['paid'])
             ->whereBetween('created_at', [$startOfPeriod->toDateTimeString(), $endOfPeriod->toDateTimeString()])
             ->when($status, function ($query) use ($status) {
