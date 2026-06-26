@@ -15,7 +15,7 @@ const Val = ({ children, size = 11 }) => (
     </div>
 );
 
-function ClearanceCopy({ clearance, isPersonalCopy = false }) {
+function ClearanceCopy({ clearance, qrCodeSvg, isPersonalCopy = false }) {
     const validUntil = clearance.released_at
         ? new Date(new Date(clearance.released_at).setFullYear(new Date(clearance.released_at).getFullYear() + 1))
             .toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' }).toUpperCase()
@@ -218,10 +218,12 @@ function ClearanceCopy({ clearance, isPersonalCopy = false }) {
                         </div>
 
                         {/* QR */}
-                        <div style={{ width: 75, height: 75, background: '#000', display: 'flex', flexWrap: 'wrap', padding: 3, gap: 1 }}>
-                            {Array.from({ length: 49 }).map((_, i) => (
-                                <div key={i} style={{ width: 8, height: 8, background: Math.random() > 0.45 ? '#fff' : 'transparent' }}/>
-                            ))}
+                        <div style={{ width: 75, height: 75, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            {qrCodeSvg ? (
+                                <div dangerouslySetInnerHTML={{ __html: qrCodeSvg }} style={{ width: '100%', height: '100%' }} />
+                            ) : (
+                                <div style={{ background: '#000', width: '100%', height: '100%' }}></div>
+                            )}
                         </div>
                         <div style={{ fontSize: 6.5, color: '#888', textTransform: 'uppercase', textAlign: 'center' }}>Scan QR to verify</div>
 
@@ -249,15 +251,35 @@ function ClearanceCopy({ clearance, isPersonalCopy = false }) {
     );
 }
 
-export default function ClearanceViewer({ auth, clearance }) {
+export default function ClearanceViewer({ auth, clearance, qrCodeSvg }) {
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title={`NBI Clearance - ${clearance.clearance_number}`}>
                 <style>{`
                     @media print {
-                        body * { visibility: hidden; }
-                        #clearance-print, #clearance-print * { visibility: visible; }
-                        #clearance-print { position: fixed; top: 0; left: 0; width: 100%; }
+                        @page { size: portrait; margin: 0; }
+                        body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: white !important; margin: 0; padding: 0; }
+                        
+                        /* Hide app layout elements */
+                        nav, aside, header, .print\\:hidden { display: none !important; }
+                        
+                        /* Fix layout shifts by absolutely positioning the print wrapper */
+                        #clearance-print-wrapper {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            padding: 0;
+                            margin: 0;
+                        }
+
+                        #clearance-print {
+                            border: none !important;
+                            box-shadow: none !important;
+                            width: 100% !important;
+                            max-width: 800px;
+                            margin: 0 auto;
+                        }
                     }
                 `}</style>
             </Head>
@@ -271,10 +293,10 @@ export default function ClearanceViewer({ auth, clearance }) {
                     Back to Status
                 </Link>
                 <div className="flex gap-3">
-                    <Link href={route('clearance.download', clearance.tracking_no)}
+                    <a href={route('clearance.download', clearance.tracking_no)}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-bold hover:bg-slate-200 transition">
                         Download PDF
-                    </Link>
+                    </a>
                     <button onClick={() => window.print()}
                         className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-bold hover:bg-blue-700 transition">
                         Print Clearance
@@ -283,10 +305,10 @@ export default function ClearanceViewer({ auth, clearance }) {
             </div>
 
             {/* Two Copies */}
-            <div className="flex justify-center px-4 pb-12 print:p-0">
-                <div id="clearance-print" style={{ width: 820, border: '1px solid #ccc', boxShadow: '0 4px 24px rgba(0,0,0,0.10)' }}>
-                    <ClearanceCopy clearance={clearance} isPersonalCopy={false} />
-                    <ClearanceCopy clearance={clearance} isPersonalCopy={true} />
+            <div id="clearance-print-wrapper" className="flex justify-center px-4 pb-12 print:p-0">
+                <div id="clearance-print" style={{ width: 820, border: '1px solid #ccc', boxShadow: '0 4px 24px rgba(0,0,0,0.10)', background: 'white' }}>
+                    <ClearanceCopy clearance={clearance} qrCodeSvg={qrCodeSvg} isPersonalCopy={false} />
+                    <ClearanceCopy clearance={clearance} qrCodeSvg={qrCodeSvg} isPersonalCopy={true} />
                 </div>
             </div>
 

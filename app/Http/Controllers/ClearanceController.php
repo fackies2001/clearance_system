@@ -121,8 +121,13 @@ class ClearanceController extends Controller
             return redirect()->route('application.status')->with('error', 'Clearance not yet released.');
         }
 
+        $qrCodeSvg = \SimpleSoftwareIO\QrCode\Facades\QrCode::size(80)
+            ->margin(0)
+            ->generate($clearance->clearance_number . '|' . $clearance->tracking_no . '|' . $clearance->last_name . ',' . $clearance->first_name);
+
         return Inertia::render('Application/ClearanceViewer', [
-            'clearance' => $clearance
+            'clearance' => $clearance,
+            'qrCodeSvg' => (string) $qrCodeSvg
         ]);
     }
 
