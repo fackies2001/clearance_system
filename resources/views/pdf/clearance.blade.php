@@ -6,7 +6,7 @@
     <style>
         @page {
             size: A4 portrait;
-            margin: 8mm 15mm;
+            margin: 12mm 22mm;
         }
         * {
             margin: 0;
@@ -17,14 +17,13 @@
         body {
             background: #ffffff;
             color: #000000;
-            font-size: 8px;
+            font-size: 8.5px;
         }
 
-        /* ─── Copy Container (Zero horizontal padding to avoid right margin overflow) ─── */
+        /* ─── Copy Container ─── */
         .clearance-copy {
             width: 100%;
-            height: 382px;
-            padding: 4px 0;
+            padding: 8px 12px;
             position: relative;
             background: #ffffff;
             overflow: hidden;
@@ -40,11 +39,11 @@
             z-index: 0;
             opacity: 0.035;
             overflow: hidden;
-            font-size: 8px;
+            font-size: 8.5px;
             font-weight: 900;
             color: #1a3a6b;
             text-transform: uppercase;
-            line-height: 1.6;
+            line-height: 1.7;
             letter-spacing: 0.5px;
             word-spacing: 2px;
         }
@@ -59,8 +58,8 @@
         .header-wrap {
             width: 100%;
             border-bottom: 2px solid #1a3a6b;
-            padding-bottom: 4px;
-            margin-bottom: 4px;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
         }
         .header-table {
             margin: 0 auto;
@@ -102,19 +101,19 @@
             text-transform: uppercase;
         }
         .h-rep {
-            font-size: 10.5px;
+            font-size: 11px;
             font-weight: 900;
             text-transform: uppercase;
             line-height: 1.2;
         }
         .h-doj {
-            font-size: 8.5px;
+            font-size: 9px;
             font-weight: bold;
             text-transform: uppercase;
             line-height: 1.2;
         }
         .h-nbi {
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 900;
             color: #1a3a6b;
             letter-spacing: 0.8px;
@@ -123,24 +122,24 @@
         }
 
         .cert-statement {
-            font-size: 6px;
+            font-size: 6.5px;
             text-align: center;
             color: #444444;
             font-style: italic;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
 
-        /* ─── Main 2-Column Grid (table-layout fixed to prevent column overflow) ─── */
+        /* ─── Main 2-Column Grid ─── */
         .main-grid {
             width: 100%;
             border-collapse: collapse;
         }
         .col-left {
             vertical-align: top;
-            padding-right: 8px;
+            padding-right: 12px;
         }
         .col-right {
-            width: 86px;
+            width: 88px;
             vertical-align: top;
             text-align: center;
         }
@@ -159,30 +158,30 @@
             margin-bottom: 1px;
         }
         .val {
-            font-size: 9px;
+            font-size: 9.5px;
             font-weight: bold;
             color: #000000;
             text-transform: uppercase;
             border-bottom: 0.5px solid #888888;
-            padding-bottom: 1px;
-            margin-bottom: 4px;
+            padding-bottom: 2px;
+            margin-bottom: 5px;
         }
         .val-id {
-            font-size: 8.5px;
+            font-size: 9px;
             font-weight: bold;
             color: #000000;
         }
         .val-lg {
-            font-size: 12px;
+            font-size: 12.5px;
             font-weight: 900;
         }
 
         /* ─── Remarks ─── */
         .remarks-box {
             border: 1.5px solid #000000;
-            padding: 3px 6px;
-            margin-top: 2px;
-            margin-bottom: 6px;
+            padding: 4px 6px;
+            margin-top: 3px;
+            margin-bottom: 7px;
         }
         .remarks-lbl {
             font-size: 6px;
@@ -191,7 +190,7 @@
             text-transform: uppercase;
         }
         .remarks-val {
-            font-size: 10.5px;
+            font-size: 11px;
             font-weight: 900;
             text-transform: uppercase;
             color: #000000;
@@ -201,6 +200,7 @@
         .bottom-row {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 3px;
         }
         .bottom-row td {
             vertical-align: bottom;
@@ -216,49 +216,49 @@
             padding: 2px 0;
             letter-spacing: 0.8px;
             width: 86px;
-            margin: 0 auto 3px auto;
+            margin: 0 auto 4px auto;
         }
         .photo-frame {
             width: 82px;
-            height: 96px;
+            height: 98px;
             border: 1.5px solid #555555;
             background: #f1f5f9;
             text-align: center;
-            margin: 0 auto 3px auto;
+            margin: 0 auto 4px auto;
             overflow: hidden;
         }
         .photo-frame img {
             width: 82px;
-            height: 96px;
+            height: 98px;
             display: block;
         }
         .sig-frame {
             width: 82px;
-            height: 22px;
+            height: 24px;
             border: 0.5px solid #999999;
             text-align: center;
-            font-size: 5.5px;
+            font-size: 6px;
             color: #888888;
-            line-height: 22px;
+            line-height: 24px;
             text-transform: uppercase;
-            margin: 0 auto 3px auto;
+            margin: 0 auto 4px auto;
         }
         .qr-frame {
-            width: 66px;
-            height: 66px;
-            margin: 0 auto 1px auto;
+            width: 68px;
+            height: 68px;
+            margin: 0 auto 2px auto;
             text-align: center;
         }
         .qr-frame img {
-            width: 66px;
-            height: 66px;
+            width: 68px;
+            height: 68px;
         }
         .qr-subtext {
             font-size: 5.5px;
             color: #888888;
             text-transform: uppercase;
             text-align: center;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
 
         /* ─── Transaction Table ─── */
@@ -270,7 +270,7 @@
         }
         .tx-table td {
             border: 0.5px solid #cccccc;
-            padding: 1px 2px;
+            padding: 1.5px 2px;
         }
         .tx-label {
             font-weight: bold;
@@ -282,14 +282,14 @@
         /* ─── Dashed Cut Line ─── */
         .cut-line {
             border-top: 1.5px dashed #888888;
-            margin: 4px 0;
+            margin: 8px 0;
         }
 
         /* ─── Personal Copy Watermark ─── */
         .personal-stamp {
             position: absolute;
             top: 125px;
-            left: 110px;
+            left: 100px;
             font-size: 32px;
             font-weight: 900;
             color: rgba(220, 50, 50, 0.18);
@@ -399,7 +399,7 @@
 
                     {{-- Row 3: Address --}}
                     <div class="lbl">Address</div>
-                    <div class="val" style="font-size: 8px;">{{ $fullAddress }}</div>
+                    <div class="val" style="font-size: 8.5px;">{{ $fullAddress }}</div>
 
                     {{-- Row 4: Date of Birth & Place of Birth --}}
                     <table class="field-table">
@@ -473,7 +473,7 @@
                         @if(isset($photoBase64) && $photoBase64)
                             <img src="{{ $photoBase64 }}" />
                         @else
-                            <div style="font-size: 6px; color: #aaaaaa; line-height: 96px;">NO PHOTO</div>
+                            <div style="font-size: 6px; color: #aaaaaa; line-height: 98px;">NO PHOTO</div>
                         @endif
                     </div>
 
@@ -581,7 +581,7 @@
 
                     {{-- Row 3: Address --}}
                     <div class="lbl">Address</div>
-                    <div class="val" style="font-size: 8px;">{{ $fullAddress }}</div>
+                    <div class="val" style="font-size: 8.5px;">{{ $fullAddress }}</div>
 
                     {{-- Row 4: Date of Birth & Place of Birth --}}
                     <table class="field-table">
@@ -655,7 +655,7 @@
                         @if(isset($photoBase64) && $photoBase64)
                             <img src="{{ $photoBase64 }}" />
                         @else
-                            <div style="font-size: 6px; color: #aaaaaa; line-height: 96px;">NO PHOTO</div>
+                            <div style="font-size: 6px; color: #aaaaaa; line-height: 98px;">NO PHOTO</div>
                         @endif
                     </div>
 
