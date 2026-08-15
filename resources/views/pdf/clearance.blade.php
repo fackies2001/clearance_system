@@ -6,7 +6,7 @@
     <style>
         @page {
             size: A4 portrait;
-            margin: 8mm 12mm;
+            margin: 8mm 15mm;
         }
         * {
             margin: 0;
@@ -20,11 +20,11 @@
             font-size: 8px;
         }
 
-        /* ─── Copy Container ─── */
+        /* ─── Copy Container (Zero horizontal padding to avoid right margin overflow) ─── */
         .clearance-copy {
             width: 100%;
-            height: 385px;
-            padding: 6px 10px;
+            height: 382px;
+            padding: 4px 0;
             position: relative;
             background: #ffffff;
             overflow: hidden;
@@ -130,17 +130,17 @@
             margin-bottom: 5px;
         }
 
-        /* ─── Main 2-Column Grid ─── */
+        /* ─── Main 2-Column Grid (table-layout fixed to prevent column overflow) ─── */
         .main-grid {
             width: 100%;
             border-collapse: collapse;
         }
         .col-left {
             vertical-align: top;
-            padding-right: 10px;
+            padding-right: 8px;
         }
         .col-right {
-            width: 90px;
+            width: 86px;
             vertical-align: top;
             text-align: center;
         }
@@ -197,7 +197,7 @@
             color: #000000;
         }
 
-        /* ─── Bottom Row: Barcode + Director Signature ─── */
+        /* ─── Bottom Row: Barcode + Director Signature Line ─── */
         .bottom-row {
             width: 100%;
             border-collapse: collapse;
@@ -215,7 +215,7 @@
             text-align: center;
             padding: 2px 0;
             letter-spacing: 0.8px;
-            width: 90px;
+            width: 86px;
             margin: 0 auto 3px auto;
         }
         .photo-frame {
@@ -263,7 +263,7 @@
 
         /* ─── Transaction Table ─── */
         .tx-table {
-            width: 88px;
+            width: 86px;
             border-collapse: collapse;
             font-size: 5.5px;
             margin: 0 auto;
