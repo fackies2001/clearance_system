@@ -160,45 +160,42 @@ export default function Dashboard({ auth, clearances = [], stats = { total: 0, c
                     {/* Pending Review Card */}
                     <button
                         onClick={() => { setActiveFilter('pending'); setCurrentPage(1); }}
-                        className={`group relative overflow-hidden text-left rounded-2xl p-6 transition-all duration-300 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex items-start gap-4 border ${activeFilter === 'pending' ? 'bg-amber-50 border-amber-200 scale-[1.02]' : 'bg-white border-slate-100 hover:border-amber-200 hover:shadow-lg'}`}
+                        className={`group relative overflow-hidden text-left rounded-2xl p-6 transition-all duration-300 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex items-start gap-4 border ${activeFilter === 'pending' ? 'bg-slate-900 border-slate-900 scale-[1.02]' : 'bg-white border-slate-100 hover:border-slate-300 hover:shadow-lg'}`}
                     >
-                        {activeFilter === 'pending' && <div className="absolute top-0 left-0 w-1 h-full bg-amber-500" />}
-                        <div className={`p-3 rounded-xl transition-colors ${activeFilter === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600 group-hover:bg-amber-50 group-hover:text-amber-600'}`}>
+                        <div className={`p-3 rounded-xl transition-colors ${activeFilter === 'pending' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200'}`}>
                             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                         <div className="z-10 relative">
-                            <h3 className={`text-sm font-semibold tracking-wide ${activeFilter === 'pending' ? 'text-amber-700' : 'text-slate-500'}`}>Pending Review</h3>
-                            <div className={`text-4xl mt-1 font-black tracking-tight ${activeFilter === 'pending' ? 'text-amber-900' : 'text-slate-800'}`}>{pendingCount}</div>
+                            <h3 className={`text-sm font-semibold tracking-wide ${activeFilter === 'pending' ? 'text-slate-300' : 'text-slate-500'}`}>Pending Review</h3>
+                            <div className={`text-4xl mt-1 font-black tracking-tight ${activeFilter === 'pending' ? 'text-white' : 'text-slate-800'}`}>{pendingCount}</div>
                         </div>
                     </button>
 
                     {/* Cleared (No Hit) Card */}
                     <button
                         onClick={() => { setActiveFilter('cleared'); setCurrentPage(1); }}
-                        className={`group relative overflow-hidden text-left rounded-2xl p-6 transition-all duration-300 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex items-start gap-4 border ${activeFilter === 'cleared' ? 'bg-emerald-50 border-emerald-200 scale-[1.02]' : 'bg-white border-slate-100 hover:border-emerald-200 hover:shadow-lg'}`}
+                        className={`group relative overflow-hidden text-left rounded-2xl p-6 transition-all duration-300 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex items-start gap-4 border ${activeFilter === 'cleared' ? 'bg-slate-900 border-slate-900 scale-[1.02]' : 'bg-white border-slate-100 hover:border-slate-300 hover:shadow-lg'}`}
                     >
-                        {activeFilter === 'cleared' && <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500" />}
-                        <div className={`p-3 rounded-xl transition-colors ${activeFilter === 'cleared' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600 group-hover:bg-emerald-50 group-hover:text-emerald-600'}`}>
+                        <div className={`p-3 rounded-xl transition-colors ${activeFilter === 'cleared' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200'}`}>
                             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                         <div className="z-10 relative">
-                            <h3 className={`text-sm font-semibold tracking-wide ${activeFilter === 'cleared' ? 'text-emerald-700' : 'text-slate-500'}`}>Cleared (No Hit)</h3>
-                            <div className={`text-4xl mt-1 font-black tracking-tight ${activeFilter === 'cleared' ? 'text-emerald-900' : 'text-slate-800'}`}>{cleared}</div>
+                            <h3 className={`text-sm font-semibold tracking-wide ${activeFilter === 'cleared' ? 'text-slate-300' : 'text-slate-500'}`}>Cleared (No Hit)</h3>
+                            <div className={`text-4xl mt-1 font-black tracking-tight ${activeFilter === 'cleared' ? 'text-white' : 'text-slate-800'}`}>{cleared}</div>
                         </div>
                     </button>
 
                     {/* Detected HITs Card */}
                     <button
                         onClick={() => { setActiveFilter('hit'); setCurrentPage(1); }}
-                        className={`group relative overflow-hidden text-left rounded-2xl p-6 transition-all duration-300 shadow-[0_4px_20px_-4px_rgba(225,29,72,0.1)] flex items-start gap-4 border ${activeFilter === 'hit' ? 'bg-rose-50 border-rose-200 scale-[1.02]' : 'bg-white border-slate-100 hover:border-rose-200 hover:shadow-lg'}`}
+                        className={`group relative overflow-hidden text-left rounded-2xl p-6 transition-all duration-300 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] flex items-start gap-4 border ${activeFilter === 'hit' ? 'bg-slate-900 border-slate-900 scale-[1.02]' : 'bg-white border-slate-100 hover:border-slate-300 hover:shadow-lg'}`}
                     >
-                        {activeFilter === 'hit' && <div className="absolute top-0 left-0 w-1 h-full bg-rose-500" />}
-                        <div className={`p-3 rounded-xl transition-colors ${activeFilter === 'hit' ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-600 group-hover:bg-rose-50 group-hover:text-rose-600'}`}>
+                        <div className={`p-3 rounded-xl transition-colors ${activeFilter === 'hit' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600 group-hover:bg-slate-200'}`}>
                             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                         </div>
                         <div className="z-10 relative">
-                            <h3 className={`text-sm font-semibold tracking-wide ${activeFilter === 'hit' ? 'text-rose-700' : 'text-slate-500'}`}>Detected HITs</h3>
-                            <div className={`text-4xl mt-1 font-black tracking-tight ${activeFilter === 'hit' ? 'text-rose-900' : 'text-slate-800'}`}>{hit}</div>
+                            <h3 className={`text-sm font-semibold tracking-wide ${activeFilter === 'hit' ? 'text-slate-300' : 'text-slate-500'}`}>Detected HITs</h3>
+                            <div className={`text-4xl mt-1 font-black tracking-tight ${activeFilter === 'hit' ? 'text-white' : 'text-slate-800'}`}>{hit}</div>
                         </div>
                     </button>
                 </div>

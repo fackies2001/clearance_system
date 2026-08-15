@@ -68,7 +68,7 @@ function SidebarContent({ isAdmin, isConfirmer, onNavigate }) {
                         Processing Workflow
                     </p>
 
-                    <NavLink href={route('admin.walkin.index')} active={c('admin.walkin.index')} activeColor="bg-emerald-600" icon={ICONS.walkin} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.walkin.index')} active={c('admin.walkin.index')} icon={ICONS.walkin} onNavigate={onNavigate}>
                         Walk-in Payment
                     </NavLink>
                     <NavLink href={route('admin.biometrics.index')} active={c('admin.biometrics.index')} icon={ICONS.biometrics} onNavigate={onNavigate}>
@@ -89,13 +89,13 @@ function SidebarContent({ isAdmin, isConfirmer, onNavigate }) {
                     <NavLink href={route('admin.users.index')} active={c('admin.users.index')} icon={ICONS.users} onNavigate={onNavigate}>
                         User Management
                     </NavLink>
-                    <NavLink href={route('admin.hit.index')} active={c('admin.hit.index')} activeColor="bg-red-600" icon={ICONS.hit} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.hit.index')} active={c('admin.hit.index')} icon={ICONS.hit} onNavigate={onNavigate}>
                         HIT Verification
                     </NavLink>
-                    <NavLink href={route('admin.reports.index')} active={c('admin.reports.index')} activeColor="bg-purple-600" icon={ICONS.reports} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.reports.index')} active={c('admin.reports.index')} icon={ICONS.reports} onNavigate={onNavigate}>
                         Reports & Analytics
                     </NavLink>
-                    <NavLink href={route('admin.audit.index')} active={c('admin.audit.index')} activeColor="bg-yellow-600" icon={ICONS.audit} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.audit.index')} active={c('admin.audit.index')} icon={ICONS.audit} onNavigate={onNavigate}>
                         Audit Logs
                     </NavLink>
                     <NavLink href={route('admin.transactions.index')} active={c('admin.transactions.index')} icon={ICONS.transactions} onNavigate={onNavigate}>

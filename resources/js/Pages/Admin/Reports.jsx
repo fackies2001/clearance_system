@@ -31,25 +31,41 @@ function fmtMonth(ym) {
 }
 
 // ── Stat Card Component ───────────────────────────────────────────────────────
-function StatCard({ label, value, sub, color, icon }) {
+const REPORT_SVGS = {
+    total:      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />,
+    released:   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />,
+    hit:        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />,
+    rejected:   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />,
+    pending:    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />,
+    processing: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />,
+};
+
+function StatCard({ label, value, sub, iconType = "total" }) {
     return (
         <div style={{
             background: "#fff",
-            border: `1.5px solid ${color}25`,
-            borderLeft: `4px solid ${color}`,
+            border: "1px solid #e2e8f0",
             borderRadius: 12,
             padding: "18px 20px",
             flex: 1, minWidth: 150,
         }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                 <div>
-                    <div style={{ fontSize: 11, color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>
+                    <div style={{ fontSize: 11, color: "#64748b", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>
                         {label}
                     </div>
-                    <div style={{ fontSize: 30, fontWeight: 800, color, lineHeight: 1 }}>{value}</div>
+                    <div style={{ fontSize: 28, fontWeight: 800, color: "#1e293b", lineHeight: 1 }}>{value}</div>
                     {sub && <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 5, fontWeight: 500 }}>{sub}</div>}
                 </div>
-                <div style={{ fontSize: 26, opacity: 0.6 }}>{icon}</div>
+                <div style={{
+                    width: 36, height: 36, borderRadius: 8,
+                    background: "#f1f5f9", color: "#334155",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {REPORT_SVGS[iconType] || REPORT_SVGS.total}
+                    </svg>
+                </div>
             </div>
         </div>
     );
@@ -218,9 +234,13 @@ export default function Reports({
                     <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                         <div style={{
                             width: 36, height: 36, borderRadius: 10,
-                            background: "#7c3aed", display: "flex",
-                            alignItems: "center", justifyContent: "center", fontSize: 18,
-                        }}>📊</div>
+                            background: "#1e293b", display: "flex",
+                            alignItems: "center", justifyContent: "center", color: "#fff",
+                        }}>
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                        </div>
                         <div>
                             <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#0f172a" }}>
                                 Reports & Analytics
@@ -270,40 +290,37 @@ export default function Reports({
                         label="Total Applications"
                         value={summary.total_applications}
                         sub={`${summary.this_month_apps} this month`}
-                        color="#1d4ed8"
-                        icon="📋"
+                        iconType="total"
                     />
                     <StatCard
                         label="Released"
                         value={summary.total_released}
                         sub={`${summary.this_month_released} this month`}
-                        color="#065f46"
-                        icon="✅"
+                        iconType="released"
                     />
                     <StatCard
                         label="HIT Cases"
                         value={summary.total_hits}
-                        color="#d97706"
-                        icon="⚠️"
+                        sub="Under verification"
+                        iconType="hit"
                     />
                     <StatCard
                         label="Rejected"
                         value={summary.total_rejected}
-                        color="#dc2626"
-                        icon="❌"
+                        sub="Disapproved"
+                        iconType="rejected"
                     />
                     <StatCard
                         label="Pending"
                         value={summary.total_pending}
-                        color="#64748b"
-                        icon="🕐"
+                        sub="Awaiting review"
+                        iconType="pending"
                     />
                     <StatCard
                         label="Avg. Processing"
                         value={`${summary.avg_processing_days}d`}
                         sub="from filed to resolved"
-                        color="#7c3aed"
-                        icon="⏱️"
+                        iconType="processing"
                     />
                 </div>
 

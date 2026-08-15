@@ -57,25 +57,24 @@ function timeAgo(dateStr) {
 }
 
 // ── Stat Card ───────────────────────────────────────────────────────────────
-// 1. Add the "onClick" prop to the component arguments
-const STAT_ICONS = {
-    "#3b82f6": "📋",
-    "#059669": "✅",
-    "#f59e0b": "⚠️",    
-    "#8b5cf6": "📅",
-    "#ef4444": "💳",
-    "#0ea5e9": "👥",
+// ── SVG Icons for Stat Cards ────────────────────────────────────────────────
+const STAT_SVG = {
+    applications: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />,
+    released:     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />,
+    hit:          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />,
+    appointments: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />,
+    payments:     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />,
+    users:        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />,
 };
 
-function StatCard({ label, value, sub, color, icon, onClick }) {
-    const emoji = icon || STAT_ICONS[color] || "📊";
+function StatCard({ label, value, sub, iconType = "applications", onClick }) {
+    const brandColor = "#1e293b";
     return (
         <div
             onClick={onClick}
             style={{
                 background: "#fff",
-                border: "1px solid #f1f5f9",
-                borderTop: `3px solid ${color}`,
+                border: "1px solid #e2e8f0",
                 borderRadius: 14,
                 padding: "18px 20px",
                 flex: 1,
@@ -99,12 +98,12 @@ function StatCard({ label, value, sub, color, icon, onClick }) {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                 <div style={{ flex: 1 }}>
                     <div style={{
-                        fontSize: 11, fontWeight: 700, color: "#94a3b8",
+                        fontSize: 11, fontWeight: 700, color: "#64748b",
                         textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 8,
                     }}>
                         {label}
                     </div>
-                    <div style={{ fontSize: 36, fontWeight: 800, color, lineHeight: 1 }}>
+                    <div style={{ fontSize: 32, fontWeight: 800, color: brandColor, lineHeight: 1 }}>
                         {value}
                     </div>
                     {sub && (
@@ -117,12 +116,14 @@ function StatCard({ label, value, sub, color, icon, onClick }) {
                     )}
                 </div>
                 <div style={{
-                    width: 42, height: 42, borderRadius: 10,
-                    background: `${color}15`,
+                    width: 40, height: 40, borderRadius: 10,
+                    background: "#f1f5f9", color: "#334155",
                     display: "flex", alignItems: "center",
-                    justifyContent: "center", fontSize: 20, flexShrink: 0,
+                    justifyContent: "center", flexShrink: 0,
                 }}>
-                    {emoji}
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {STAT_SVG[iconType] || STAT_SVG.applications}
+                    </svg>
                 </div>
             </div>
         </div>
@@ -243,10 +244,14 @@ export default function Dashboard({
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <div style={{
                         width: 38, height: 38, borderRadius: 10,
-                        background: "linear-gradient(135deg, #1e3a5f, #3b82f6)",
+                        background: "#1e293b",
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: 18, color: "#fff",
-                    }}>📊</div>
+                        color: "#fff",
+                    }}>
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
                     <div>
                         <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#0f172a", letterSpacing: "-0.02em" }}>
                             Admin Dashboard
@@ -277,7 +282,9 @@ export default function Dashboard({
                         onMouseEnter={e => { if(!isDropdownOpen) e.currentTarget.style.borderColor = "#cbd5e1"; }}
                         onMouseLeave={e => { if(!isDropdownOpen) e.currentTarget.style.borderColor = "#e2e8f0"; }}
                     >
-                        <span style={{ fontSize: 14 }}>📅</span>
+                        <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
                         <span>
                             {
                                 stats.active_range === 'today' ? 'Today' :
@@ -418,43 +425,44 @@ export default function Dashboard({
                     <div style={{ display: "flex", gap: 14, flexWrap: "wrap", marginBottom: 28 }}>
                         <StatCard 
                             label="Today's Applications" 
-                            value={stats.current_applications} // Starts at 0 on daily resets
+                            value={stats.current_applications}
                             sub={`${stats.pending_applications} pending processing`} 
-                            color="#3b82f6" 
+                            iconType="applications"
                             onClick={() => router.visit(route('admin.clearance.index'))}
                         />
                         <StatCard 
                             label="Released Clearances" 
-                            value={stats.released} // Reflects items issued within the active date period
+                            value={stats.released}
                             sub={`Total record: ${stats.all_time_applications} overall`} 
-                            color="#059669" 
+                            iconType="released"
                             onClick={() => router.visit(route('admin.clearance.index'))}
                         />
                         <StatCard 
                             label="HIT Cases Detected" 
-                            value={stats.hit_cases} // Matches hits found during the active date range boundary
-                            color="#f59e0b" 
+                            value={stats.hit_cases}
+                            sub="Under verification"
+                            iconType="hit"
                             onClick={() => router.visit(route('admin.hit.index'))}
                         />
                         <StatCard 
                             label="Scheduled Appointments" 
-                            value={stats.appointments_count} // Displays the actual list volume count for the active date filter
+                            value={stats.appointments_count}
                             sub={`${stats.pending_appointments} pending validation`} 
-                            color="#8b5cf6" 
+                            iconType="appointments"
                             onClick={() => router.visit(route('admin.appointments.index'))}
                         />
                         <StatCard 
                             label="Pending Payments" 
-                            value={stats.pending_payment} // Tracks current active cycle unsettled balances
+                            value={stats.pending_payment}
                             sub={`${stats.paid_applications} successfully paid`} 
-                            color="#ef4444" 
+                            iconType="payments"
                             onClick={() => router.visit(route('admin.transactions.index'))}
                         />
                         <StatCard 
                             label="Total System Users" 
-                            value={stats.total_users} // Static metric constant accumulation display
+                            value={stats.total_users}
                             sub="Registered client accounts"
-                            color="#0ea5e9" 
+                            iconType="users"
                             onClick={() => router.visit(route('admin.users.index'))}
                         />
                     </div>
