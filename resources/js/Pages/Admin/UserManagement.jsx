@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Head, router, usePage } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Users, ShieldCheck, User, Search, ChevronDown, UserCog, Trash2, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function UserManagement({ auth, users = [] }) {
     const { flash } = usePage().props;
@@ -155,36 +156,42 @@ export default function UserManagement({ auth, users = [] }) {
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
-                        { label: 'Total Users',  value: users.length,                              color: '#3b82f6', icon: '👥', sub: 'Registered client accounts' },
-                        { label: 'Admins',       value: users.filter(u => u.role === 'admin').length, color: '#8b5cf6', icon: '👑', sub: 'System administrators' },
-                        { label: 'Applicants',   value: users.filter(u => u.role === 'user').length,  color: '#10b981', icon: '👤', sub: 'Regular user accounts' },
-                    ].map(card => (
-                        <div key={card.label} style={{
-                            background: '#fff',
-                            borderTop: `1.5px solid #e2e8f0`,
-                            borderRight: `1.5px solid #e2e8f0`,
-                            borderBottom: `1.5px solid #e2e8f0`,
-                            borderLeft: `4px solid ${card.color}`,
-                            borderRadius: 14,
-                            padding: '20px 22px',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'flex-start',
-                        }}>
-                            <div>
-                                <div style={{ fontSize: 11, color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
-                                    {card.label}
+                        { label: 'Total Users',  value: users.length,                              icon: Users, sub: 'Registered client accounts' },
+                        { label: 'Admins',       value: users.filter(u => u.role === 'admin').length, icon: ShieldCheck, sub: 'System administrators' },
+                        { label: 'Applicants',   value: users.filter(u => u.role === 'user').length,  icon: User, sub: 'Regular user accounts' },
+                    ].map(card => {
+                        const Icon = card.icon;
+                        return (
+                            <div key={card.label} style={{
+                                background: '#fff',
+                                border: `1px solid #e2e8f0`,
+                                borderRadius: 14,
+                                padding: '20px 22px',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'flex-start',
+                            }}>
+                                <div>
+                                    <div style={{ fontSize: 11, color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
+                                        {card.label}
+                                    </div>
+                                    <div style={{ fontSize: 32, fontWeight: 800, color: '#1e293b', lineHeight: 1 }}>
+                                        {card.value}
+                                    </div>
+                                    <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 6, fontWeight: 500 }}>
+                                        {card.sub}
+                                    </div>
                                 </div>
-                                <div style={{ fontSize: 32, fontWeight: 800, color: card.color, lineHeight: 1 }}>
-                                    {card.value}
-                                </div>
-                                <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 6, fontWeight: 500 }}>
-                                    {card.sub}
+                                <div style={{
+                                    width: 40, height: 40, borderRadius: 10,
+                                    background: '#f1f5f9', color: '#334155',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                }}>
+                                    <Icon className="w-5 h-5" />
                                 </div>
                             </div>
-                            <div style={{ fontSize: 26, opacity: 0.5 }}>{card.icon}</div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 {/* Table Card */}

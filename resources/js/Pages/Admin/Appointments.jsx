@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Head, router, usePage, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Calendar, User, Clock, CheckCircle2, XCircle, Search, ChevronDown, Check } from 'lucide-react';
 
 const STATUS_CONFIG = {
     pending:   { label: 'Pending',   classes: 'bg-amber-50 text-amber-700 border-amber-200',    dot: 'bg-amber-400'   },
@@ -267,12 +268,10 @@ export default function AdminAppointments({ appointments = {}, stats = {}, filte
                                         className="flex items-center justify-between gap-3 border border-slate-200 bg-white rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 w-full sm:w-auto min-w-[180px]"
                                     >
                                         <span className="flex items-center gap-2">
-                                            <span>📅</span>
+                                            <Calendar className="w-4 h-4 text-slate-500" />
                                             <span>{getRangeLabel(filters.range || 'all_time')}</span>
                                         </span>
-                                        <svg className={`w-3 h-3 text-slate-400 flex-shrink-0 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} viewBox="0 0 12 12" fill="none" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4.5l3 3 3-3" />
-                                        </svg>
+                                        <ChevronDown className={`w-3.5 h-3.5 text-slate-400 flex-shrink-0 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                                     </button>
 
                                     {isDropdownOpen && (
@@ -345,7 +344,9 @@ export default function AdminAppointments({ appointments = {}, stats = {}, filte
                                     <tr>
                                         <td colSpan="7" className="py-20 text-center bg-slate-50/30">
                                             <div className="flex flex-col items-center gap-2">
-                                                <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-xl">📅</div>
+                                                <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">
+                                                    <Calendar className="w-6 h-6" />
+                                                </div>
                                                 <p className="font-bold text-slate-600 text-sm">No appointments found</p>
                                                 <p className="text-xs text-slate-400">Try adjusting your search or date filters</p>
                                             </div>
@@ -387,12 +388,12 @@ export default function AdminAppointments({ appointments = {}, stats = {}, filte
 
                                             {/* Type */}
                                             <td className="px-4 py-3.5">
-                                                <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border ${
+                                                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border ${
                                                     appt.type === 'walk_in'
                                                         ? 'bg-purple-50 text-purple-700 border-purple-200'
                                                         : 'bg-sky-50 text-sky-700 border-sky-200'
                                                 }`}>
-                                                    {appt.type === 'walk_in' ? '🚶 Walk-in' : '📅 Scheduled'}
+                                                    {appt.type === 'walk_in' ? 'Walk-in' : 'Scheduled'}
                                                 </span>
                                             </td>
 
@@ -492,7 +493,7 @@ export default function AdminAppointments({ appointments = {}, stats = {}, filte
                                     { label: 'Queue Number', value: selected.queue_number, mono: true },
                                     { label: 'Date',         value: fmtDate(selected.appointment_date) },
                                     { label: 'Time Slot',    value: selected.time_slot },
-                                    { label: 'Type',         value: selected.type === 'walk_in' ? '🚶 Walk-in' : '📅 Scheduled' },
+                                    { label: 'Type',         value: selected.type === 'walk_in' ? 'Walk-in' : 'Scheduled' },
                                 ].map(({ label, value, mono }) => (
                                     <div key={label} className="bg-slate-50 rounded-xl p-3.5 border border-slate-100">
                                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{label}</p>

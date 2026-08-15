@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { Head, router, usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { AlertTriangle, Check, X, Search, ShieldAlert } from 'lucide-react';
 
 function fmtDate(d) {
     if (!d) return "—";
@@ -269,7 +270,9 @@ export default function HitVerification({ hitClearances = [], stats }) {
         <AuthenticatedLayout
             header={
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: 10, background: "#dc2626", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>⚠</div>
+                    <div style={{ width: 36, height: 36, borderRadius: 10, background: "#1e293b", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <AlertTriangle className="w-5 h-5 text-amber-500" />
+                    </div>
                     <div>
                         <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#0f172a" }}>HIT Verification</h2>
                         <p style={{ margin: 0, fontSize: 12, color: "#64748b" }}>Review and resolve flagged HIT cases</p>
@@ -283,7 +286,7 @@ export default function HitVerification({ hitClearances = [], stats }) {
 
                 {flash?.success && (
                     <div style={{ padding: "12px 16px", background: "#dcfce7", border: "1px solid #86efac", borderRadius: 10, color: "#15803d", fontSize: 13, fontWeight: 600, marginBottom: 20, display: "flex", alignItems: "center", gap: 8 }}>
-                        <span>✓</span> {flash.success}
+                        <Check className="w-4 h-4" /> {flash.success}
                     </div>
                 )}
 

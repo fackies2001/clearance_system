@@ -1,6 +1,21 @@
 import { useState, useMemo, useEffect } from "react";
 import { Head, router, usePage, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import {
+    ClipboardCheck,
+    ClipboardList,
+    Clock,
+    Search,
+    Fingerprint,
+    CheckCircle2,
+    Send,
+    AlertTriangle,
+    XCircle,
+    Calendar,
+    ChevronDown,
+    Check,
+    X
+} from 'lucide-react';
 
 // ── Status Config ────────────────────────────────────────────────────────────
 const WORKFLOW_STEPS = [
@@ -520,31 +535,30 @@ export default function ClearanceProcessing({ clearances = {}, stats = {}, filte
     };
 
     const STAT_FILTERS = [
-    { key: "all",                 label: "Total",       value: stats.total,               color: "#0f172a", icon: "📋" },
-    { key: "pending",             label: "Pending",     value: stats.pending,             color: "#64748b", icon: "⏳" },
-    { key: "under_review",        label: "In Review",   value: stats.under_review,        color: "#0369a1", icon: "🔍" },
-    { key: "biometrics_captured", label: "Bio Done",    value: stats.biometrics_captured, color: "#7c3aed", icon: "👆" },
-    { key: "approved",            label: "Approved",    value: stats.approved,            color: "#15803d", icon: "✅" },
-    { key: "released",            label: "Released",    value: stats.released,            color: "#065f46", icon: "🎉" },
-    { key: "hit",                 label: "HIT",         value: stats.hit,                 color: "#d97706", icon: "⚠️" },
-    { key: "rejected",            label: "Rejected",    value: stats.rejected,            color: "#dc2626", icon: "❌" },
-];
+        { key: "all",                 label: "Total",       value: stats.total,               color: "#0f172a", icon: ClipboardList },
+        { key: "pending",             label: "Pending",     value: stats.pending,             color: "#64748b", icon: Clock },
+        { key: "under_review",        label: "In Review",   value: stats.under_review,        color: "#0369a1", icon: Search },
+        { key: "biometrics_captured", label: "Bio Done",    value: stats.biometrics_captured, color: "#7c3aed", icon: Fingerprint },
+        { key: "approved",            label: "Approved",    value: stats.approved,            color: "#15803d", icon: CheckCircle2 },
+        { key: "released",            label: "Released",    value: stats.released,            color: "#065f46", icon: Send },
+        { key: "hit",                 label: "HIT",         value: stats.hit,                 color: "#d97706", icon: AlertTriangle },
+        { key: "rejected",            label: "Rejected",    value: stats.rejected,            color: "#dc2626", icon: XCircle },
+    ];
 
     const renderSortArrow = (field) => {
-
-    const active = filters.sort_field === field;
-    const asc = filters.sort_order === 'asc';
-    return (
-        <span className="ml-1 flex flex-col gap-[2px]">
-            <svg className={`w-2 h-2 ${active && asc ? 'text-white' : 'text-slate-500'}`} viewBox="0 0 8 5" fill="currentColor">
-                <path d="M4 0L8 5H0L4 0Z"/>
-            </svg>
-            <svg className={`w-2 h-2 ${active && !asc ? 'text-white' : 'text-slate-500'}`} viewBox="0 0 8 5" fill="currentColor">
-                <path d="M4 5L0 0H8L4 5Z"/>
-            </svg>
-        </span>
-    );
-};
+        const active = filters.sort_field === field;
+        const asc = filters.sort_order === 'asc';
+        return (
+            <span className="ml-1 flex flex-col gap-[2px]">
+                <svg className={`w-2 h-2 ${active && asc ? 'text-white' : 'text-slate-500'}`} viewBox="0 0 8 5" fill="currentColor">
+                    <path d="M4 0L8 5H0L4 0Z"/>
+                </svg>
+                <svg className={`w-2 h-2 ${active && !asc ? 'text-white' : 'text-slate-500'}`} viewBox="0 0 8 5" fill="currentColor">
+                    <path d="M4 5L0 0H8L4 5Z"/>
+                </svg>
+            </span>
+        );
+    };
 
     return (
         <AuthenticatedLayout
@@ -552,10 +566,10 @@ export default function ClearanceProcessing({ clearances = {}, stats = {}, filte
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <div style={{
                         width: 36, height: 36, borderRadius: 10,
-                        background: "#1d4ed8", display: "flex",
+                        background: "#1e293b", display: "flex",
                         alignItems: "center", justifyContent: "center",
                     }}>
-                        <span style={{ fontSize: 18 }}>🗂</span>
+                        <ClipboardCheck className="w-5 h-5 text-white" />
                     </div>
                     <div>
                         <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#0f172a" }}>
@@ -580,46 +594,50 @@ export default function ClearanceProcessing({ clearances = {}, stats = {}, filte
                         color: "#15803d", fontSize: 13, fontWeight: 600,
                         marginBottom: 20, display: "flex", alignItems: "center", gap: 8,
                     }}>
-                        <span>✓</span> {flash.success}
+                        <Check className="w-4 h-4" /> {flash.success}
                     </div>
                 )}
 
                 {/* Stat Cards */}
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 24 }}>
-                    {STAT_FILTERS.map(sf => (
-                        <div
-                            key={sf.key}
-                            onClick={() => updateFilters({ status: sf.key === 'all' ? '' : sf.key })}
-                          style={{
-                                background: (filters.status === sf.key || (sf.key === 'all' && !filters.status)) ? sf.color + '12' : '#fff',
-                                borderTop: '1.5px solid ' + ((filters.status === sf.key || (sf.key === 'all' && !filters.status)) ? sf.color : '#e2e8f0'),
-                                borderRight: '1.5px solid ' + ((filters.status === sf.key || (sf.key === 'all' && !filters.status)) ? sf.color : '#e2e8f0'),
-                                borderBottom: '1.5px solid ' + ((filters.status === sf.key || (sf.key === 'all' && !filters.status)) ? sf.color : '#e2e8f0'),
-                                borderLeft: `4px solid ${sf.color}`,
-                                borderRadius: 14,
-                                padding: '16px 20px',
-                                cursor: 'pointer',
-                                flex: '1 1 120px',
-                                maxWidth: 'calc(12.5% - 10px)',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'flex-start',
-                                transition: 'all 0.15s',
-                                boxShadow: (filters.status === sf.key || (sf.key === 'all' && !filters.status)) ? `0 0 0 3px ${sf.color}20` : 'none',
-                           }}
-        
-                        >
-                            <div>
-                                <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
-                                    {sf.label}
+                    {STAT_FILTERS.map(sf => {
+                        const Icon = sf.icon;
+                        return (
+                            <div
+                                key={sf.key}
+                                onClick={() => updateFilters({ status: sf.key === 'all' ? '' : sf.key })}
+                                style={{
+                                    background: (filters.status === sf.key || (sf.key === 'all' && !filters.status)) ? sf.color + '12' : '#fff',
+                                    borderTop: '1.5px solid ' + ((filters.status === sf.key || (sf.key === 'all' && !filters.status)) ? sf.color : '#e2e8f0'),
+                                    borderRight: '1.5px solid ' + ((filters.status === sf.key || (sf.key === 'all' && !filters.status)) ? sf.color : '#e2e8f0'),
+                                    borderBottom: '1.5px solid ' + ((filters.status === sf.key || (sf.key === 'all' && !filters.status)) ? sf.color : '#e2e8f0'),
+                                    borderLeft: `4px solid ${sf.color}`,
+                                    borderRadius: 14,
+                                    padding: '16px 20px',
+                                    cursor: 'pointer',
+                                    flex: '1 1 120px',
+                                    maxWidth: 'calc(12.5% - 10px)',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'flex-start',
+                                    transition: 'all 0.15s',
+                                    boxShadow: (filters.status === sf.key || (sf.key === 'all' && !filters.status)) ? `0 0 0 3px ${sf.color}20` : 'none',
+                                }}
+                            >
+                                <div>
+                                    <div style={{ fontSize: 10, color: '#94a3b8', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
+                                        {sf.label}
+                                    </div>
+                                    <div style={{ fontSize: 28, fontWeight: 800, color: sf.color, lineHeight: 1 }}>
+                                        {sf.value}
+                                    </div>
                                 </div>
-                                <div style={{ fontSize: 28, fontWeight: 800, color: sf.color, lineHeight: 1 }}>
-                                    {sf.value}
+                                <div style={{ opacity: 0.5, color: sf.color }}>
+                                    <Icon className="w-5 h-5" />
                                 </div>
                             </div>
-                            <div style={{ fontSize: 22, opacity: 0.45 }}>{sf.icon}</div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                     {/* Search + Table */}
@@ -684,7 +702,7 @@ export default function ClearanceProcessing({ clearances = {}, stats = {}, filte
                                     className="w-full border border-gray-300 bg-white rounded px-3 py-1.5 text-sm font-semibold text-slate-700 flex items-center justify-between gap-2 shadow-sm transition-all focus:outline-none"
                                 >
                                     <span className="flex items-center gap-1.5">
-                                        <span>📅</span>
+                                        <Calendar className="w-3.5 h-3.5 text-slate-500" />
                                         <span>
                                             {
                                                 filters.range === 'today' ? 'Today' :
@@ -699,7 +717,7 @@ export default function ClearanceProcessing({ clearances = {}, stats = {}, filte
                                             }
                                         </span>
                                     </span>
-                                    <span className="text-[10px] text-slate-400">▼</span>
+                                    <ChevronDown className="w-3 h-3 text-slate-400" />
                                 </button>
 
                                 {isDropdownOpen && (

@@ -13,41 +13,39 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+import {
+    LayoutDashboard,
+    CreditCard,
+    Camera,
+    Calendar,
+    FileText,
+    ClipboardCheck,
+    Users,
+    AlertTriangle,
+    BarChart3,
+    ClipboardList,
+    Receipt,
+    Activity,
+    Wallet
+} from 'lucide-react';
+
 // ─── Nav Link Component ───────────────────────────────────────────────────────
-function NavLink({ href, active, activeColor = 'bg-blue-600', icon, children, onNavigate }) {
+function NavLink({ href, active, activeColor = 'bg-blue-600', icon: Icon, children, onNavigate }) {
     return (
         <Link
             href={href}
             onClick={onNavigate}
-            className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+            className={`flex items-center px-4 py-2.5 rounded-lg transition-all text-sm font-medium ${
                 active
-                    ? `${activeColor} text-white shadow-md`
-                    : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                    ? `${activeColor} text-white shadow-sm`
+                    : 'text-slate-400 hover:bg-slate-800 hover:text-white'
             }`}
         >
-            <svg className="w-5 h-5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                {icon}
-            </svg>
-            <span className="text-sm">{children}</span>
+            {Icon && <Icon className="w-4 h-4 mr-3 shrink-0" />}
+            <span>{children}</span>
         </Link>
     );
 }
-
-// ─── SVG Path Shorthands ──────────────────────────────────────────────────────
-const ICONS = {
-    home:        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />,
-    walkin:      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />,
-    biometrics:  <><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></>,
-    calendar:    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />,
-    form:        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />,
-    clearance:   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />,
-    users:       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />,
-    hit:         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />,
-    reports:     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />,
-    audit:       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />,
-    transactions:<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />,
-    status:      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />,
-};
 
 // ─── Sidebar Content ──────────────────────────────────────────────────────────
 function SidebarContent({ isAdmin, isConfirmer, onNavigate }) {
@@ -58,47 +56,47 @@ function SidebarContent({ isAdmin, isConfirmer, onNavigate }) {
             {/* ── ADMIN ── */}
             {isAdmin && (
                 <>
-                    <p className="text-xs text-gray-500 uppercase tracking-widest px-4 mb-2">Admin</p>
+                    <p className="text-xs text-gray-500 uppercase tracking-widest px-4 mb-2 font-semibold">Admin</p>
 
-                    <NavLink href={route('admin.dashboard')} active={c('admin.dashboard')} icon={ICONS.home} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.dashboard')} active={c('admin.dashboard')} icon={LayoutDashboard} onNavigate={onNavigate}>
                         Dashboard
                     </NavLink>
 
-                    <p className="text-[10px] text-gray-600 uppercase tracking-[0.2em] px-4 mt-6 mb-2 font-black">
+                    <p className="text-[10px] text-gray-500 uppercase tracking-[0.2em] px-4 mt-6 mb-2 font-bold">
                         Processing Workflow
                     </p>
 
-                    <NavLink href={route('admin.walkin.index')} active={c('admin.walkin.index')} icon={ICONS.walkin} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.walkin.index')} active={c('admin.walkin.index')} icon={CreditCard} onNavigate={onNavigate}>
                         Walk-in Payment
                     </NavLink>
-                    <NavLink href={route('admin.biometrics.index')} active={c('admin.biometrics.index')} icon={ICONS.biometrics} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.biometrics.index')} active={c('admin.biometrics.index')} icon={Camera} onNavigate={onNavigate}>
                         Biometrics Capture
                     </NavLink>
 
                     <hr className="border-gray-800 my-4" />
 
-                    <NavLink href={route('admin.appointments.index')} active={c('admin.appointments.index')} icon={ICONS.calendar} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.appointments.index')} active={c('admin.appointments.index')} icon={Calendar} onNavigate={onNavigate}>
                         Appointments
                     </NavLink>
-                    <NavLink href={route('apply.form')} active={c('apply.form')} icon={ICONS.form} onNavigate={onNavigate}>
+                    <NavLink href={route('apply.form')} active={c('apply.form')} icon={FileText} onNavigate={onNavigate}>
                         Application Form
                     </NavLink>
-                    <NavLink href={route('admin.clearance.index')} active={c('admin.clearance.index')} icon={ICONS.clearance} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.clearance.index')} active={c('admin.clearance.index')} icon={ClipboardCheck} onNavigate={onNavigate}>
                         Clearance Processing
                     </NavLink>
-                    <NavLink href={route('admin.users.index')} active={c('admin.users.index')} icon={ICONS.users} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.users.index')} active={c('admin.users.index')} icon={Users} onNavigate={onNavigate}>
                         User Management
                     </NavLink>
-                    <NavLink href={route('admin.hit.index')} active={c('admin.hit.index')} icon={ICONS.hit} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.hit.index')} active={c('admin.hit.index')} icon={AlertTriangle} onNavigate={onNavigate}>
                         HIT Verification
                     </NavLink>
-                    <NavLink href={route('admin.reports.index')} active={c('admin.reports.index')} icon={ICONS.reports} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.reports.index')} active={c('admin.reports.index')} icon={BarChart3} onNavigate={onNavigate}>
                         Reports & Analytics
                     </NavLink>
-                    <NavLink href={route('admin.audit.index')} active={c('admin.audit.index')} icon={ICONS.audit} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.audit.index')} active={c('admin.audit.index')} icon={ClipboardList} onNavigate={onNavigate}>
                         Audit Logs
                     </NavLink>
-                    <NavLink href={route('admin.transactions.index')} active={c('admin.transactions.index')} icon={ICONS.transactions} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.transactions.index')} active={c('admin.transactions.index')} icon={Receipt} onNavigate={onNavigate}>
                         Transaction History
                     </NavLink>
                 </>
@@ -107,11 +105,11 @@ function SidebarContent({ isAdmin, isConfirmer, onNavigate }) {
             {/* ── CONFIRMER ── */}
             {isConfirmer && (
                 <>
-                    <p className="text-xs text-gray-500 uppercase tracking-widest px-4 mb-2">Confirmer</p>
-                    <NavLink href={route('dashboard')} active={c('dashboard')} icon={ICONS.home} onNavigate={onNavigate}>
+                    <p className="text-xs text-gray-500 uppercase tracking-widest px-4 mb-2 font-semibold">Confirmer</p>
+                    <NavLink href={route('dashboard')} active={c('dashboard')} icon={LayoutDashboard} onNavigate={onNavigate}>
                         Dashboard
                     </NavLink>
-                    <NavLink href={route('admin.appointments.index')} active={c('admin.appointments.index')} icon={ICONS.calendar} onNavigate={onNavigate}>
+                    <NavLink href={route('admin.appointments.index')} active={c('admin.appointments.index')} icon={Calendar} onNavigate={onNavigate}>
                         Appointments
                     </NavLink>
                 </>
@@ -120,17 +118,17 @@ function SidebarContent({ isAdmin, isConfirmer, onNavigate }) {
             {/* ── APPLICANT ── */}
             {!isAdmin && (
                 <>
-                    <p className="text-xs text-gray-500 uppercase tracking-widest px-4 mb-2">Applicant</p>
-                    <NavLink href={route('apply.form')} active={c('apply.form')} icon={ICONS.form} onNavigate={onNavigate}>
+                    <p className="text-xs text-gray-500 uppercase tracking-widest px-4 mb-2 font-semibold">Applicant</p>
+                    <NavLink href={route('apply.form')} active={c('apply.form')} icon={FileText} onNavigate={onNavigate}>
                         Application Form
                     </NavLink>
-                    <NavLink href={route('appointment.index')} active={c('appointment.index')} icon={ICONS.calendar} onNavigate={onNavigate}>
+                    <NavLink href={route('appointment.index')} active={c('appointment.index')} icon={Calendar} onNavigate={onNavigate}>
                         My Appointment
                     </NavLink>
-                    <NavLink href={route('application.status')} active={c('application.status')} icon={ICONS.status} onNavigate={onNavigate}>
+                    <NavLink href={route('application.status')} active={c('application.status')} icon={Activity} onNavigate={onNavigate}>
                         Application Status
                     </NavLink>
-                    <NavLink href={route('payment.show', 'LATEST')} active={c('payment.show')} icon={ICONS.walkin} onNavigate={onNavigate}>
+                    <NavLink href={route('payment.show', 'LATEST')} active={c('payment.show')} icon={Wallet} onNavigate={onNavigate}>
                         Payment Center
                     </NavLink>
                 </>
