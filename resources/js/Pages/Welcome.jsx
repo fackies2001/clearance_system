@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
+import ApplicationLogo from '@/Components/ApplicationLogo';
 
 const faqs = [
     { q: 'How much is NBI Clearance?', a: 'The standard fee is ₱130 for regular processing. Additional fees may apply for same-day or rush processing.' },
@@ -74,9 +75,7 @@ export default function Welcome({ auth }) {
                 <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
                     <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 bg-amber-50 rounded-xl flex items-center justify-center border border-amber-200">
-                                <span className="text-lg">🛡️</span>
-                            </div>
+                            <ApplicationLogo className="w-10 h-10" />
                             <span className="text-[#0f172a] font-black text-lg tracking-tight">
                                 NBI <span className="text-amber-600">SYS</span>
                             </span>
@@ -318,9 +317,7 @@ export default function Welcome({ auth }) {
                 <footer className="bg-[#fdf8f0] border-t border-amber-200/60 py-10">
                     <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-amber-100 rounded-xl flex items-center justify-center border border-amber-200">
-                                <span className="text-base">🛡️</span>
-                            </div>
+                            <ApplicationLogo className="w-8 h-8" />
                             <span className="text-[#0f172a] font-black text-base tracking-tight">
                                 NBI <span className="text-amber-600">SYS</span>
                             </span>

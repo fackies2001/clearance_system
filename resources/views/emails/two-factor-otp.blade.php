@@ -127,6 +127,36 @@
     <div class="container">
 
         <div class="header">
+            <div style="margin-bottom: 12px; text-align: center;">
+                <svg width="48" height="48" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block;">
+                    <defs>
+                        <linearGradient id="emailGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fbbf24" />
+                            <stop offset="45%" stop-color="#f59e0b" />
+                            <stop offset="100%" stop-color="#d97706" />
+                        </linearGradient>
+                    </defs>
+                    <g stroke="url(#emailGoldGrad)" stroke-width="3.5" stroke-linecap="round" opacity="0.85">
+                        <path d="M72 65 C80 50, 120 50, 128 65" stroke-dasharray="3 3" />
+                        <path d="M64 78 C75 58, 125 58, 136 78" />
+                        <path d="M58 90 C72 68, 128 68, 142 90" />
+                    </g>
+                    <g stroke="url(#emailGoldGrad)" stroke-width="3.5" stroke-linecap="round" opacity="0.85">
+                        <path d="M75 145 C85 165, 115 165, 125 145" />
+                        <path d="M68 158 C82 180, 118 180, 132 158" />
+                        <path d="M78 172 C88 186, 112 186, 122 172" />
+                    </g>
+                    <path d="M 35 75 C 50 68, 75 62, 100 62 C 125 62, 150 68, 165 75" fill="none" stroke="url(#emailGoldGrad)" stroke-width="6" stroke-linecap="round" />
+                    <path d="M 100 60 C 86 60, 80 75, 80 92 C 80 108, 86 116, 90 120 C 86 135, 82 145, 100 150 C 118 145, 114 135, 110 120 C 114 116, 120 108, 120 92 C 120 75, 114 60, 100 60 Z" fill="url(#emailGoldGrad)" />
+                    <path d="M 100 80 A 9 9 0 1 0 100 98 A 9 9 0 0 0 100 80 Z M 95 94 L 105 94 L 108 128 L 92 128 Z" fill="#0f172a" />
+                    <circle cx="35" cy="75" r="5" fill="none" stroke="url(#emailGoldGrad)" stroke-width="3" />
+                    <path d="M 30 78 L 18 115 M 40 78 L 52 115" stroke="url(#emailGoldGrad)" stroke-width="2.5" stroke-linecap="round" />
+                    <path d="M 14 115 L 56 115 Q 35 130 14 115 Z" fill="url(#emailGoldGrad)" />
+                    <circle cx="165" cy="75" r="5" fill="none" stroke="url(#emailGoldGrad)" stroke-width="3" />
+                    <path d="M 160 78 L 148 115 M 170 78 L 182 115" stroke="url(#emailGoldGrad)" stroke-width="2.5" stroke-linecap="round" />
+                    <path d="M 144 115 L 186 115 Q 165 130 144 115 Z" fill="url(#emailGoldGrad)" />
+                </svg>
+            </div>
             <h1>NBI <span>CLEARANCE</span> SYSTEM</h1>
             <p>National Bureau of Investigation &mdash; Official Portal</p>
         </div>
@@ -144,7 +174,7 @@
             <p class="validity">This OTP is valid for <strong>10 minutes</strong> only.</p>
 
             <div class="warning-box">
-                ⚠️ <strong>Do not share this code with anyone.</strong><br>
+                 <strong>Do not share this code with anyone.</strong><br>
                 NBI Clearance System will never ask for your OTP via phone or chat.
             </div>
 
