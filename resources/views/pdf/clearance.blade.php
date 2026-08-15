@@ -1,387 +1,563 @@
-{{-- resources/views/pdf/clearance.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>NBI Clearance - {{ $clearance->clearance_number }}</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        @page {
+            size: A4 portrait;
+            margin: 8mm 10mm;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
         body {
-            font-family: Arial, sans-serif;
-            color: #000;
-            background: #fff;
-            font-size: 11px;
+            background: #ffffff;
+            color: #000000;
+            font-size: 10px;
         }
-
-        .page {
-            width: 215mm;
-            min-height: 140mm;
-            padding: 8mm 10mm;
+        .clearance-card {
+            width: 100%;
+            border: 1px solid #000000;
+            padding: 8px 12px;
             position: relative;
-            overflow: hidden;
+            background: #ffffff;
         }
-
-        /* Watermark */
-        .watermark {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            opacity: 0.045;
-            pointer-events: none;
-            z-index: 0;
-            gap: 0;
-            overflow: hidden;
-        }
-        .watermark span {
-            font-size: 13px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            white-space: nowrap;
-            color: #1a3a6b;
-            padding: 4px 6px;
-        }
-
-        .content { position: relative; z-index: 1; }
-
-        /* Header */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 6px;
-            padding-bottom: 6px;
-            border-bottom: 1.5px solid #1a3a6b;
-        }
-        .header-logo {
-            width: 52px;
-            height: 52px;
-            flex-shrink: 0;
-        }
-        .header-text { text-align: center; }
-        .header-text .bagong { font-size: 8px; font-weight: 700; text-transform: uppercase; color: #1a3a6b; letter-spacing: 2px; }
-        .header-text .republic { font-size: 13px; font-weight: 900; text-transform: uppercase; }
-        .header-text .doj { font-size: 11px; font-weight: 700; text-transform: uppercase; }
-        .header-text .nbi { font-size: 17px; font-weight: 900; text-transform: uppercase; color: #1a3a6b; letter-spacing: 1px; }
-
-        .cert-tagline {
-            font-size: 8px;
+        .cut-line {
+            border-top: 1.5px dashed #666666;
+            margin: 10px 0;
             text-align: center;
-            color: #333;
-            margin-bottom: 8px;
+            position: relative;
+        }
+        .cut-line-text {
+            background: #ffffff;
+            padding: 0 8px;
+            font-size: 8px;
+            color: #666666;
+            position: relative;
+            top: -6px;
+            text-transform: uppercase;
+        }
+
+        /* Header Table */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-bottom: 2px solid #1a3a6b;
+            margin-bottom: 4px;
+        }
+        .header-title {
+            text-align: center;
+        }
+        .bagong-text { font-size: 6px; font-weight: bold; color: #1a3a6b; letter-spacing: 1.5px; text-transform: uppercase; }
+        .republic-text { font-size: 11px; font-weight: 900; text-transform: uppercase; }
+        .doj-text { font-size: 9px; font-weight: bold; text-transform: uppercase; }
+        .nbi-text { font-size: 15px; font-weight: 900; color: #1a3a6b; letter-spacing: 1px; text-transform: uppercase; }
+
+        .cert-statement {
+            font-size: 7px;
+            text-align: center;
+            color: #333333;
             font-style: italic;
-        }
-
-        /* Main body */
-        .main-body {
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Left section */
-        .left-col { flex: 1; }
-
-        .field-row {
-            display: flex;
-            gap: 12px;
             margin-bottom: 6px;
         }
-        .field { flex: 1; }
+
+        /* Data Fields */
         .field-label {
-            font-size: 7px;
-            font-weight: 700;
+            font-size: 6.5px;
+            font-weight: bold;
+            color: #444444;
             text-transform: uppercase;
-            color: #555;
-            border-bottom: 0.5px solid #999;
+            border-bottom: 0.5px solid #888888;
             padding-bottom: 1px;
-            margin-bottom: 2px;
-            letter-spacing: 0.5px;
+            margin-bottom: 1px;
         }
         .field-value {
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 10px;
+            font-weight: bold;
+            color: #000000;
             text-transform: uppercase;
-            color: #000;
+            padding-bottom: 4px;
         }
-        .field-value.large {
-            font-size: 15px;
+        .field-value-large {
+            font-size: 13px;
             font-weight: 900;
-            letter-spacing: -0.3px;
+            color: #000000;
+            text-transform: uppercase;
+            padding-bottom: 4px;
         }
-        .field-value.blue { color: #1a3a6b; }
-        .field-value.mono { font-family: 'Courier New', monospace; }
-
-        .remarks-box {
-            margin-top: 8px;
-            border: 1.5px solid #000;
-            padding: 6px 10px;
-        }
-        .remarks-label { font-size: 7px; font-weight: 700; text-transform: uppercase; color: #555; margin-bottom: 3px; }
-        .remarks-value { font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        /* Right section */
-        .right-col {
-            width: 105px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
+        .field-value-blue {
+            font-size: 10px;
+            font-weight: bold;
+            color: #1a3a6b;
+            font-family: 'Courier New', monospace;
+            padding-bottom: 4px;
         }
 
-        .nbi-id-badge {
+        /* Remarks Box */
+        .remarks-container {
+            border: 1.5px solid #000000;
+            padding: 3px 6px;
+            margin-top: 4px;
+            margin-bottom: 6px;
+        }
+        .remarks-title { font-size: 6.5px; font-weight: bold; color: #444444; text-transform: uppercase; }
+        .remarks-text { font-size: 11px; font-weight: 900; text-transform: uppercase; color: #000000; }
+
+        /* Right Column Elements */
+        .nbi-badge {
             background: #1a3a6b;
-            color: #fff;
-            font-size: 9px;
-            font-weight: 900;
-            padding: 2px 8px;
-            letter-spacing: 1px;
-            text-align: center;
-            width: 100%;
-        }
-
-        .photo-box {
-            width: 90px;
-            height: 110px;
-            border: 1.5px solid #555;
-            overflow: hidden;
-            background: #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .photo-box img { width: 100%; height: 100%; object-fit: cover; }
-        .photo-placeholder { font-size: 8px; color: #aaa; text-align: center; }
-
-        .sig-box {
-            width: 90px;
-            height: 36px;
-            border: 0.5px solid #999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .sig-label { font-size: 7px; color: #555; text-align: center; text-transform: uppercase; }
-
-        .qr-box {
-            width: 80px;
-            height: 80px;
-        }
-        .qr-box img { width: 100%; height: 100%; }
-
-        /* Bottom section */
-        .bottom-section {
-            margin-top: 8px;
-            display: flex;
-            gap: 10px;
-            align-items: flex-end;
-        }
-
-        .barcode-section { flex: 1; }
-        .barcode-section img { width: 100%; max-height: 36px; }
-        .barcode-no { font-size: 8px; font-family: 'Courier New', monospace; text-align: center; margin-top: 2px; }
-
-        .transaction-table {
-            font-size: 7px;
-            border-collapse: collapse;
-            width: 180px;
-        }
-        .transaction-table td {
-            padding: 1px 4px;
-            border: 0.5px solid #ccc;
-        }
-        .transaction-table .t-label { color: #555; font-weight: 700; text-transform: uppercase; }
-
-        .signature-section {
-            text-align: center;
-            flex: 1;
-        }
-        .sig-line { border-top: 1px solid #000; width: 120px; margin: 30px auto 2px; }
-        .sig-name { font-size: 9px; font-weight: 900; text-transform: uppercase; }
-        .sig-title { font-size: 7px; color: #555; text-transform: uppercase; }
-
-        .validity-box {
+            color: #ffffff;
             font-size: 8px;
-            text-align: right;
-            color: #333;
+            font-weight: 900;
+            text-align: center;
+            padding: 2px 0;
+            letter-spacing: 1px;
+            width: 100%;
+            margin-bottom: 4px;
         }
-        .valid-until { font-size: 11px; font-weight: 900; color: #1a3a6b; }
+        .photo-frame {
+            width: 80px;
+            height: 96px;
+            border: 1px solid #444444;
+            background: #f1f5f9;
+            text-align: center;
+            margin: 0 auto 4px auto;
+        }
+        .photo-img {
+            width: 80px;
+            height: 96px;
+            object-fit: cover;
+        }
+        .sig-frame {
+            width: 80px;
+            height: 24px;
+            border: 0.5px solid #888888;
+            text-align: center;
+            font-size: 6px;
+            color: #666666;
+            line-height: 24px;
+            margin: 0 auto 4px auto;
+            text-transform: uppercase;
+        }
 
-        @page { size: 215mm 140mm landscape; margin: 0; }
-        @media print { body { margin: 0; } }
+        /* Watermark Personal Copy */
+        .personal-watermark {
+            position: absolute;
+            top: 32%;
+            left: 20%;
+            font-size: 32px;
+            font-weight: 900;
+            color: rgba(220, 38, 38, 0.15);
+            border: 3px solid rgba(220, 38, 38, 0.15);
+            padding: 4px 16px;
+            transform: rotate(-20deg);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Transaction Table */
+        .tx-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 6px;
+        }
+        .tx-table td {
+            border: 0.5px solid #cccccc;
+            padding: 1px 3px;
+        }
+        .tx-label {
+            font-weight: bold;
+            color: #555555;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
-<div class="page">
 
-    {{-- Watermark --}}
-    <div class="watermark">
-        @for($i = 0; $i < 80; $i++)
-            <span>National Bureau of Investigation</span>
-        @endfor
+@php
+    $validUntil = $clearance->released_at
+        ? \Carbon\Carbon::parse($clearance->released_at)->addYear()->format('F d, Y')
+        : '—';
+    $dob = $clearance->date_of_birth
+        ? \Carbon\Carbon::parse($clearance->date_of_birth)->format('F d, Y')
+        : '—';
+    $dateIssued = $clearance->released_at
+        ? \Carbon\Carbon::parse($clearance->released_at)->format('F d, Y')
+        : '—';
+    $fullAddress = strtoupper(implode(', ', array_filter([
+        $clearance->present_street,
+        'BRGY ' . $clearance->present_barangay,
+        $clearance->present_city,
+        $clearance->present_province
+    ])));
+@endphp
+
+{{-- ════════════════════════════════════════════════════════════════════ text --}}
+{{-- 1. ORIGINAL COPY (TOP) --}}
+{{-- ════════════════════════════════════════════════════════════════════ text --}}
+<div class="clearance-card">
+
+    <!-- Header -->
+    <table class="header-table">
+        <tr>
+            <td style="width: 48px; text-align: center; vertical-align: middle;">
+                <div style="width: 42px; height: 42px; border: 1px solid #cccccc; font-size: 5px; color: #666; line-height: 1.1; padding-top: 10px; font-weight: bold;">
+                    BAGONG<br>PILIPINAS
+                </div>
+            </td>
+            <td class="header-title">
+                <div class="bagong-text">Bagong Pilipinas</div>
+                <div class="republic-text">Republic of the Philippines</div>
+                <div class="doj-text">Department of Justice</div>
+                <div class="nbi-text">National Bureau of Investigation</div>
+            </td>
+            <td style="width: 48px; text-align: center; vertical-align: middle;">
+                <div style="width: 42px; height: 42px; border: 1.5px solid #1a3a6b; font-size: 11px; color: #1a3a6b; font-weight: 900; line-height: 40px;">
+                    NBI
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="cert-statement">
+        This is to certify that the person whose name, picture, signature and thumbprint appearing herein applied for NBI Clearance and the results is as follows:
     </div>
 
-    <div class="content">
+    <!-- Main Content Grid Table -->
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <!-- Left Column: Personal Information -->
+            <td style="vertical-align: top; padding-right: 10px;">
+                
+                <!-- NBI ID & Valid Until -->
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 50%; padding-right: 8px;">
+                            <div class="field-label">NBI ID No.</div>
+                            <div class="field-value-blue">{{ $clearance->clearance_number }}</div>
+                        </td>
+                        <td style="width: 50%;">
+                            <div class="field-label">Valid Until</div>
+                            <div class="field-value">{{ strtoupper($validUntil) }}</div>
+                        </td>
+                    </tr>
+                </table>
 
-        {{-- Header --}}
-        <div class="header">
-            {{-- Left logo placeholder --}}
-            <div style="width:52px;height:52px;border:1px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:7px;color:#aaa;text-align:center;">BAGONG<br>PILIPINAS</div>
-            <div class="header-text">
-                <div class="bagong">Bagong Pilipinas</div>
-                <div class="republic">Republic of the Philippines</div>
-                <div class="doj">Department of Justice</div>
-                <div class="nbi">National Bureau of Investigation</div>
-            </div>
-            {{-- Right NBI logo placeholder --}}
-            <div style="width:52px;height:52px;border:1px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:9px;color:#1a3a6b;font-weight:900;">NBI</div>
-        </div>
+                <!-- Name Row -->
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 40%; padding-right: 6px;">
+                            <div class="field-label">Family Name</div>
+                            <div class="field-value-large">{{ strtoupper($clearance->last_name) }}</div>
+                        </td>
+                        <td style="width: 40%; padding-right: 6px;">
+                            <div class="field-label">First Name</div>
+                            <div class="field-value-large">{{ strtoupper($clearance->first_name) }}</div>
+                        </td>
+                        <td style="width: 20%;">
+                            <div class="field-label">Middle Name</div>
+                            <div class="field-value-large">{{ strtoupper($clearance->middle_name ?? 'N/A') }}</div>
+                        </td>
+                    </tr>
+                </table>
 
-        <p class="cert-tagline">This is to certify that the person whose name, picture, signature and thumbprint appearing herein applied for NBI Clearance and the results is as follows:</p>
+                <!-- Address -->
+                <div style="width: 100%;">
+                    <div class="field-label">Address</div>
+                    <div class="field-value" style="font-size: 9px;">{{ $fullAddress }}</div>
+                </div>
 
-        {{-- Main Body --}}
-        <div class="main-body">
-            <div class="left-col">
+                <!-- DOB & POB -->
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 50%; padding-right: 8px;">
+                            <div class="field-label">Date of Birth</div>
+                            <div class="field-value">{{ strtoupper($dob) }}</div>
+                        </td>
+                        <td style="width: 50%;">
+                            <div class="field-label">Place of Birth</div>
+                            <div class="field-value">{{ strtoupper($clearance->place_of_birth) }}</div>
+                        </td>
+                    </tr>
+                </table>
 
-                {{-- NBI ID & Valid Until --}}
-                <div class="field-row">
-                    <div class="field">
-                        <div class="field-label">NBI ID No.</div>
-                        <div class="field-value blue mono">{{ $clearance->clearance_number }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Valid Until</div>
-                        <div class="field-value">{{ \Carbon\Carbon::parse($clearance->released_at)->addYear()->format('F d, Y') }}</div>
+                <!-- Citizenship, Civil Status, Gender -->
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 33%; padding-right: 6px;">
+                            <div class="field-label">Citizenship</div>
+                            <div class="field-value">{{ strtoupper($clearance->nationality) }}</div>
+                        </td>
+                        <td style="width: 33%; padding-right: 6px;">
+                            <div class="field-label">Civil Status</div>
+                            <div class="field-value">{{ strtoupper($clearance->civil_status) }}</div>
+                        </td>
+                        <td style="width: 34%;">
+                            <div class="field-label">Gender</div>
+                            <div class="field-value">{{ strtoupper($clearance->sex) }}</div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Purpose -->
+                <div style="width: 100%;">
+                    <div class="field-label">Purpose</div>
+                    <div class="field-value">{{ strtoupper($clearance->purpose) }}</div>
+                </div>
+
+                <!-- Remarks Box -->
+                <div class="remarks-container">
+                    <div class="remarks-title">Remarks</div>
+                    <div class="remarks-text">
+                        {{ $clearance->status === 'CLEARED' ? 'NO DEROGATORY RECORD' : 'WITH DEROGATORY RECORD' }}
                     </div>
                 </div>
 
-                {{-- Name --}}
-                <div class="field-row">
-                    <div class="field" style="flex:2">
-                        <div class="field-label">Family Name</div>
-                        <div class="field-value large">{{ strtoupper($clearance->last_name) }}</div>
-                    </div>
-                    <div class="field" style="flex:2">
-                        <div class="field-label">First Name</div>
-                        <div class="field-value large">{{ strtoupper($clearance->first_name) }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Middle Name</div>
-                        <div class="field-value large">{{ strtoupper($clearance->middle_name ?? '') }}</div>
-                    </div>
+                <!-- Barcode & Director Signature Footer -->
+                <table style="width: 100%; border-collapse: collapse; margin-top: 2px;">
+                    <tr>
+                        <td style="width: 60%; vertical-align: bottom;">
+                            @if(isset($barcodeBase64) && $barcodeBase64)
+                                <img src="data:image/png;base64,{{ $barcodeBase64 }}" style="width: 180px; height: 28px;" />
+                            @endif
+                            <div style="font-size: 7px; font-family: monospace; font-weight: bold; margin-top: 1px;">
+                                {{ $clearance->clearance_number }}
+                            </div>
+                        </td>
+                        <td style="width: 40%; text-align: center; vertical-align: bottom;">
+                            <div style="border-top: 1px solid #000000; width: 100px; margin: 0 auto 2px auto;"></div>
+                            <div style="font-size: 7px; font-weight: 900; text-transform: uppercase;">ATTY. NBI DIRECTOR</div>
+                            <div style="font-size: 6px; color: #555555; text-transform: uppercase;">Director</div>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+
+            <!-- Right Column: Badge, Photo, Signature, QR, Tx Table -->
+            <td style="width: 90px; vertical-align: top; text-align: center;">
+                
+                <div class="nbi-badge">
+                    A-{{ strtoupper(substr($clearance->clearance_number, -7)) }}
                 </div>
 
-                {{-- Address --}}
-                <div class="field-row">
-                    <div class="field">
-                        <div class="field-label">Address</div>
-                        <div class="field-value" style="font-size:10px">{{ strtoupper($clearance->present_street . ' BRGY ' . $clearance->present_barangay . ' ' . $clearance->present_city . ' ' . $clearance->present_province) }}</div>
-                    </div>
-                </div>
-
-                {{-- DOB, POB, Citizenship, Civil Status, Gender --}}
-                <div class="field-row">
-                    <div class="field">
-                        <div class="field-label">Date of Birth</div>
-                        <div class="field-value">{{ \Carbon\Carbon::parse($clearance->date_of_birth)->format('F d, Y') }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Place of Birth</div>
-                        <div class="field-value">{{ strtoupper($clearance->place_of_birth) }}</div>
-                    </div>
-                </div>
-                <div class="field-row">
-                    <div class="field">
-                        <div class="field-label">Citizenship</div>
-                        <div class="field-value">{{ strtoupper($clearance->nationality) }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Civil Status</div>
-                        <div class="field-value">{{ strtoupper($clearance->civil_status) }}</div>
-                    </div>
-                    <div class="field">
-                        <div class="field-label">Gender</div>
-                        <div class="field-value">{{ strtoupper($clearance->sex) }}</div>
-                    </div>
-                </div>
-
-                {{-- Purpose --}}
-                <div class="field-row">
-                    <div class="field">
-                        <div class="field-label">Purpose</div>
-                        <div class="field-value">{{ strtoupper($clearance->purpose) }}</div>
-                    </div>
-                </div>
-
-                {{-- Remarks --}}
-                <div class="remarks-box">
-                    <div class="remarks-label">Remarks</div>
-                    <div class="remarks-value">{{ $clearance->status === 'CLEARED' ? 'NO DEROGATORY RECORD' : 'WITH DEROGATORY RECORD' }}</div>
-                </div>
-
-            </div>
-
-            {{-- Right Column --}}
-            <div class="right-col">
-                <div class="nbi-id-badge">A-{{ substr($clearance->clearance_number, -7) }}</div>
-
-                <div class="photo-box">
-                    @if($clearance->photo_path)
-                        <img src="{{ storage_path('app/public/' . $clearance->photo_path) }}" alt="Photo">
+                <div class="photo-frame">
+                    @if(isset($photoBase64) && $photoBase64)
+                        <img src="{{ $photoBase64 }}" class="photo-img" />
                     @else
-                        <div class="photo-placeholder">NO PHOTO</div>
+                        <div style="font-size: 6px; color: #999; line-height: 96px;">NO PHOTO</div>
                     @endif
                 </div>
 
-                <div class="sig-box">
-                    <div class="sig-label">Signature</div>
+                <div class="sig-frame">Signature</div>
+
+                <div style="margin: 2px auto;">
+                    @if(isset($qrCodeBase64) && $qrCodeBase64)
+                        <img src="data:image/png;base64,{{ $qrCodeBase64 }}" style="width: 64px; height: 64px;" />
+                    @endif
                 </div>
 
-                {{-- QR Code --}}
-                <div class="qr-box">
-                    {!! QrCode::size(80)->generate($clearance->clearance_number . '|' . $clearance->tracking_no . '|' . $clearance->last_name . ',' . $clearance->first_name) !!}
-                </div>
-            </div>
-        </div>
-
-        {{-- Bottom --}}
-        <div class="bottom-section">
-
-            {{-- Barcode --}}
-            <div class="barcode-section">
-                @php
-                    $generator = new Picqer\Barcode\BarcodeGeneratorSVG();
-                    $barcode = $generator->getBarcode($clearance->clearance_number, $generator::TYPE_CODE_128, 1.5, 36);
-                @endphp
-                {!! $barcode !!}
-                <div class="barcode-no">{{ $clearance->clearance_number }}</div>
-            </div>
-
-            {{-- Signature --}}
-            <div class="signature-section">
-                <div class="sig-line"></div>
-                <div class="sig-name">ATTY. NBI DIRECTOR</div>
-                <div class="sig-title">Director</div>
-            </div>
-
-            {{-- Transaction Info --}}
-            <div>
-                <div style="font-size:7px;color:#555;margin-bottom:2px;">Date Printed: {{ now()->format('M d, Y g:i A') }}</div>
-                <table class="transaction-table">
-                    <tr><td class="t-label">Agency</td><td>NBI</td><td class="t-label">DATIO</td><td>openaa</td></tr>
-                    <tr><td class="t-label">CASID</td><td>openaa</td><td class="t-label">BGIID</td><td>openaa</td></tr>
-                    <tr><td class="t-label">O.R. No.</td><td>{{ $clearance->payment_reference ?? 'N/A' }}</td><td class="t-label">RECID</td><td>dataref</td></tr>
-                    <tr><td class="t-label">O.R. Date</td><td>{{ $clearance->paid_at ? \Carbon\Carbon::parse($clearance->paid_at)->format('m/d/Y') : 'N/A' }}</td><td class="t-label">PRTID</td><td>nbiref</td></tr>
-                    <tr><td class="t-label">DST PAID</td><td colspan="3">{{ $clearance->payment_amount ? '₱'.$clearance->payment_amount : 'N/A' }}</td></tr>
+                <table class="tx-table">
+                    <tr><td class="tx-label">Date</td><td>{{ $dateIssued }}</td></tr>
+                    <tr><td class="tx-label">Agency</td><td>NBI</td></tr>
+                    <tr><td class="tx-label">O.R. No.</td><td>{{ $clearance->payment_reference ?? 'N/A' }}</td></tr>
+                    <tr><td class="tx-label">DST PAID</td><td>{{ $clearance->payment_amount ? '₱'.$clearance->payment_amount : 'N/A' }}</td></tr>
                 </table>
-            </div>
 
-        </div>
+            </td>
+        </tr>
+    </table>
 
-    </div>
 </div>
+
+<!-- Cut Line -->
+<div class="cut-line">
+    <span class="cut-line-text">✂ Cut along line &bull; Personal Copy Below</span>
+</div>
+
+{{-- ════════════════════════════════════════════════════════════════════ text --}}
+{{-- 2. PERSONAL COPY (BOTTOM) --}}
+{{-- ════════════════════════════════════════════════════════════════════ text --}}
+<div class="clearance-card">
+
+    <div class="personal-watermark">PERSONAL COPY</div>
+
+    <!-- Header -->
+    <table class="header-table">
+        <tr>
+            <td style="width: 48px; text-align: center; vertical-align: middle;">
+                <div style="width: 42px; height: 42px; border: 1px solid #cccccc; font-size: 5px; color: #666; line-height: 1.1; padding-top: 10px; font-weight: bold;">
+                    BAGONG<br>PILIPINAS
+                </div>
+            </td>
+            <td class="header-title">
+                <div class="bagong-text">Bagong Pilipinas</div>
+                <div class="republic-text">Republic of the Philippines</div>
+                <div class="doj-text">Department of Justice</div>
+                <div class="nbi-text">National Bureau of Investigation</div>
+            </td>
+            <td style="width: 48px; text-align: center; vertical-align: middle;">
+                <div style="width: 42px; height: 42px; border: 1.5px solid #1a3a6b; font-size: 11px; color: #1a3a6b; font-weight: 900; line-height: 40px;">
+                    NBI
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="cert-statement">
+        This is to certify that the person whose name, picture, signature and thumbprint appearing herein applied for NBI Clearance and the results is as follows:
+    </div>
+
+    <!-- Main Content Grid Table -->
+    <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+            <!-- Left Column: Personal Information -->
+            <td style="vertical-align: top; padding-right: 10px;">
+                
+                <!-- NBI ID & Valid Until -->
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 50%; padding-right: 8px;">
+                            <div class="field-label">NBI ID No.</div>
+                            <div class="field-value-blue">{{ $clearance->clearance_number }}</div>
+                        </td>
+                        <td style="width: 50%;">
+                            <div class="field-label">Valid Until</div>
+                            <div class="field-value">{{ strtoupper($validUntil) }}</div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Name Row -->
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 40%; padding-right: 6px;">
+                            <div class="field-label">Family Name</div>
+                            <div class="field-value-large">{{ strtoupper($clearance->last_name) }}</div>
+                        </td>
+                        <td style="width: 40%; padding-right: 6px;">
+                            <div class="field-label">First Name</div>
+                            <div class="field-value-large">{{ strtoupper($clearance->first_name) }}</div>
+                        </td>
+                        <td style="width: 20%;">
+                            <div class="field-label">Middle Name</div>
+                            <div class="field-value-large">{{ strtoupper($clearance->middle_name ?? 'N/A') }}</div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Address -->
+                <div style="width: 100%;">
+                    <div class="field-label">Address</div>
+                    <div class="field-value" style="font-size: 9px;">{{ $fullAddress }}</div>
+                </div>
+
+                <!-- DOB & POB -->
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 50%; padding-right: 8px;">
+                            <div class="field-label">Date of Birth</div>
+                            <div class="field-value">{{ strtoupper($dob) }}</div>
+                        </td>
+                        <td style="width: 50%;">
+                            <div class="field-label">Place of Birth</div>
+                            <div class="field-value">{{ strtoupper($clearance->place_of_birth) }}</div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Citizenship, Civil Status, Gender -->
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 33%; padding-right: 6px;">
+                            <div class="field-label">Citizenship</div>
+                            <div class="field-value">{{ strtoupper($clearance->nationality) }}</div>
+                        </td>
+                        <td style="width: 33%; padding-right: 6px;">
+                            <div class="field-label">Civil Status</div>
+                            <div class="field-value">{{ strtoupper($clearance->civil_status) }}</div>
+                        </td>
+                        <td style="width: 34%;">
+                            <div class="field-label">Gender</div>
+                            <div class="field-value">{{ strtoupper($clearance->sex) }}</div>
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- Purpose -->
+                <div style="width: 100%;">
+                    <div class="field-label">Purpose</div>
+                    <div class="field-value">{{ strtoupper($clearance->purpose) }}</div>
+                </div>
+
+                <!-- Remarks Box -->
+                <div class="remarks-container">
+                    <div class="remarks-title">Remarks</div>
+                    <div class="remarks-text">
+                        {{ $clearance->status === 'CLEARED' ? 'NO DEROGATORY RECORD' : 'WITH DEROGATORY RECORD' }}
+                    </div>
+                </div>
+
+                <!-- Barcode & Director Signature Footer -->
+                <table style="width: 100%; border-collapse: collapse; margin-top: 2px;">
+                    <tr>
+                        <td style="width: 60%; vertical-align: bottom;">
+                            @if(isset($barcodeBase64) && $barcodeBase64)
+                                <img src="data:image/png;base64,{{ $barcodeBase64 }}" style="width: 180px; height: 28px;" />
+                            @endif
+                            <div style="font-size: 7px; font-family: monospace; font-weight: bold; margin-top: 1px;">
+                                {{ $clearance->clearance_number }}
+                            </div>
+                        </td>
+                        <td style="width: 40%; text-align: center; vertical-align: bottom;">
+                            <div style="border-top: 1px solid #000000; width: 100px; margin: 0 auto 2px auto;"></div>
+                            <div style="font-size: 7px; font-weight: 900; text-transform: uppercase;">ATTY. NBI DIRECTOR</div>
+                            <div style="font-size: 6px; color: #555555; text-transform: uppercase;">Director</div>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+
+            <!-- Right Column: Badge, Photo, Signature, QR, Tx Table -->
+            <td style="width: 90px; vertical-align: top; text-align: center;">
+                
+                <div class="nbi-badge">
+                    A-{{ strtoupper(substr($clearance->clearance_number, -7)) }}
+                </div>
+
+                <div class="photo-frame">
+                    @if(isset($photoBase64) && $photoBase64)
+                        <img src="{{ $photoBase64 }}" class="photo-img" />
+                    @else
+                        <div style="font-size: 6px; color: #999; line-height: 96px;">NO PHOTO</div>
+                    @endif
+                </div>
+
+                <div class="sig-frame">Signature</div>
+
+                <div style="margin: 2px auto;">
+                    @if(isset($qrCodeBase64) && $qrCodeBase64)
+                        <img src="data:image/png;base64,{{ $qrCodeBase64 }}" style="width: 64px; height: 64px;" />
+                    @endif
+                </div>
+
+                <table class="tx-table">
+                    <tr><td class="tx-label">Date</td><td>{{ $dateIssued }}</td></tr>
+                    <tr><td class="tx-label">Agency</td><td>NBI</td></tr>
+                    <tr><td class="tx-label">O.R. No.</td><td>{{ $clearance->payment_reference ?? 'N/A' }}</td></tr>
+                    <tr><td class="tx-label">DST PAID</td><td>{{ $clearance->payment_amount ? '₱'.$clearance->payment_amount : 'N/A' }}</td></tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</div>
+
 </body>
 </html>

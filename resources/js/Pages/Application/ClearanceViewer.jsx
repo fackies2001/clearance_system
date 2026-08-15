@@ -37,7 +37,7 @@ function ClearanceCopy({ clearance, qrCodeSvg, isPersonalCopy = false }) {
     ].filter(Boolean).join(', ').toUpperCase();
 
     return (
-        <div style={{
+        <div className="clearance-copy-container" style={{
             width: '100%',
             background: '#fff',
             padding: '14px 18px',
@@ -257,28 +257,32 @@ export default function ClearanceViewer({ auth, clearance, qrCodeSvg }) {
             <Head title={`NBI Clearance - ${clearance.clearance_number}`}>
                 <style>{`
                     @media print {
-                        @page { size: portrait; margin: 0; }
+                        @page { size: A4 portrait; margin: 4mm; }
                         body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: white !important; margin: 0; padding: 0; }
                         
                         /* Hide app layout elements */
                         nav, aside, header, .print\\:hidden { display: none !important; }
                         
-                        /* Fix layout shifts by absolutely positioning the print wrapper */
                         #clearance-print-wrapper {
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            width: 100%;
-                            padding: 0;
-                            margin: 0;
+                            position: static !important;
+                            width: 100% !important;
+                            padding: 0 !important;
+                            margin: 0 !important;
+                            display: block !important;
                         }
 
                         #clearance-print {
                             border: none !important;
                             box-shadow: none !important;
                             width: 100% !important;
-                            max-width: 800px;
-                            margin: 0 auto;
+                            max-width: 100% !important;
+                            margin: 0 !important;
+                            padding: 0 !important;
+                        }
+
+                        .clearance-copy-container {
+                            padding: 8px 12px !important;
+                            page-break-inside: avoid !important;
                         }
                     }
                 `}</style>

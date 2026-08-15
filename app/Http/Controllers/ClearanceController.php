@@ -131,7 +131,6 @@ class ClearanceController extends Controller
         ]);
     }
 
-        // app/Http/Controllers/ClearanceController.php
     public function downloadClearance($tracking_no)
     {
         $clearance = Clearance::where('tracking_no', $tracking_no)
@@ -142,9 +141,29 @@ class ClearanceController extends Controller
             abort(403, 'Clearance not yet released.');
         }
 
+        // Generate QR Code PNG Base64 for DomPDF
+        $qrData = $clearance->clearance_number . '|' . $clearance->tracking_no . '|' . $clearance->last_name . ',' . $clearance->first_name;
+        $qrCodeBase64 = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(100)->margin(0)->generate($qrData));
+
+        // Generate Barcode PNG Base64 for DomPDF
+        $generator = new \Picqer\Barcode\BarcodeGeneratorPNG();
+        $barcodeBase64 = base64_encode($generator->getBarcode($clearance->clearance_number, $generator::TYPE_CODE_128, 2, 32));
+
+        // Base64 Photo if exists
+        $photoBase64 = null;
+        if ($clearance->photo_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($clearance->photo_path)) {
+            $photoPath = storage_path('app/public/' . $clearance->photo_path);
+            $photoData = file_get_contents($photoPath);
+            $type = pathinfo($photoPath, PATHINFO_EXTENSION);
+            $photoBase64 = 'data:image/' . $type . ';base64,' . base64_encode($photoData);
+        }
+
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.clearance', [
-            'clearance' => $clearance
-        ])->setPaper([0, 0, 609.449, 396.850], 'landscape'); // A5 landscape
+            'clearance' => $clearance,
+            'qrCodeBase64' => $qrCodeBase64,
+            'barcodeBase64' => $barcodeBase64,
+            'photoBase64' => $photoBase64,
+        ])->setPaper('a4', 'portrait');
 
         return $pdf->download("NBI_Clearance_{$clearance->clearance_number}.pdf");
     }
