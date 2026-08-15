@@ -257,17 +257,33 @@ export default function ClearanceViewer({ auth, clearance, qrCodeSvg }) {
             <Head title={`NBI Clearance - ${clearance.clearance_number}`}>
                 <style>{`
                     @media print {
-                        @page { size: A4 portrait; margin: 4mm; }
-                        body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: white !important; margin: 0; padding: 0; }
+                        @page { size: A4 portrait; margin: 0; }
                         
-                        /* Hide app layout elements */
-                        nav, aside, header, .print\\:hidden { display: none !important; }
-                        
+                        * {
+                            -webkit-print-color-adjust: exact !important;
+                            print-color-adjust: exact !important;
+                        }
+
+                        html, body, #app, main, div:not(#clearance-print):not(.clearance-copy-container) {
+                            background: #ffffff !important;
+                            background-color: #ffffff !important;
+                            color: #000000 !important;
+                            box-shadow: none !important;
+                        }
+
+                        /* Hide UI controls */
+                        nav, aside, header, .print\\:hidden, button, a {
+                            display: none !important;
+                        }
+
                         #clearance-print-wrapper {
-                            position: static !important;
+                            position: absolute !important;
+                            top: 0 !important;
+                            left: 0 !important;
                             width: 100% !important;
-                            padding: 0 !important;
                             margin: 0 !important;
+                            padding: 0 !important;
+                            background: #ffffff !important;
                             display: block !important;
                         }
 
@@ -278,10 +294,12 @@ export default function ClearanceViewer({ auth, clearance, qrCodeSvg }) {
                             max-width: 100% !important;
                             margin: 0 !important;
                             padding: 0 !important;
+                            background: #ffffff !important;
                         }
 
                         .clearance-copy-container {
-                            padding: 8px 12px !important;
+                            padding: 6px 12px !important;
+                            background: #ffffff !important;
                             page-break-inside: avoid !important;
                         }
                     }

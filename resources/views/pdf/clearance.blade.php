@@ -322,7 +322,7 @@
                     <tr>
                         <td style="width: 60%; vertical-align: bottom;">
                             @if(isset($barcodeBase64) && $barcodeBase64)
-                                <img src="data:image/png;base64,{{ $barcodeBase64 }}" style="width: 180px; height: 28px;" />
+                                <img src="{{ $barcodeBase64 }}" style="width: 180px; height: 28px;" />
                             @endif
                             <div style="font-size: 7px; font-family: monospace; font-weight: bold; margin-top: 1px;">
                                 {{ $clearance->clearance_number }}
@@ -357,7 +357,7 @@
 
                 <div style="margin: 2px auto;">
                     @if(isset($qrCodeBase64) && $qrCodeBase64)
-                        <img src="data:image/png;base64,{{ $qrCodeBase64 }}" style="width: 64px; height: 64px;" />
+                        <img src="{{ $qrCodeBase64 }}" style="width: 64px; height: 64px;" />
                     @endif
                 </div>
 
@@ -507,7 +507,7 @@
                     <tr>
                         <td style="width: 60%; vertical-align: bottom;">
                             @if(isset($barcodeBase64) && $barcodeBase64)
-                                <img src="data:image/png;base64,{{ $barcodeBase64 }}" style="width: 180px; height: 28px;" />
+                                <img src="{{ $barcodeBase64 }}" style="width: 180px; height: 28px;" />
                             @endif
                             <div style="font-size: 7px; font-family: monospace; font-weight: bold; margin-top: 1px;">
                                 {{ $clearance->clearance_number }}
@@ -542,7 +542,7 @@
 
                 <div style="margin: 2px auto;">
                     @if(isset($qrCodeBase64) && $qrCodeBase64)
-                        <img src="data:image/png;base64,{{ $qrCodeBase64 }}" style="width: 64px; height: 64px;" />
+                        <img src="{{ $qrCodeBase64 }}" style="width: 64px; height: 64px;" />
                     @endif
                 </div>
 

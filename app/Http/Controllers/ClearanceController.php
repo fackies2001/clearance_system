@@ -141,13 +141,15 @@ class ClearanceController extends Controller
             abort(403, 'Clearance not yet released.');
         }
 
-        // Generate QR Code PNG Base64 for DomPDF
+        // Generate QR Code SVG Data URI (No Imagick extension required)
         $qrData = $clearance->clearance_number . '|' . $clearance->tracking_no . '|' . $clearance->last_name . ',' . $clearance->first_name;
-        $qrCodeBase64 = base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(100)->margin(0)->generate($qrData));
+        $qrSvg = (string) \SimpleSoftwareIO\QrCode\Facades\QrCode::size(90)->margin(0)->generate($qrData);
+        $qrCodeBase64 = 'data:image/svg+xml;base64,' . base64_encode($qrSvg);
 
-        // Generate Barcode PNG Base64 for DomPDF
-        $generator = new \Picqer\Barcode\BarcodeGeneratorPNG();
-        $barcodeBase64 = base64_encode($generator->getBarcode($clearance->clearance_number, $generator::TYPE_CODE_128, 2, 32));
+        // Generate Barcode SVG Data URI (No Imagick extension required)
+        $generator = new \Picqer\Barcode\BarcodeGeneratorSVG();
+        $barcodeSvg = $generator->getBarcode($clearance->clearance_number, $generator::TYPE_CODE_128, 1.5, 32);
+        $barcodeBase64 = 'data:image/svg+xml;base64,' . base64_encode($barcodeSvg);
 
         // Base64 Photo if exists
         $photoBase64 = null;
