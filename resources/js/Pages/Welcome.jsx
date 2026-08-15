@@ -71,27 +71,27 @@ export default function Welcome({ auth }) {
             <div className="min-h-screen bg-white font-sans">
 
                 {/* ── NAVBAR ── */}
-                <nav className="sticky top-0 z-50 bg-[#0f172a]/95 backdrop-blur border-b border-white/10">
+                <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
                     <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 bg-white/10 rounded-xl flex items-center justify-center border border-white/20">
+                            <div className="w-9 h-9 bg-amber-50 rounded-xl flex items-center justify-center border border-amber-200">
                                 <span className="text-lg">🛡️</span>
                             </div>
-                            <span className="text-white font-black text-lg tracking-tight">
-                                NBI <span className="text-blue-400">SYS</span>
+                            <span className="text-[#0f172a] font-black text-lg tracking-tight">
+                                NBI <span className="text-amber-600">SYS</span>
                             </span>
                         </div>
                         <div className="flex items-center gap-3">
                             {auth.user ? (
-                                <Link href={route('dashboard')} className="px-5 py-2 rounded-xl bg-white text-[#1e3a5f] font-bold text-sm hover:bg-blue-50 transition-all">
+                                <Link href={route('dashboard')} className="px-5 py-2 rounded-xl bg-[#1e3a5f] text-white font-bold text-sm hover:bg-[#2a4f75] transition-all shadow-md">
                                     Go to Dashboard →
                                 </Link>
                             ) : (
                                 <>
-                                    <Link href={route('login')} className="px-5 py-2 rounded-xl text-white/70 font-semibold text-sm hover:text-white hover:bg-white/10 transition-all">
+                                    <Link href={route('login')} className="px-5 py-2 rounded-xl text-slate-500 font-semibold text-sm hover:text-[#0f172a] hover:bg-slate-100 transition-all">
                                         Sign In
                                     </Link>
-                                    <Link href={route('register')} className="px-5 py-2 rounded-xl bg-white text-[#1e3a5f] font-bold text-sm hover:bg-blue-50 transition-all shadow-lg">
+                                    <Link href={route('register')} className="px-5 py-2 rounded-xl bg-[#1e3a5f] text-white font-bold text-sm hover:bg-[#2a4f75] transition-all shadow-md">
                                         Get Started
                                     </Link>
                                 </>
@@ -101,28 +101,28 @@ export default function Welcome({ auth }) {
                 </nav>
 
                 {/* ── HERO ── */}
-                <section className="bg-gradient-to-br from-[#0f172a] via-[#1e3a5f] to-[#1d4ed8] relative overflow-hidden">
-                    <div className="absolute top-[-100px] right-[-100px] w-[400px] h-[400px] rounded-full bg-white/5" />
-                    <div className="absolute bottom-[-80px] left-[-80px] w-[350px] h-[350px] rounded-full bg-white/5" />
+                <section className="bg-[#fdf8f0] relative overflow-hidden">
+                    <div className="absolute top-[-100px] right-[-100px] w-[400px] h-[400px] rounded-full bg-amber-200/20" />
+                    <div className="absolute bottom-[-80px] left-[-80px] w-[350px] h-[350px] rounded-full bg-amber-200/20" />
                     <div className="max-w-7xl mx-auto px-6 pt-24 pb-28 text-center relative z-10">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-blue-200 text-xs font-bold uppercase tracking-widest mb-8">
-                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 border border-amber-200 text-amber-700 text-xs font-bold uppercase tracking-widest mb-8">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                             Online Application Now Available
                         </div>
-                        <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight leading-tight mb-6">
+                        <h1 className="text-5xl md:text-6xl font-black text-[#0f172a] tracking-tight leading-tight mb-6">
                             NBI Clearance<br />
-                            <span className="text-blue-400">Online Appointment</span>
+                            <span className="text-amber-600">Online Appointment</span>
                         </h1>
-                        <p className="text-blue-200 text-lg max-w-2xl mx-auto mb-4 leading-relaxed">
+                        <p className="text-slate-600 text-lg max-w-2xl mx-auto mb-4 leading-relaxed">
                             The NBI Clearance is an official document issued by the National Bureau of Investigation in the Philippines.
                             It proves that a person has no criminal record and is commonly required for jobs, passports, visas, loans, and other legal transactions.
                         </p>
-                        <p className="text-blue-300/70 text-sm mb-10">Getting your NBI clearance early helps avoid delays in important applications.</p>
+                        <p className="text-slate-400 text-sm mb-10">Getting your NBI clearance early helps avoid delays in important applications.</p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
-                            <Link href={route('register')} className="px-8 py-4 rounded-2xl bg-white text-[#1e3a5f] font-black text-base hover:bg-blue-50 transition-all shadow-2xl shadow-blue-900/30 w-full sm:w-auto">
+                            <Link href={route('register')} className="px-8 py-4 rounded-2xl bg-[#1e3a5f] text-white font-black text-base hover:bg-[#2a4f75] transition-all shadow-xl w-full sm:w-auto">
                                 Get an Appointment →
                             </Link>
-                            <Link href={route('login')} className="px-8 py-4 rounded-2xl bg-white/10 border border-white/20 text-white font-bold text-base hover:bg-white/20 transition-all w-full sm:w-auto">
+                            <Link href={route('login')} className="px-8 py-4 rounded-2xl bg-white border border-slate-200 text-[#0f172a] font-bold text-base hover:bg-slate-50 hover:shadow-md transition-all w-full sm:w-auto">
                                 Sign In
                             </Link>
                         </div>
@@ -133,10 +133,10 @@ export default function Welcome({ auth }) {
                                 { icon: '📅', title: 'Set Appointment', desc: 'Schedule your biometrics capture at your convenience.' },
                                 { icon: '🪪', title: 'Get Clearance', desc: 'Download or print your NBI Clearance digitally.' },
                             ].map(f => (
-                                <div key={f.title} className="bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-6 text-left hover:bg-white/15 transition-all">
-                                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-2xl mb-4">{f.icon}</div>
-                                    <h3 className="text-white font-bold text-sm mb-2">{f.title}</h3>
-                                    <p className="text-blue-200 text-xs leading-relaxed">{f.desc}</p>
+                                <div key={f.title} className="bg-white border border-slate-100 rounded-2xl p-6 text-left shadow-sm hover:shadow-md transition-all">
+                                    <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center text-2xl mb-4">{f.icon}</div>
+                                    <h3 className="text-[#0f172a] font-bold text-sm mb-2">{f.title}</h3>
+                                    <p className="text-slate-500 text-xs leading-relaxed">{f.desc}</p>
                                 </div>
                             ))}
                         </div>
@@ -148,7 +148,7 @@ export default function Welcome({ auth }) {
                     <div className="max-w-5xl mx-auto px-6 text-center">
                         <span className="inline-block px-4 py-1.5 rounded-full bg-slate-100 text-slate-500 text-xs font-bold uppercase tracking-widest mb-6">Why It Matters</span>
                         <h2 className="text-3xl md:text-4xl font-black text-[#0f172a] mb-3">
-                            Why do we need <span className="text-blue-600">NBI Clearance?</span>
+                            Why do we need <span className="text-amber-600">NBI Clearance?</span>
                         </h2>
                         <p className="text-slate-500 text-sm mb-12">It's an essential for multiple important purposes in the Philippines.</p>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -159,7 +159,7 @@ export default function Welcome({ auth }) {
                                 { icon: '🏛️', title: 'Government Transactions', desc: 'Needed for licenses, permits, and other official documents.' },
                             ].map(c => (
                                 <div key={c.title} className="bg-white border border-slate-100 rounded-2xl p-6 text-left shadow-sm hover:shadow-md transition-all">
-                                    <div className="w-11 h-11 rounded-xl bg-red-50 flex items-center justify-center text-xl mb-4">{c.icon}</div>
+                                    <div className="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center text-xl mb-4">{c.icon}</div>
                                     <h3 className="font-bold text-[#0f172a] text-sm mb-2">{c.title}</h3>
                                     <p className="text-slate-500 text-xs leading-relaxed">{c.desc}</p>
                                 </div>
@@ -181,7 +181,7 @@ export default function Welcome({ auth }) {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
                                 <h3 className="font-black text-[#0f172a] text-sm mb-4 flex items-center gap-2">
-                                    <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-black">1</span>
+                                    <span className="w-6 h-6 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs font-black">1</span>
                                     Valid Government-Issued ID (2 required)
                                 </h3>
                                 <ul className="space-y-2">
@@ -224,7 +224,7 @@ export default function Welcome({ auth }) {
                         <div className="text-center mb-12">
                             <span className="inline-block px-4 py-1.5 rounded-full bg-slate-100 text-slate-500 text-xs font-bold uppercase tracking-widest mb-6">Step-by-Step</span>
                             <h2 className="text-3xl md:text-4xl font-black text-[#0f172a] mb-3">
-                                How to <span className="text-blue-600">Apply Online</span>
+                                How to <span className="text-amber-600">Apply Online</span>
                             </h2>
                             <p className="text-slate-500 text-sm">Applying for a Clearance involves a straightforward process. Here is a detailed, step-by-step guide.</p>
                         </div>
@@ -242,7 +242,7 @@ export default function Welcome({ auth }) {
                             ))}
                         </div>
                         <div className="text-center mt-10">
-                            <Link href={route('register')} className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-[#1e3a5f] text-white font-black text-sm hover:bg-[#1d4ed8] transition-all shadow-lg">
+                            <Link href={route('register')} className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-[#1e3a5f] text-white font-black text-sm hover:bg-[#2a4f75] transition-all shadow-lg">
                                 Register Now →
                             </Link>
                         </div>
@@ -250,25 +250,25 @@ export default function Welcome({ auth }) {
                 </section>
 
                 {/* ── TIPS ── */}
-                <section className="py-20 bg-[#7a1414]">
+                <section className="py-20 bg-[#fdf8f0]">
                     <div className="max-w-5xl mx-auto px-6">
                         <div className="text-center mb-12">
-                            <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-amber-300 text-xs font-bold uppercase tracking-widest mb-6">Pro Tips</span>
-                            <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
-                                Tips for a <span className="text-amber-400">Smooth Process</span>
+                            <span className="inline-block px-4 py-1.5 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase tracking-widest mb-6">Pro Tips</span>
+                            <h2 className="text-3xl md:text-4xl font-black text-[#0f172a] mb-3">
+                                Tips for a <span className="text-amber-600">Smooth Process</span>
                             </h2>
-                            <p className="text-white/60 text-sm">Follow these tips to streamline your NBI process and avoid common pitfalls.</p>
+                            <p className="text-slate-500 text-sm">Follow these tips to streamline your NBI process and avoid common pitfalls.</p>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {tips.map(t => (
-                                <div key={t.n} className="bg-white/10 border border-white/20 rounded-2xl p-5 hover:bg-white/15 transition-all">
-                                    <div className="text-amber-400 font-black text-2xl mb-3">{t.n}</div>
-                                    <h3 className="text-white font-bold text-sm mb-2">{t.title}</h3>
-                                    <p className="text-white/60 text-xs leading-relaxed">{t.desc}</p>
+                                <div key={t.n} className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
+                                    <div className="text-amber-500 font-black text-2xl mb-3">{t.n}</div>
+                                    <h3 className="text-[#0f172a] font-bold text-sm mb-2">{t.title}</h3>
+                                    <p className="text-slate-500 text-xs leading-relaxed">{t.desc}</p>
                                 </div>
                             ))}
                         </div>
-                        <p className="text-center text-white/50 text-sm mt-10">
+                        <p className="text-center text-slate-400 text-sm mt-10">
                             By following these tips, you can streamline your NBI process and avoid common pitfalls, ensuring a quicker and more efficient experience.
                         </p>
                     </div>
@@ -280,7 +280,7 @@ export default function Welcome({ auth }) {
                         <div className="text-center mb-12">
                             <span className="inline-block px-4 py-1.5 rounded-full bg-slate-100 text-slate-500 text-xs font-bold uppercase tracking-widest mb-6">Troubleshooting</span>
                             <h2 className="text-3xl md:text-4xl font-black text-[#0f172a] mb-3">
-                                Common Issues & <span className="text-blue-600">How to Resolve Them</span>
+                                Common Issues & <span className="text-amber-600">How to Resolve Them</span>
                             </h2>
                             <p className="text-slate-500 text-sm">Understanding these common issues will help you navigate the NBI clearance process smoothly.</p>
                         </div>
@@ -288,7 +288,7 @@ export default function Welcome({ auth }) {
                             {issues.map(issue => (
                                 <div key={issue.title} className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all">
                                     <div className="flex items-center gap-2 mb-3">
-                                        <span className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0" />
+                                        <span className="w-2 h-2 rounded-full bg-amber-500 flex-shrink-0" />
                                         <h3 className="font-black text-[#0f172a] text-sm">{issue.title}</h3>
                                     </div>
                                     <p className="text-slate-500 text-xs leading-relaxed">{issue.desc}</p>
@@ -322,13 +322,13 @@ export default function Welcome({ auth }) {
                                 <span className="text-base">🛡️</span>
                             </div>
                             <span className="text-white font-black text-base tracking-tight">
-                                NBI <span className="text-blue-400">SYS</span>
+                                NBI <span className="text-amber-500">SYS</span>
                             </span>
                         </div>
-                        <p className="text-blue-300/40 text-xs">© {new Date().getFullYear()} NBI Clearance Online System. All rights reserved.</p>
+                        <p className="text-slate-400 text-xs">© {new Date().getFullYear()} NBI Clearance Online System. All rights reserved.</p>
                         <div className="flex items-center gap-4">
-                            <Link href={route('login')} className="text-blue-300/50 text-xs hover:text-blue-300 transition-all">Sign In</Link>
-                            <Link href={route('register')} className="text-blue-300/50 text-xs hover:text-blue-300 transition-all">Register</Link>
+                            <Link href={route('login')} className="text-slate-400 text-xs hover:text-white transition-all">Sign In</Link>
+                            <Link href={route('register')} className="text-slate-400 text-xs hover:text-white transition-all">Register</Link>
                         </div>
                     </div>
                 </footer>
