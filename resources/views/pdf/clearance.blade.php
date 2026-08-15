@@ -6,7 +6,7 @@
     <style>
         @page {
             size: A4 portrait;
-            margin: 6mm 8mm;
+            margin: 8mm 10mm;
         }
         * {
             margin: 0;
@@ -28,7 +28,7 @@
         }
         .cut-line {
             border-top: 1.5px dashed #888888;
-            margin: 8px 0;
+            margin: 10px 0;
             text-align: center;
             position: relative;
         }
@@ -49,7 +49,7 @@
             width: 100%;
             border-collapse: collapse;
             border-bottom: 2px solid #1a3a6b;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
         .header-title {
             text-align: center;
@@ -150,17 +150,17 @@
             text-transform: uppercase;
         }
 
-        /* Watermark Personal Copy */
+        /* Watermark Personal Copy - Exact Pixels relative to card top */
         .personal-watermark {
             position: absolute;
-            top: 30%;
-            left: 18%;
-            font-size: 34px;
+            top: 75px;
+            left: 140px;
+            font-size: 28px;
             font-weight: 900;
             color: rgba(220, 38, 38, 0.12);
-            border: 3px solid rgba(220, 38, 38, 0.12);
-            padding: 4px 18px;
-            transform: rotate(-18deg);
+            border: 2.5px solid rgba(220, 38, 38, 0.12);
+            padding: 4px 16px;
+            transform: rotate(-16deg);
             text-transform: uppercase;
             letter-spacing: 2px;
         }
@@ -211,19 +211,19 @@
     <!-- Header Table -->
     <table class="header-table">
         <tr>
-            <td style="width: 50px; text-align: left; vertical-align: middle;">
-                <div style="width: 44px; height: 44px; border: 1px solid #cccccc; font-size: 5px; color: #666; line-height: 1.1; padding-top: 9px; font-weight: bold; text-align: center;">
+            <td style="width: 52px; text-align: left; vertical-align: middle; padding: 2px 0;">
+                <div style="width: 42px; height: 42px; border: 1px solid #cccccc; font-size: 5px; color: #666; line-height: 1.1; padding-top: 8px; font-weight: bold; text-align: center; margin: 0 auto;">
                     BAGONG<br>PILIPINAS
                 </div>
             </td>
-            <td class="header-title">
+            <td class="header-title" style="vertical-align: middle; padding: 2px 0;">
                 <div class="bagong-text">Bagong Pilipinas</div>
                 <div class="republic-text">Republic of the Philippines</div>
                 <div class="doj-text">Department of Justice</div>
                 <div class="nbi-text">National Bureau of Investigation</div>
             </td>
-            <td style="width: 50px; text-align: right; vertical-align: middle;">
-                <div style="width: 44px; height: 44px; border: 1.5px solid #1a3a6b; font-size: 11px; color: #1a3a6b; font-weight: 900; line-height: 42px; text-align: center; margin-left: auto;">
+            <td style="width: 52px; text-align: right; vertical-align: middle; padding: 2px 0;">
+                <div style="width: 42px; height: 42px; border: 1.5px solid #1a3a6b; font-size: 11px; color: #1a3a6b; font-weight: 900; line-height: 40px; text-align: center; margin: 0 0 0 auto;">
                     NBI
                 </div>
             </td>
@@ -372,7 +372,7 @@
                     <tr><td class="tx-label">Date</td><td>{{ $dateIssued }}</td></tr>
                     <tr><td class="tx-label">Agency</td><td>NBI</td></tr>
                     <tr><td class="tx-label">O.R. No.</td><td>{{ $clearance->payment_reference ?? 'N/A' }}</td></tr>
-                    <tr><td class="tx-label">DST PAID</td><td>{{ $clearance->payment_amount ? '₱'.$clearance->payment_amount : 'N/A' }}</td></tr>
+                    <tr><td class="tx-label">DST PAID</td><td>{{ $clearance->payment_amount ? 'Php '.$clearance->payment_amount : 'N/A' }}</td></tr>
                 </table>
 
             </td>
@@ -396,19 +396,19 @@
     <!-- Header Table -->
     <table class="header-table">
         <tr>
-            <td style="width: 50px; text-align: left; vertical-align: middle;">
-                <div style="width: 44px; height: 44px; border: 1px solid #cccccc; font-size: 5px; color: #666; line-height: 1.1; padding-top: 9px; font-weight: bold; text-align: center;">
+            <td style="width: 52px; text-align: left; vertical-align: middle; padding: 2px 0;">
+                <div style="width: 42px; height: 42px; border: 1px solid #cccccc; font-size: 5px; color: #666; line-height: 1.1; padding-top: 8px; font-weight: bold; text-align: center; margin: 0 auto;">
                     BAGONG<br>PILIPINAS
                 </div>
             </td>
-            <td class="header-title">
+            <td class="header-title" style="vertical-align: middle; padding: 2px 0;">
                 <div class="bagong-text">Bagong Pilipinas</div>
                 <div class="republic-text">Republic of the Philippines</div>
                 <div class="doj-text">Department of Justice</div>
                 <div class="nbi-text">National Bureau of Investigation</div>
             </td>
-            <td style="width: 50px; text-align: right; vertical-align: middle;">
-                <div style="width: 44px; height: 44px; border: 1.5px solid #1a3a6b; font-size: 11px; color: #1a3a6b; font-weight: 900; line-height: 42px; text-align: center; margin-left: auto;">
+            <td style="width: 52px; text-align: right; vertical-align: middle; padding: 2px 0;">
+                <div style="width: 42px; height: 42px; border: 1.5px solid #1a3a6b; font-size: 11px; color: #1a3a6b; font-weight: 900; line-height: 40px; text-align: center; margin: 0 0 0 auto;">
                     NBI
                 </div>
             </td>
@@ -557,7 +557,7 @@
                     <tr><td class="tx-label">Date</td><td>{{ $dateIssued }}</td></tr>
                     <tr><td class="tx-label">Agency</td><td>NBI</td></tr>
                     <tr><td class="tx-label">O.R. No.</td><td>{{ $clearance->payment_reference ?? 'N/A' }}</td></tr>
-                    <tr><td class="tx-label">DST PAID</td><td>{{ $clearance->payment_amount ? '₱'.$clearance->payment_amount : 'N/A' }}</td></tr>
+                    <tr><td class="tx-label">DST PAID</td><td>{{ $clearance->payment_amount ? 'Php '.$clearance->payment_amount : 'N/A' }}</td></tr>
                 </table>
 
             </td>
