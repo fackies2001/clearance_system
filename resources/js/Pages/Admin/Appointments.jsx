@@ -116,7 +116,7 @@ export default function AdminAppointments({ appointments = {}, stats = {}, filte
             <select
                 value={value}
                 onChange={onChange}
-                className={`appearance-none border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm bg-white text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-200 cursor-pointer shadow-sm ${minWidth}`}
+                className={`appearance-none [background-image:none] bg-none border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm bg-white text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-200 cursor-pointer shadow-sm ${minWidth}`}
             >
                 {children}
             </select>

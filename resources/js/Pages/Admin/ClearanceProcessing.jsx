@@ -639,7 +639,7 @@ export default function ClearanceProcessing({ clearances = {}, stats = {}, filte
                                         <select
                                             value={filters.per_page || 10}
                                             onChange={e => updateFilters({ per_page: e.target.value })}
-                                            className="appearance-none border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm bg-white text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-200 cursor-pointer shadow-sm"
+                                            className="appearance-none [background-image:none] bg-none border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm bg-white text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-200 cursor-pointer shadow-sm"
                                         >
                                             {[5, 10, 25, 50, 100].map(v => <option key={v} value={v}>{v}</option>)}
                                         </select>
@@ -658,7 +658,7 @@ export default function ClearanceProcessing({ clearances = {}, stats = {}, filte
                                     <select
                                         value={filters.status || ''}
                                         onChange={e => updateFilters({ status: e.target.value })}
-                                        className="appearance-none border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm bg-white text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-200 cursor-pointer shadow-sm min-w-[130px]"
+                                        className="appearance-none [background-image:none] bg-none border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm bg-white text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-200 cursor-pointer shadow-sm min-w-[130px]"
                                     >
                                         <option value="">All Status</option>
                                         <option value="pending">Pending</option>

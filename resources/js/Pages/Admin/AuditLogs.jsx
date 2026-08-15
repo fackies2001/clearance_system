@@ -204,7 +204,7 @@ export default function AuditLogs({ logs = [], stats = {}, currentFilter = 'toda
                                 <select
                                     value={perPage}
                                     onChange={(e) => { setPerPage(Number(e.target.value)); setPage(1); }}
-                                    className="appearance-none border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm bg-white text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-200 cursor-pointer shadow-sm"
+                                    className="appearance-none [background-image:none] bg-none border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm bg-white text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-200 cursor-pointer shadow-sm"
                                 >
                                     {[5, 10, 25, 50, 100].map(v => <option key={v} value={v}>{v}</option>)}
                                 </select>
@@ -222,7 +222,7 @@ export default function AuditLogs({ logs = [], stats = {}, currentFilter = 'toda
                                 <select
                                     value={filterAction}
                                     onChange={(e) => handleFilterChange(e.target.value)}
-                                    className="appearance-none border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm bg-white text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-200 cursor-pointer shadow-sm"
+                                    className="appearance-none [background-image:none] bg-none border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm bg-white text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-200 cursor-pointer shadow-sm"
                                 >
                                     <option value="all">All Status</option>
                                     {uniqueActions.map(action => {
@@ -246,7 +246,7 @@ export default function AuditLogs({ logs = [], stats = {}, currentFilter = 'toda
                                 <select
                                     value={dateFilter}
                                     onChange={handleDateFilterChange}
-                                    className="appearance-none border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm bg-white text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-200 cursor-pointer shadow-sm"
+                                    className="appearance-none [background-image:none] bg-none border border-slate-200 rounded-lg pl-3 pr-8 py-1.5 text-sm bg-white text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-200 cursor-pointer shadow-sm"
                                 >
                                     <option value="today">Today</option>
                                     <option value="yesterday">Yesterday</option>
