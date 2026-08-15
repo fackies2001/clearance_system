@@ -34,14 +34,14 @@ export default function Login({ status, canResetPassword }) {
 
             <form onSubmit={submit} className="space-y-5">
                 <div>
-                    <label className="block text-xs font-700 text-slate-500 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
                         Email Address
                     </label>
                     <input
                         type="email"
                         value={data.email}
                         onChange={e => setData('email', e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                         placeholder="you@email.com"
                         autoFocus
                         required
@@ -50,14 +50,14 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 <div>
-                    <label className="block text-xs font-700 text-slate-500 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
                         Password
                     </label>
                     <input
                         type="password"
                         value={data.password}
                         onChange={e => setData('password', e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                        className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                         placeholder="••••••••"
                         required
                     />
@@ -73,7 +73,7 @@ export default function Login({ status, canResetPassword }) {
                         <span className="text-sm text-slate-600">Remember me</span>
                     </label>
                     {canResetPassword && (
-                        <Link href={route('password.request')} className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                        <Link href={route('password.request')} className="text-sm text-amber-600 hover:text-amber-700 font-medium">
                             Forgot password?
                         </Link>
                     )}
@@ -82,14 +82,14 @@ export default function Login({ status, canResetPassword }) {
                 <button
                     type="submit"
                     disabled={processing}
-                    className="w-full py-3 rounded-xl bg-[#1e3a5f] text-white font-bold text-sm hover:bg-[#1d4ed8] transition-all disabled:opacity-60 shadow-lg shadow-blue-900/20"
+                    className="w-full py-3.5 rounded-xl bg-[#1e3a5f] text-white font-bold text-sm hover:bg-[#2a4f75] transition-all disabled:opacity-60 shadow-md"
                 >
                     {processing ? 'Signing in...' : 'Sign In →'}
                 </button>
 
                 <p className="text-center text-sm text-slate-500">
                     Don't have an account?{' '}
-                    <Link href={route('register')} className="text-blue-600 font-bold hover:text-blue-700">
+                    <Link href={route('register')} className="text-amber-600 font-bold hover:text-amber-700">
                         Create one here
                     </Link>
                 </p>

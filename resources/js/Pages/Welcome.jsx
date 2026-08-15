@@ -315,20 +315,20 @@ export default function Welcome({ auth }) {
                 </section>
 
                 {/* ── FOOTER ── */}
-                <footer className="bg-[#0f172a] py-10">
+                <footer className="bg-[#fdf8f0] border-t border-amber-200/60 py-10">
                     <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-white/10 rounded-xl flex items-center justify-center border border-white/20">
+                            <div className="w-8 h-8 bg-amber-100 rounded-xl flex items-center justify-center border border-amber-200">
                                 <span className="text-base">🛡️</span>
                             </div>
-                            <span className="text-white font-black text-base tracking-tight">
-                                NBI <span className="text-amber-500">SYS</span>
+                            <span className="text-[#0f172a] font-black text-base tracking-tight">
+                                NBI <span className="text-amber-600">SYS</span>
                             </span>
                         </div>
-                        <p className="text-slate-400 text-xs">© {new Date().getFullYear()} NBI Clearance Online System. All rights reserved.</p>
+                        <p className="text-slate-500 text-xs">© {new Date().getFullYear()} NBI Clearance Online System. All rights reserved.</p>
                         <div className="flex items-center gap-4">
-                            <Link href={route('login')} className="text-slate-400 text-xs hover:text-white transition-all">Sign In</Link>
-                            <Link href={route('register')} className="text-slate-400 text-xs hover:text-white transition-all">Register</Link>
+                            <Link href={route('login')} className="text-slate-500 text-xs hover:text-[#0f172a] transition-all">Sign In</Link>
+                            <Link href={route('register')} className="text-slate-500 text-xs hover:text-[#0f172a] transition-all">Register</Link>
                         </div>
                     </div>
                 </footer>

@@ -44,8 +44,8 @@ export default function Register() {
     ];
     const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
-    const selectClass = "w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none";
-    const inputClass  = "w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all";
+    const selectClass = "w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all appearance-none";
+    const inputClass  = "w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all";
     const labelClass  = "block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5";
 
     return (
@@ -229,14 +229,14 @@ export default function Register() {
                 <button
                     type="submit"
                     disabled={processing}
-                    className="w-full py-3 rounded-xl bg-[#1e3a5f] text-white font-bold text-sm hover:bg-[#1d4ed8] transition-all disabled:opacity-60 shadow-lg shadow-blue-900/20"
+                    className="w-full py-3.5 rounded-xl bg-[#1e3a5f] text-white font-bold text-sm hover:bg-[#2a4f75] transition-all disabled:opacity-60 shadow-md"
                 >
                     {processing ? 'Creating account...' : 'Create Account →'}
                 </button>
 
                 <p className="text-center text-sm text-slate-500">
                     Already have an account?{' '}
-                    <Link href={route('login')} className="text-blue-600 font-bold hover:text-blue-700">
+                    <Link href={route('login')} className="text-amber-600 font-bold hover:text-amber-700">
                         Sign in here
                     </Link>
                 </p>
