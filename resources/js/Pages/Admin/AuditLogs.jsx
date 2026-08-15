@@ -41,9 +41,10 @@ function ActionBadge({ action }) {
 
 function formatDate(dateStr) {
     if (!dateStr) return '—';
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' })
-        + ' ' + d.toLocaleTimeString('en-PH', { hour: '2-digit', minute: '2-digit' });
+    return new Date(dateStr).toLocaleString('en-PH', {
+        month: 'short', day: 'numeric', year: 'numeric',
+        hour: '2-digit', minute: '2-digit', hour12: true
+    });
 }
 
 function StatCard({ label, value, color }) {

@@ -337,7 +337,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                                                     <p className="text-xs font-bold text-slate-900">{notif.title}</p>
                                                                     <p className="text-[11px] text-slate-500 leading-tight mt-0.5">{notif.message}</p>
                                                                     <p className="text-[10px] text-slate-400 mt-1">
-                                                                        {new Date(notif.created_at).toLocaleTimeString()}
+                                                                        {new Date(notif.created_at).toLocaleString('en-PH', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}
                                                                     </p>
                                                                 </div>
                                                                 {/* Dynamic logical rendering: The blue indicator dot appears only if the read_at timestamp is null */}

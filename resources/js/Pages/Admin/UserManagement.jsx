@@ -311,8 +311,9 @@ export default function UserManagement({ auth, users = [] }) {
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 text-slate-600">
-                                                {new Date(user.created_at).toLocaleDateString('en-US', {
-                                                    month: 'short', day: 'numeric', year: 'numeric'
+                                                {new Date(user.created_at).toLocaleString('en-US', {
+                                                    month: 'short', day: 'numeric', year: 'numeric',
+                                                    hour: '2-digit', minute: '2-digit', hour12: true
                                                 })}
                                             </td>
                                             <td className="px-6 py-4">
