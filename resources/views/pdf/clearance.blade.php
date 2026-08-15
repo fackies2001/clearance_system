@@ -6,7 +6,7 @@
     <style>
         @page {
             size: A4 portrait;
-            margin: 8mm 10mm;
+            margin: 6mm 8mm;
         }
         * {
             margin: 0;
@@ -17,29 +17,31 @@
         body {
             background: #ffffff;
             color: #000000;
-            font-size: 10px;
+            font-size: 9.5px;
         }
         .clearance-card {
             width: 100%;
-            border: 1px solid #000000;
-            padding: 8px 12px;
+            border: 1.5px solid #1a3a6b;
+            padding: 6px 10px;
             position: relative;
             background: #ffffff;
         }
         .cut-line {
-            border-top: 1.5px dashed #666666;
-            margin: 10px 0;
+            border-top: 1.5px dashed #888888;
+            margin: 8px 0;
             text-align: center;
             position: relative;
         }
         .cut-line-text {
             background: #ffffff;
-            padding: 0 8px;
-            font-size: 8px;
-            color: #666666;
+            padding: 0 10px;
+            font-size: 7.5px;
+            color: #555555;
             position: relative;
             top: -6px;
             text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.5px;
         }
 
         /* Header Table */
@@ -47,22 +49,22 @@
             width: 100%;
             border-collapse: collapse;
             border-bottom: 2px solid #1a3a6b;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
         .header-title {
             text-align: center;
         }
         .bagong-text { font-size: 6px; font-weight: bold; color: #1a3a6b; letter-spacing: 1.5px; text-transform: uppercase; }
-        .republic-text { font-size: 11px; font-weight: 900; text-transform: uppercase; }
-        .doj-text { font-size: 9px; font-weight: bold; text-transform: uppercase; }
-        .nbi-text { font-size: 15px; font-weight: 900; color: #1a3a6b; letter-spacing: 1px; text-transform: uppercase; }
+        .republic-text { font-size: 11px; font-weight: 900; text-transform: uppercase; line-height: 1.2; }
+        .doj-text { font-size: 8.5px; font-weight: bold; text-transform: uppercase; }
+        .nbi-text { font-size: 14px; font-weight: 900; color: #1a3a6b; letter-spacing: 1px; text-transform: uppercase; line-height: 1.2; }
 
         .cert-statement {
             font-size: 7px;
             text-align: center;
             color: #333333;
             font-style: italic;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         /* Data Fields */
@@ -71,41 +73,41 @@
             font-weight: bold;
             color: #444444;
             text-transform: uppercase;
-            border-bottom: 0.5px solid #888888;
+            border-bottom: 0.5px solid #999999;
             padding-bottom: 1px;
             margin-bottom: 1px;
         }
         .field-value {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: bold;
             color: #000000;
             text-transform: uppercase;
-            padding-bottom: 4px;
+            padding-bottom: 3px;
         }
         .field-value-large {
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 900;
             color: #000000;
             text-transform: uppercase;
-            padding-bottom: 4px;
+            padding-bottom: 3px;
         }
         .field-value-blue {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: bold;
             color: #1a3a6b;
             font-family: 'Courier New', monospace;
-            padding-bottom: 4px;
+            padding-bottom: 3px;
         }
 
         /* Remarks Box */
         .remarks-container {
             border: 1.5px solid #000000;
             padding: 3px 6px;
-            margin-top: 4px;
-            margin-bottom: 6px;
+            margin-top: 3px;
+            margin-bottom: 4px;
         }
-        .remarks-title { font-size: 6.5px; font-weight: bold; color: #444444; text-transform: uppercase; }
-        .remarks-text { font-size: 11px; font-weight: 900; text-transform: uppercase; color: #000000; }
+        .remarks-title { font-size: 6px; font-weight: bold; color: #444444; text-transform: uppercase; }
+        .remarks-text { font-size: 10.5px; font-weight: 900; text-transform: uppercase; color: #000000; }
 
         /* Right Column Elements */
         .nbi-badge {
@@ -117,44 +119,48 @@
             padding: 2px 0;
             letter-spacing: 1px;
             width: 100%;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
         .photo-frame {
-            width: 80px;
-            height: 96px;
+            width: 82px;
+            height: 98px;
             border: 1px solid #444444;
             background: #f1f5f9;
             text-align: center;
-            margin: 0 auto 4px auto;
+            margin: 0 auto 3px auto;
+            vertical-align: middle;
         }
         .photo-img {
-            width: 80px;
-            height: 96px;
-            object-fit: cover;
+            max-width: 80px;
+            max-height: 96px;
+            width: auto;
+            height: auto;
+            margin: 0 auto;
+            display: block;
         }
         .sig-frame {
-            width: 80px;
-            height: 24px;
+            width: 82px;
+            height: 22px;
             border: 0.5px solid #888888;
             text-align: center;
             font-size: 6px;
             color: #666666;
-            line-height: 24px;
-            margin: 0 auto 4px auto;
+            line-height: 22px;
+            margin: 0 auto 3px auto;
             text-transform: uppercase;
         }
 
         /* Watermark Personal Copy */
         .personal-watermark {
             position: absolute;
-            top: 32%;
-            left: 20%;
-            font-size: 32px;
+            top: 30%;
+            left: 18%;
+            font-size: 34px;
             font-weight: 900;
-            color: rgba(220, 38, 38, 0.15);
-            border: 3px solid rgba(220, 38, 38, 0.15);
-            padding: 4px 16px;
-            transform: rotate(-20deg);
+            color: rgba(220, 38, 38, 0.12);
+            border: 3px solid rgba(220, 38, 38, 0.12);
+            padding: 4px 18px;
+            transform: rotate(-18deg);
             text-transform: uppercase;
             letter-spacing: 2px;
         }
@@ -164,10 +170,11 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 6px;
+            margin-top: 2px;
         }
         .tx-table td {
             border: 0.5px solid #cccccc;
-            padding: 1px 3px;
+            padding: 1px 2px;
         }
         .tx-label {
             font-weight: bold;
@@ -196,16 +203,16 @@
     ])));
 @endphp
 
-{{-- ════════════════════════════════════════════════════════════════════ text --}}
+{{-- ════════════════════════════════════════════════════════════════════ --}}
 {{-- 1. ORIGINAL COPY (TOP) --}}
-{{-- ════════════════════════════════════════════════════════════════════ text --}}
+{{-- ════════════════════════════════════════════════════════════════════ --}}
 <div class="clearance-card">
 
-    <!-- Header -->
+    <!-- Header Table -->
     <table class="header-table">
         <tr>
-            <td style="width: 48px; text-align: center; vertical-align: middle;">
-                <div style="width: 42px; height: 42px; border: 1px solid #cccccc; font-size: 5px; color: #666; line-height: 1.1; padding-top: 10px; font-weight: bold;">
+            <td style="width: 50px; text-align: left; vertical-align: middle;">
+                <div style="width: 44px; height: 44px; border: 1px solid #cccccc; font-size: 5px; color: #666; line-height: 1.1; padding-top: 9px; font-weight: bold; text-align: center;">
                     BAGONG<br>PILIPINAS
                 </div>
             </td>
@@ -215,8 +222,8 @@
                 <div class="doj-text">Department of Justice</div>
                 <div class="nbi-text">National Bureau of Investigation</div>
             </td>
-            <td style="width: 48px; text-align: center; vertical-align: middle;">
-                <div style="width: 42px; height: 42px; border: 1.5px solid #1a3a6b; font-size: 11px; color: #1a3a6b; font-weight: 900; line-height: 40px;">
+            <td style="width: 50px; text-align: right; vertical-align: middle;">
+                <div style="width: 44px; height: 44px; border: 1.5px solid #1a3a6b; font-size: 11px; color: #1a3a6b; font-weight: 900; line-height: 42px; text-align: center; margin-left: auto;">
                     NBI
                 </div>
             </td>
@@ -268,7 +275,7 @@
                 <!-- Address -->
                 <div style="width: 100%;">
                     <div class="field-label">Address</div>
-                    <div class="field-value" style="font-size: 9px;">{{ $fullAddress }}</div>
+                    <div class="field-value" style="font-size: 8.5px;">{{ $fullAddress }}</div>
                 </div>
 
                 <!-- DOB & POB -->
@@ -322,16 +329,16 @@
                     <tr>
                         <td style="width: 60%; vertical-align: bottom;">
                             @if(isset($barcodeBase64) && $barcodeBase64)
-                                <img src="{{ $barcodeBase64 }}" style="width: 180px; height: 28px;" />
+                                <img src="{{ $barcodeBase64 }}" style="width: 175px; height: 26px;" />
                             @endif
-                            <div style="font-size: 7px; font-family: monospace; font-weight: bold; margin-top: 1px;">
+                            <div style="font-size: 6.5px; font-family: monospace; font-weight: bold; margin-top: 1px;">
                                 {{ $clearance->clearance_number }}
                             </div>
                         </td>
                         <td style="width: 40%; text-align: center; vertical-align: bottom;">
-                            <div style="border-top: 1px solid #000000; width: 100px; margin: 0 auto 2px auto;"></div>
-                            <div style="font-size: 7px; font-weight: 900; text-transform: uppercase;">ATTY. NBI DIRECTOR</div>
-                            <div style="font-size: 6px; color: #555555; text-transform: uppercase;">Director</div>
+                            <div style="border-top: 1px solid #000000; width: 95px; margin: 0 auto 2px auto;"></div>
+                            <div style="font-size: 6.5px; font-weight: 900; text-transform: uppercase;">ATTY. NBI DIRECTOR</div>
+                            <div style="font-size: 5.5px; color: #555555; text-transform: uppercase;">Director</div>
                         </td>
                     </tr>
                 </table>
@@ -339,7 +346,7 @@
             </td>
 
             <!-- Right Column: Badge, Photo, Signature, QR, Tx Table -->
-            <td style="width: 90px; vertical-align: top; text-align: center;">
+            <td style="width: 92px; vertical-align: top; text-align: center;">
                 
                 <div class="nbi-badge">
                     A-{{ strtoupper(substr($clearance->clearance_number, -7)) }}
@@ -349,7 +356,7 @@
                     @if(isset($photoBase64) && $photoBase64)
                         <img src="{{ $photoBase64 }}" class="photo-img" />
                     @else
-                        <div style="font-size: 6px; color: #999; line-height: 96px;">NO PHOTO</div>
+                        <div style="font-size: 6px; color: #999; line-height: 98px;">NO PHOTO</div>
                     @endif
                 </div>
 
@@ -357,7 +364,7 @@
 
                 <div style="margin: 2px auto;">
                     @if(isset($qrCodeBase64) && $qrCodeBase64)
-                        <img src="{{ $qrCodeBase64 }}" style="width: 64px; height: 64px;" />
+                        <img src="{{ $qrCodeBase64 }}" style="width: 60px; height: 60px;" />
                     @endif
                 </div>
 
@@ -376,21 +383,21 @@
 
 <!-- Cut Line -->
 <div class="cut-line">
-    <span class="cut-line-text">✂ Cut along line &bull; Personal Copy Below</span>
+    <span class="cut-line-text">--- CUT ALONG LINE &bull; PERSONAL COPY BELOW ---</span>
 </div>
 
-{{-- ════════════════════════════════════════════════════════════════════ text --}}
+{{-- ════════════════════════════════════════════════════════════════════ --}}
 {{-- 2. PERSONAL COPY (BOTTOM) --}}
-{{-- ════════════════════════════════════════════════════════════════════ text --}}
+{{-- ════════════════════════════════════════════════════════════════════ --}}
 <div class="clearance-card">
 
     <div class="personal-watermark">PERSONAL COPY</div>
 
-    <!-- Header -->
+    <!-- Header Table -->
     <table class="header-table">
         <tr>
-            <td style="width: 48px; text-align: center; vertical-align: middle;">
-                <div style="width: 42px; height: 42px; border: 1px solid #cccccc; font-size: 5px; color: #666; line-height: 1.1; padding-top: 10px; font-weight: bold;">
+            <td style="width: 50px; text-align: left; vertical-align: middle;">
+                <div style="width: 44px; height: 44px; border: 1px solid #cccccc; font-size: 5px; color: #666; line-height: 1.1; padding-top: 9px; font-weight: bold; text-align: center;">
                     BAGONG<br>PILIPINAS
                 </div>
             </td>
@@ -400,8 +407,8 @@
                 <div class="doj-text">Department of Justice</div>
                 <div class="nbi-text">National Bureau of Investigation</div>
             </td>
-            <td style="width: 48px; text-align: center; vertical-align: middle;">
-                <div style="width: 42px; height: 42px; border: 1.5px solid #1a3a6b; font-size: 11px; color: #1a3a6b; font-weight: 900; line-height: 40px;">
+            <td style="width: 50px; text-align: right; vertical-align: middle;">
+                <div style="width: 44px; height: 44px; border: 1.5px solid #1a3a6b; font-size: 11px; color: #1a3a6b; font-weight: 900; line-height: 42px; text-align: center; margin-left: auto;">
                     NBI
                 </div>
             </td>
@@ -453,7 +460,7 @@
                 <!-- Address -->
                 <div style="width: 100%;">
                     <div class="field-label">Address</div>
-                    <div class="field-value" style="font-size: 9px;">{{ $fullAddress }}</div>
+                    <div class="field-value" style="font-size: 8.5px;">{{ $fullAddress }}</div>
                 </div>
 
                 <!-- DOB & POB -->
@@ -507,16 +514,16 @@
                     <tr>
                         <td style="width: 60%; vertical-align: bottom;">
                             @if(isset($barcodeBase64) && $barcodeBase64)
-                                <img src="{{ $barcodeBase64 }}" style="width: 180px; height: 28px;" />
+                                <img src="{{ $barcodeBase64 }}" style="width: 175px; height: 26px;" />
                             @endif
-                            <div style="font-size: 7px; font-family: monospace; font-weight: bold; margin-top: 1px;">
+                            <div style="font-size: 6.5px; font-family: monospace; font-weight: bold; margin-top: 1px;">
                                 {{ $clearance->clearance_number }}
                             </div>
                         </td>
                         <td style="width: 40%; text-align: center; vertical-align: bottom;">
-                            <div style="border-top: 1px solid #000000; width: 100px; margin: 0 auto 2px auto;"></div>
-                            <div style="font-size: 7px; font-weight: 900; text-transform: uppercase;">ATTY. NBI DIRECTOR</div>
-                            <div style="font-size: 6px; color: #555555; text-transform: uppercase;">Director</div>
+                            <div style="border-top: 1px solid #000000; width: 95px; margin: 0 auto 2px auto;"></div>
+                            <div style="font-size: 6.5px; font-weight: 900; text-transform: uppercase;">ATTY. NBI DIRECTOR</div>
+                            <div style="font-size: 5.5px; color: #555555; text-transform: uppercase;">Director</div>
                         </td>
                     </tr>
                 </table>
@@ -524,7 +531,7 @@
             </td>
 
             <!-- Right Column: Badge, Photo, Signature, QR, Tx Table -->
-            <td style="width: 90px; vertical-align: top; text-align: center;">
+            <td style="width: 92px; vertical-align: top; text-align: center;">
                 
                 <div class="nbi-badge">
                     A-{{ strtoupper(substr($clearance->clearance_number, -7)) }}
@@ -534,7 +541,7 @@
                     @if(isset($photoBase64) && $photoBase64)
                         <img src="{{ $photoBase64 }}" class="photo-img" />
                     @else
-                        <div style="font-size: 6px; color: #999; line-height: 96px;">NO PHOTO</div>
+                        <div style="font-size: 6px; color: #999; line-height: 98px;">NO PHOTO</div>
                     @endif
                 </div>
 
@@ -542,7 +549,7 @@
 
                 <div style="margin: 2px auto;">
                     @if(isset($qrCodeBase64) && $qrCodeBase64)
-                        <img src="{{ $qrCodeBase64 }}" style="width: 64px; height: 64px;" />
+                        <img src="{{ $qrCodeBase64 }}" style="width: 60px; height: 60px;" />
                     @endif
                 </div>
 

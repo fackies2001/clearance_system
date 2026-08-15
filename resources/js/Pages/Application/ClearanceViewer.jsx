@@ -259,46 +259,44 @@ export default function ClearanceViewer({ auth, clearance, qrCodeSvg }) {
                     @media print {
                         @page { size: A4 portrait; margin: 0; }
                         
-                        * {
-                            -webkit-print-color-adjust: exact !important;
-                            print-color-adjust: exact !important;
-                        }
-
-                        html, body, #app, main, div:not(#clearance-print):not(.clearance-copy-container) {
+                        body {
                             background: #ffffff !important;
-                            background-color: #ffffff !important;
-                            color: #000000 !important;
-                            box-shadow: none !important;
+                            margin: 0 !important;
+                            padding: 0 !important;
                         }
 
-                        /* Hide UI controls */
-                        nav, aside, header, .print\\:hidden, button, a {
-                            display: none !important;
+                        body * {
+                            visibility: hidden !important;
+                        }
+
+                        #clearance-print-wrapper, #clearance-print-wrapper * {
+                            visibility: visible !important;
                         }
 
                         #clearance-print-wrapper {
                             position: absolute !important;
-                            top: 0 !important;
                             left: 0 !important;
+                            top: 0 !important;
                             width: 100% !important;
                             margin: 0 !important;
                             padding: 0 !important;
                             background: #ffffff !important;
-                            display: block !important;
+                            display: flex !important;
+                            justify-content: center !important;
                         }
 
                         #clearance-print {
                             border: none !important;
                             box-shadow: none !important;
                             width: 100% !important;
-                            max-width: 100% !important;
-                            margin: 0 !important;
+                            max-width: 800px !important;
+                            margin: 0 auto !important;
                             padding: 0 !important;
                             background: #ffffff !important;
                         }
 
                         .clearance-copy-container {
-                            padding: 6px 12px !important;
+                            padding: 10px 14px !important;
                             background: #ffffff !important;
                             page-break-inside: avoid !important;
                         }
